@@ -1,0 +1,27 @@
+name: Project workflow
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Run flutter test, analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup java version 12.x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Setup flutter version stable
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze project source
+        run: flutter analyze
+      - name: Test (Unit test & Widjet test)
+        run: fluter test
+      - name: Run tests
+        run: dart test
