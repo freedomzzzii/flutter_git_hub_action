@@ -29,10 +29,28 @@ jobs:
         # gen mock file
       - name: Run tests
         run: flutter test
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  update_version:
+    name: Update code version for build
+    needs: [ fluter_analyze_test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate build number
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{secrets.github_token}}
+      - name: Print new build number and run number
+        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+      - name: Increate version code
+        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
 
   build_ios:
     name: Build Flutter (iOS)
-    needs: [ fluter_analyze_test ]
+    needs: [ fluter_analyze_test, update_version ]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -45,25 +63,27 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
         run: flutter pub get
         # gen l10n
       - name: Build file .ipa
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release
+      - name: Upload ipa
+        uses: actions/upload-artifact@v2
+        with:
+          name: appbundle-build
+          path: build/app/outputs/bundle/release
+      # TODO: upload output file
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   build_appbundle:
     name: Build Flutter (Android - Appbundle)
-    needs: [ fluter_analyze_test ]
+    needs: [ fluter_analyze_test, update_version ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -76,14 +96,6 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
@@ -96,10 +108,14 @@ jobs:
         with:
           name: appbundle-build
           path: build/app/outputs/bundle/release
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   build_apk:
     name: Build Flutter (Android - APK)
-    needs: [ fluter_analyze_test ]
+    needs: [ fluter_analyze_test, update_version ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -112,14 +128,6 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
@@ -132,10 +140,14 @@ jobs:
         with:
           name: appbundle-build
           path: build/app/outputs/apk/release
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   build_web:
     name: Build Flutter (Web)
-    needs: [ fluter_analyze_test ]
+    needs: [ fluter_analyze_test, update_version ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -148,14 +160,6 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
@@ -163,10 +167,14 @@ jobs:
         # gen l10n
       - name: Build web
         run: flutter build web
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  distribute_apk:
-    name: Upload apk to Firebase App Distribution
-    needs: [ build_apk ]
+  distribute_app:
+    name: Upload file .apk, .aab, .ipa to Firebase App Distribution
+    needs: [ build_apk, build_appbundle, build_ios ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -186,3 +194,14 @@ jobs:
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: developer
           file: app-release.apk
+      - name: Upload apk
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_IOS_APPID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: developer
+          file: app-release.apk
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
