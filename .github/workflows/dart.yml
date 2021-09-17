@@ -131,9 +131,9 @@ jobs:
       - name: Build web
         run: flutter build web
 
-  beta_apk:
+  distribute_apk:
     name: Upload apk to Firebase App Distribution
-    needs: [ build_appbundle ]
+    needs: [ build_apk ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -151,5 +151,5 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APPID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          group: testers
+          group: developer
           file: app-release.apk
