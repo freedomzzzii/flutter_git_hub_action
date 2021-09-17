@@ -4,82 +4,82 @@ name: Project workflow
 on: [ push ]
 
 jobs:
-  fluter_analyze_test:
-    name: Run flutter test, analyze
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Analyze project source
-        run: flutter analyze
-      - name: Test (Unit test & Widjet test)
-        run: flutter test --coverage
-        # gen output test coverage
-        # gen mock file
-      - name: Run tests
-        run: flutter test
-
-  build_ios:
-    name: Build Flutter (iOS)
-    needs: [ fluter_analyze_test ]
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build file .ipa
-        run: flutter build ios --release --no-codesign
-
-  build_appbundle:
-    name: Build Flutter (Android - Appbundle)
-    needs: [ fluter_analyze_test ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build file .aab
-        run: flutter build appbundle
-      - name: Upload appbundle
-        uses: actions/upload-artifact@v2
-        with:
-          name: appbundle-build
-          path: build/app/outputs/bundle/release
+#  fluter_analyze_test:
+  #    name: Run flutter test, analyze
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v2
+  #      - name: Setup java version 12.x
+  #        uses: actions/setup-java@v1
+  #        with:
+  #          java-version: '12.x'
+  #      - name: Setup flutter version stable
+  #        uses: subosito/flutter-action@v1
+  #        with:
+  #          channel: 'stable'
+  #      - name: Install dependencies
+  #        run: flutter pub get
+  #        # gen l10n
+  #      - name: Analyze project source
+  #        run: flutter analyze
+  #      - name: Test (Unit test & Widjet test)
+  #        run: flutter test --coverage
+  #        # gen output test coverage
+  #        # gen mock file
+  #      - name: Run tests
+  #        run: flutter test
+  #
+  #  build_ios:
+  #    name: Build Flutter (iOS)
+  #    needs: [ fluter_analyze_test ]
+  #    runs-on: macos-latest
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v2
+  #      - name: Setup java version 12.x
+  #        uses: actions/setup-java@v1
+  #        with:
+  #          java-version: '12.x'
+  #      - name: Setup flutter version stable
+  #        uses: subosito/flutter-action@v1
+  #        with:
+  #          channel: 'stable'
+  #      - name: Clean project
+  #        run: flutter clean
+  #      - name: Install dependencies
+  #        run: flutter pub get
+  #        # gen l10n
+  #      - name: Build file .ipa
+  #        run: flutter build ios --release --no-codesign
+  #
+  #  build_appbundle:
+  #    name: Build Flutter (Android - Appbundle)
+  #    needs: [ fluter_analyze_test ]
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v2
+  #      - name: Setup java version 12.x
+  #        uses: actions/setup-java@v1
+  #        with:
+  #          java-version: '12.x'
+  #      - name: Setup flutter version stable
+  #        uses: subosito/flutter-action@v1
+  #        with:
+  #          channel: 'stable'
+  #      - name: Clean project
+  #        run: flutter clean
+  #      - name: Install dependencies
+  #        run: flutter pub get
+  #        # gen l10n
+  #      - name: Build file .aab
+  #        run: flutter build appbundle
+  #      - name: Upload appbundle
+  #        uses: actions/upload-artifact@v2
+  #        with:
+  #          name: appbundle-build
+  #          path: build/app/outputs/bundle/release
 
   build_apk:
     name: Build Flutter (Android - APK)
@@ -104,7 +104,7 @@ jobs:
         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
       - name: Increate version code
         #        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($GITHUB_RUN_NUMBER)/e' pubspec.yaml
-        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($GITHUB_RUN_NUMBER)/e' pubspec.yaml
+        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(${GITHUB_RUN_NUMBER})/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
@@ -118,48 +118,48 @@ jobs:
           name: appbundle-build
           path: build/app/outputs/apk/release
 
-  build_web:
-    name: Build Flutter (Web)
-    needs: [ fluter_analyze_test ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build web
-        run: flutter build web
-
-  distribute_apk:
-    name: Upload apk to Firebase App Distribution
-    needs: [ build_apk ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: appbundle-build
-      - name: Upload apk
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.FIREBASE_ANDROID_APPID}}
-          token: ${{secrets.FIREBASE_TOKEN}}
-          groups: developer
-          file: app-release.apk
+#  build_web:
+#    name: Build Flutter (Web)
+#    needs: [ fluter_analyze_test ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - name: Clean project
+#        run: flutter clean
+#      - name: Install dependencies
+#        run: flutter pub get
+#        # gen l10n
+#      - name: Build web
+#        run: flutter build web
+#
+#  distribute_apk:
+#    name: Upload apk to Firebase App Distribution
+#    needs: [ build_apk ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Download Artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: appbundle-build
+#      - name: Upload apk
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{secrets.FIREBASE_ANDROID_APPID}}
+#          token: ${{secrets.FIREBASE_TOKEN}}
+#          groups: developer
+#          file: app-release.apk
