@@ -1,6 +1,7 @@
 name: Project workflow
 
-on: [ push, pull_request ]
+# on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   fluter_analyze_test:
@@ -57,6 +58,14 @@ jobs:
     needs: [ fluter_analyze_test ]
     runs-on: ubuntu-latest
     steps:
+      - name: Generate build number
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{secrets.github_token}}
+      - name: Print new build number
+        run: echo "Build number is $BUILD_NUMBER"
+      - name: Increate version code
+        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($$BUILD_NUMBER)/e' pubspec.yaml
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup java version 12.x
