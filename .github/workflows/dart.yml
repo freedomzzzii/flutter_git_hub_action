@@ -4,7 +4,43 @@ name: Project workflow
 on: [ push ]
 
 jobs:
-#  fluter_analyze_test:
+  build_apk:
+    name: Build Flutter (Android - APK)
+    needs: [ fluter_analyze_test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup java version 12.x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Setup flutter version stable
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - name: Generate build number
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{secrets.github_token}}
+      - name: Print new build number and run number
+        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+      - name: Increate version code
+        #        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($GITHUB_RUN_NUMBER)/e' pubspec.yaml
+        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(${GITHUB_RUN_NUMBER})/e' pubspec.yaml
+      - name: Clean project
+        run: flutter clean
+      - name: Install dependencies
+        run: flutter pub get
+        # gen l10n
+      - name: Build file .apk
+        run: flutter build apk
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: appbundle-build
+          path: build/app/outputs/apk/release
+  #  fluter_analyze_test:
   #    name: Run flutter test, analyze
   #    runs-on: ubuntu-latest
   #    steps:
@@ -81,42 +117,42 @@ jobs:
   #          name: appbundle-build
   #          path: build/app/outputs/bundle/release
 
-  build_apk:
-    name: Build Flutter (Android - APK)
-    needs: [ fluter_analyze_test ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        #        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($GITHUB_RUN_NUMBER)/e' pubspec.yaml
-        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(${GITHUB_RUN_NUMBER})/e' pubspec.yaml
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build file .apk
-        run: flutter build apk
-      - name: Upload apk
-        uses: actions/upload-artifact@v2
-        with:
-          name: appbundle-build
-          path: build/app/outputs/apk/release
+#  build_apk:
+#    name: Build Flutter (Android - APK)
+#    needs: [ fluter_analyze_test ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - name: Generate build number
+#        uses: einaregilsson/build-number@v3
+#        with:
+#          token: ${{secrets.github_token}}
+#      - name: Print new build number and run number
+#        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+#      - name: Increate version code
+#        #        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($GITHUB_RUN_NUMBER)/e' pubspec.yaml
+#        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(${GITHUB_RUN_NUMBER})/e' pubspec.yaml
+#      - name: Clean project
+#        run: flutter clean
+#      - name: Install dependencies
+#        run: flutter pub get
+#        # gen l10n
+#      - name: Build file .apk
+#        run: flutter build apk
+#      - name: Upload apk
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: appbundle-build
+#          path: build/app/outputs/apk/release
 
 #  build_web:
 #    name: Build Flutter (Web)
