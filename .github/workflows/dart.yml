@@ -58,14 +58,6 @@ jobs:
     needs: [ fluter_analyze_test ]
     runs-on: ubuntu-latest
     steps:
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number
-        run: echo "Build number is $BUILD_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($$BUILD_NUMBER)/e' pubspec.yaml
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup java version 12.x
@@ -104,6 +96,14 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
+      - name: Generate build number
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{secrets.github_token}}
+      - name: Print new build number
+        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+      - name: Increate version code
+        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($$BUILD_NUMBER)/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
