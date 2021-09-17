@@ -1,4 +1,4 @@
-package com.example.flutter_git_hub_action
+package com.hugman.poccleanarch
 
 import io.flutter.embedding.android.FlutterActivity
 
