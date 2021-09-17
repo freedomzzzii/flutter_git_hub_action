@@ -104,7 +104,7 @@ jobs:
         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
       - name: Increate version code
         #        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($GITHUB_RUN_NUMBER)/e' pubspec.yaml
-        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(${GITHUB_RUN_NUMBER})/e' pubspec.yaml
+        run: perl -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(${{ GITHUB_RUN_NUMBER }})/e' pubspec.yaml
       - name: Clean project
         run: flutter clean
       - name: Install dependencies
