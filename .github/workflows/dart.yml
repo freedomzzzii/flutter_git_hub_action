@@ -56,7 +56,7 @@ jobs:
     #    needs: [ fluter_analyze_test, update_version ]
     runs-on: macos-latest
     outputs:
-      output1: ${{ steps.name.outputs.test }}
+      message: ${{ steps.step1.outputs.test }}
     steps:
       - id: message
         run: echo "::set-output name=test::Build file .ipa"
