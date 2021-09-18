@@ -54,7 +54,7 @@ jobs:
   build_ios:
     name: Build Flutter (iOS)
     needs: [ fluter_analyze_test, update_version ]
-    runs-on: macos-latest
+    runs-on: [ macos-latest, ubuntu-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
