@@ -77,7 +77,7 @@ jobs:
         # gen l10n
       - name: Build file .ipa
         run: flutter build ios --release
-        continue-on-error: true
+#        continue-on-error: true
         # TODO: upload output file
       - name: Upload ipa
         uses: actions/upload-artifact@v2
@@ -99,8 +99,9 @@ jobs:
     if: always()
     steps:
       - run: echo ${{ needs.build_ios.outputs }}
-      - run: echo ${{needs.build_ios.outputs.build_ios_status}}
-      - run: echo ${{needs.build_ios.outputs.output1}} ${{needs.build_ios.outputs.output2}}
+      - run: echo ${{ needs.build_ios.result }}
+  #      - run: echo ${{needs.build_ios.outputs.build_ios_status}}
+  #      - run: echo ${{needs.build_ios.outputs.output1}} ${{needs.build_ios.outputs.output2}}
 
   job1:
     runs-on: ubuntu-latest
