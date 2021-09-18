@@ -4,56 +4,56 @@ name: Project workflow
 on: [ push ]
 
 jobs:
-  fluter_analyze_test:
-    name: Run flutter test, analyze
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Analyze project source
-        run: flutter analyze
-      - name: Test (Unit test & Widjet test)
-        run: flutter test --coverage
-        # gen output test coverage
-        # gen mock file
-      - name: Run tests
-        run: flutter test
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: always()
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "Run test and analyze is ${{ job.status }}"
-
-  update_version:
-    name: Update code version for build
-    needs: [ fluter_analyze_test ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
+#  fluter_analyze_test:
+  #    name: Run flutter test, analyze
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v2
+  #      - name: Setup java version 12.x
+  #        uses: actions/setup-java@v1
+  #        with:
+  #          java-version: '12.x'
+  #      - name: Setup flutter version stable
+  #        uses: subosito/flutter-action@v1
+  #        with:
+  #          channel: 'stable'
+  #      - name: Install dependencies
+  #        run: flutter pub get
+  #        # gen l10n
+  #      - name: Analyze project source
+  #        run: flutter analyze
+  #      - name: Test (Unit test & Widjet test)
+  #        run: flutter test --coverage
+  #        # gen output test coverage
+  #        # gen mock file
+  #      - name: Run tests
+  #        run: flutter test
+  #      - name: Slack Notification
+  #        uses: rtCamp/action-slack-notify@v2
+  #        if: always()
+  #        env:
+  #          SLACK_COLOR: ${{ job.status }}
+  #          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+  #          SLACK_MESSAGE: "Run test and analyze is ${{ job.status }}"
+  #
+  #  update_version:
+  #    name: Update code version for build
+  #    needs: [ fluter_analyze_test ]
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Generate build number
+  #        uses: einaregilsson/build-number@v3
+  #        with:
+  #          token: ${{secrets.github_token}}
+  #      - name: Print new build number and run number
+  #        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+  #      - name: Increate version code
+  #        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
 
   build_ios:
     name: Build Flutter (iOS)
-    needs: [ fluter_analyze_test, update_version ]
+    #    needs: [ fluter_analyze_test, update_version ]
     runs-on: macos-latest
     outputs:
       build_ios_status: ${{ steps.build_ios_status.outputs.test }}
@@ -97,7 +97,7 @@ jobs:
     if: always()
     steps:
       - run: echo ${{needs.build_ios.outputs.build_ios_status}}
-      - run: echo ${{needs.job1.outputs.output1}} ${{needs.job1.outputs.output2}}
+      - run: echo ${{needs.build_ios.outputs.output1}} ${{needs.build_ios.outputs.output2}}
   #      - name: Slack Notification
   #        uses: rtCamp/action-slack-notify@v2
   #        if: always()
