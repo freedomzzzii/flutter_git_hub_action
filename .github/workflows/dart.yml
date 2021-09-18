@@ -31,9 +31,11 @@ jobs:
         run: flutter test
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
+          SLACK_COLOR: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: Run test and analyze
+          SLACK_MESSAGE: "Run test and analyze is ${{ job.status }}"
 
   update_version:
     name: Update code version for build
@@ -79,9 +81,11 @@ jobs:
       # TODO: upload output file
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
+          SLACK_COLOR: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: Build file .ipa
+          SLACK_MESSAGE: "Build file .ipa is ${{ job.status }}"
 
   build_appbundle:
     name: Build Flutter (Android - Appbundle)
@@ -112,9 +116,11 @@ jobs:
           path: build/app/outputs/bundle/release
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
+          SLACK_COLOR: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: Build file .aab
+          SLACK_MESSAGE: "Build file .aab is ${{ job.status }}"
 
   build_apk:
     name: Build Flutter (Android - APK)
@@ -145,9 +151,11 @@ jobs:
           path: build/app/outputs/apk/release
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
+          SLACK_COLOR: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: Build file .apk
+          SLACK_MESSAGE: "Build file .apk is ${{ job.status }}"
 
   build_web:
     name: Build Flutter (Web)
@@ -173,9 +181,11 @@ jobs:
         run: flutter build web
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
+          SLACK_COLOR: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: Build web
+          SLACK_MESSAGE: "Build web is ${{ job.status }}"
 
   distribute_app:
     name: Upload file .apk, .aab, .ipa to Firebase App Distribution
@@ -209,6 +219,8 @@ jobs:
           file: app-release.apk
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
+          SLACK_COLOR: ${{ job.status }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: Upload app to Firebase app distribute
+          SLACK_MESSAGE: "pload app to Firebase app distribute is ${{ job.status }}"
