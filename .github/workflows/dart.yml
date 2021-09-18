@@ -58,8 +58,7 @@ jobs:
     outputs:
       output1: ${{ steps.name.outputs.test }}
     steps:
-      - name: Set output
-        id: message
+      - id: message
         run: echo "::set-output name=test::Build file .ipa"
       #        run: echo "::set-output name=test::hello"
       - name: Checkout
