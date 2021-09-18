@@ -79,12 +79,12 @@ jobs:
         run: flutter build ios --release
         continue-on-error: true
         # TODO: upload output file
-      #      - name: Upload ipa
-      #        uses: actions/upload-artifact@v2
-      #        with:
-      #          name: appbundle-build
-      #          path: build/app/outputs/bundle/release
-      #        continue-on-error: true
+      - name: Upload ipa
+        uses: actions/upload-artifact@v2
+        with:
+          name: appbundle-build
+          path: build/app/outputs/bundle/release
+        continue-on-error: true
       - name: Pass job status build ios
         id: build_ios_status
         run: echo "::set-output name=test::${{ job.status }}"
