@@ -84,20 +84,21 @@ jobs:
         with:
           name: appbundle-build
           path: build/app/outputs/bundle/release
-        continue-on-error: true
-      - name: Pass job status build ios
-        id: build_ios_status
-        run: echo "::set-output name=test::${{ job.status }}"
-      - id: step1
-        run: echo "::set-output name=test::hello"
-      - id: step2
-        run: echo "::set-output name=test::world"
+  #        continue-on-error: true
+  #      - name: Pass job status build ios
+  #        id: build_ios_status
+  #        run: echo "::set-output name=test::${{ job.status }}"
+  #      - id: step1
+  #        run: echo "::set-output name=test::hello"
+  #      - id: step2
+  #        run: echo "::set-output name=test::world"
 
   job2:
     runs-on: ubuntu-latest
     needs: build_ios
     if: always()
     steps:
+      - run: echo ${{ needs.build_ios.outputs }}
       - run: echo ${{needs.build_ios.outputs.build_ios_status}}
       - run: echo ${{needs.build_ios.outputs.output1}} ${{needs.build_ios.outputs.output2}}
 
