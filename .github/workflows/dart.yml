@@ -115,7 +115,8 @@ jobs:
         run: echo "::set-output name=test::hello"
       - id: step2
         run: echo "::set-output name=test::world"
-      - id: message
+      - name: test
+        id: message
         run: echo "::set-output name=test::test"
   job3:
     runs-on: ubuntu-latest
