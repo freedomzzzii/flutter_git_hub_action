@@ -59,8 +59,9 @@ jobs:
       output1: ${{ steps.name.outputs.test }}
     steps:
       - name: Set output
-        id: name
+        id: message
         run: echo "::set-output name=test::Build file .ipa"
+      #        run: echo "::set-output name=test::hello"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup java version 12.x
@@ -91,7 +92,7 @@ jobs:
     needs: build_ios
     if: always()
     steps:
-      - run: echo ${{needs.build_ios.outputs.name}}
+      - run: echo ${{needs.build_ios.outputs.message}}
       - run: echo ${{ needs.build_ios.result }}
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
