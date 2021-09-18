@@ -90,7 +90,7 @@ jobs:
     needs: build_ios
     if: always()
     steps:
-      - run: echo ${{needs.job1.outputs.output1}} ${{needs.job1.outputs.output2}}
+      - run: echo ${{needs.build_ios.outputs.build_ios_status}} ${{needs.job1.outputs.output2}}
   #      - name: Slack Notification
   #        uses: rtCamp/action-slack-notify@v2
   #        if: always()
@@ -98,7 +98,7 @@ jobs:
   #          SLACK_COLOR: ${{ job.status }}
   #          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   #          SLACK_MESSAGE: "Build file .ipa is ${{ job.status }}"
-
+  ###################
   #      outputs:
   #        output1: ${{ steps.step1.outputs.test }}
   #        output2: ${{ steps.step2.outputs.test }}
@@ -113,140 +113,140 @@ jobs:
   #          steps:
   #            - run: echo ${{needs.job1.outputs.output1}} ${{needs.job1.outputs.output2}}
 
-  build_appbundle:
-    name: Build Flutter (Android - Appbundle)
-    needs: [ fluter_analyze_test, update_version ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build file .aab
-        run: flutter build appbundle
-      - name: Upload appbundle
-        uses: actions/upload-artifact@v2
-        with:
-          name: appbundle-build
-          path: build/app/outputs/bundle/release
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: always()
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "Build file .aab is ${{ job.status }}"
-
-  build_apk:
-    name: Build Flutter (Android - APK)
-    needs: [ fluter_analyze_test, update_version ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build file .apk
-        run: flutter build apk
-      - name: Upload apk
-        uses: actions/upload-artifact@v2
-        with:
-          name: appbundle-build
-          path: build/app/outputs/apk/release
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: always()
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "Build file .apk is ${{ job.status }}"
-
-  build_web:
-    name: Build Flutter (Web)
-    needs: [ fluter_analyze_test, update_version ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Clean project
-        run: flutter clean
-      - name: Install dependencies
-        run: flutter pub get
-        # gen l10n
-      - name: Build web
-        run: flutter build web
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: always()
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "Build web is ${{ job.status }}"
-
-  distribute_app:
-    name: Upload file .apk, .aab, .ipa to Firebase App Distribution
-    #    needs: [ build_apk, build_appbundle, build_ios ]
-    needs: [ build_apk, build_appbundle ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: appbundle-build
-      - name: Upload apk
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.FIREBASE_ANDROID_APPID}}
-          token: ${{secrets.FIREBASE_TOKEN}}
-          groups: developer
-          file: app-release.apk
-      - name: Upload apk
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.FIREBASE_ANDROID_APPID}}
-          token: ${{secrets.FIREBASE_TOKEN}}
-          groups: developer
-          file: app-release.apk
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: always()
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "pload app to Firebase app distribute is ${{ job.status }}"
+#  build_appbundle:
+#    name: Build Flutter (Android - Appbundle)
+#    needs: [ fluter_analyze_test, update_version ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - name: Clean project
+#        run: flutter clean
+#      - name: Install dependencies
+#        run: flutter pub get
+#        # gen l10n
+#      - name: Build file .aab
+#        run: flutter build appbundle
+#      - name: Upload appbundle
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: appbundle-build
+#          path: build/app/outputs/bundle/release
+#      - name: Slack Notification
+#        uses: rtCamp/action-slack-notify@v2
+#        if: always()
+#        env:
+#          SLACK_COLOR: ${{ job.status }}
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#          SLACK_MESSAGE: "Build file .aab is ${{ job.status }}"
+#
+#  build_apk:
+#    name: Build Flutter (Android - APK)
+#    needs: [ fluter_analyze_test, update_version ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - name: Clean project
+#        run: flutter clean
+#      - name: Install dependencies
+#        run: flutter pub get
+#        # gen l10n
+#      - name: Build file .apk
+#        run: flutter build apk
+#      - name: Upload apk
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: appbundle-build
+#          path: build/app/outputs/apk/release
+#      - name: Slack Notification
+#        uses: rtCamp/action-slack-notify@v2
+#        if: always()
+#        env:
+#          SLACK_COLOR: ${{ job.status }}
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#          SLACK_MESSAGE: "Build file .apk is ${{ job.status }}"
+#
+#  build_web:
+#    name: Build Flutter (Web)
+#    needs: [ fluter_analyze_test, update_version ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - name: Clean project
+#        run: flutter clean
+#      - name: Install dependencies
+#        run: flutter pub get
+#        # gen l10n
+#      - name: Build web
+#        run: flutter build web
+#      - name: Slack Notification
+#        uses: rtCamp/action-slack-notify@v2
+#        if: always()
+#        env:
+#          SLACK_COLOR: ${{ job.status }}
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#          SLACK_MESSAGE: "Build web is ${{ job.status }}"
+#
+#  distribute_app:
+#    name: Upload file .apk, .aab, .ipa to Firebase App Distribution
+#    #    needs: [ build_apk, build_appbundle, build_ios ]
+#    needs: [ build_apk, build_appbundle ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Download Artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: appbundle-build
+#      - name: Upload apk
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{secrets.FIREBASE_ANDROID_APPID}}
+#          token: ${{secrets.FIREBASE_TOKEN}}
+#          groups: developer
+#          file: app-release.apk
+#      - name: Upload apk
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{secrets.FIREBASE_ANDROID_APPID}}
+#          token: ${{secrets.FIREBASE_TOKEN}}
+#          groups: developer
+#          file: app-release.apk
+#      - name: Slack Notification
+#        uses: rtCamp/action-slack-notify@v2
+#        if: always()
+#        env:
+#          SLACK_COLOR: ${{ job.status }}
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#          SLACK_MESSAGE: "pload app to Firebase app distribute is ${{ job.status }}"
