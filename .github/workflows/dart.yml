@@ -77,12 +77,14 @@ jobs:
         # gen l10n
       - name: Build file .ipa
         run: flutter build ios --release
-      - name: Upload ipa
-        uses: actions/upload-artifact@v2
-        with:
-          name: appbundle-build
-          path: build/app/outputs/bundle/release
-          # TODO: upload output file
+        continue-on-error: true
+        # TODO: upload output file
+      #      - name: Upload ipa
+      #        uses: actions/upload-artifact@v2
+      #        with:
+      #          name: appbundle-build
+      #          path: build/app/outputs/bundle/release
+      #        continue-on-error: true
       - name: Pass job status build ios
         id: build_ios_status
         run: echo "::set-output name=test::${{ job.status }}"
