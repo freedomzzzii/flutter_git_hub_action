@@ -81,9 +81,9 @@ jobs:
           name: appbundle-build
           path: build/app/outputs/bundle/release
           # TODO: upload output file
-          - name: Pass job status build ios
-            id: build_ios_status
-            run: echo "::set-output name=test::${{ job.status }}"
+      - name: Pass job status build ios
+        id: build_ios_status
+        run: echo "::set-output name=test::${{ job.status }}"
 
   job2:
     runs-on: ubuntu-latest
