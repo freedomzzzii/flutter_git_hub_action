@@ -98,7 +98,7 @@ jobs:
         env:
           SLACK_COLOR: ${{ needs.build_ios.result }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "${{needs.job1.outputs.message}} ${{ needs.build_ios.result }}"
+          SLACK_MESSAGE: "${{needs.build_ios.outputs.message}} ${{ needs.build_ios.result }}"
   #      - run: echo ${{needs.build_ios.outputs.build_ios_status}}
   #      - run: echo ${{needs.build_ios.outputs.output1}} ${{needs.build_ios.outputs.output2}}
 
