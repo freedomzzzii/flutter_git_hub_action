@@ -4,7 +4,7 @@ name: Project workflow
 on: [ push ]
 
 jobs:
-  fluter_analyze_test:
+  flutter_analyze_test:
     name: Run flutter test, analyze
     runs-on: ubuntu-latest
     outputs:
@@ -230,7 +230,7 @@ jobs:
         env:
           SLACK_COLOR: ${{ needs.fluter_analyze_test.result }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: "${{needs.fluter_analyze_test.outputs.message}} ${{ needs.fluter_analyze_test.result }}"
+          SLACK_MESSAGE: "${{needs.fluter_analyze_test.outputs.message}} ${{ needs.flutter_analyze_test.result }}"
       - name: Notify build .ipa resault
         uses: rtCamp/action-slack-notify@v2
         env:
