@@ -51,7 +51,7 @@ jobs:
 
   build_ios:
     name: Build Flutter (iOS)
-    #    needs: [ fluter_analyze_test, update_version ]
+    needs: [ fluter_analyze_test, update_version ]
     runs-on: macos-latest
     outputs:
       message: ${{ steps.message.outputs.test }}
@@ -221,6 +221,7 @@ jobs:
       - build_ios
       - build_appbundle
       - build_apk
+      - build_web
       - distribute_app
     if: always()
     steps:
