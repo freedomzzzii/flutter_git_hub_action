@@ -6,18 +6,20 @@ on: [ push ]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v2settings.gradle
+      #      - uses: actions/setup-java@v2
+      #        with:
+      #          distribution: 'temurin'
+      #          java-version: '11'
+      #          cache: 'gradle'
+      #      - run: ./gradlew build --no-daemon
+      - uses: gradle/gradle-build-action@v1
         with:
-          java-version: '11'
-          distribution: 'adopt'
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: Build with Gradle
-        run: ./gradlew -v
+          gradle-version: 6.7
+          build-root-directory: android
+      - run: pushd android
+      - run: gradlew app:assembleAndroidTest
 #  flutter_analyze_test:
 #    name: Run flutter test, analyze
 #    runs-on: ubuntu-latest
