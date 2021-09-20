@@ -19,7 +19,7 @@ jobs:
           gradle-version: 6.7
           build-root-directory: android
       - run: pushd android
-      - run: gradlew app:assembleAndroidTest
+      - run: ./gradlew app:assembleAndroidTest
 #  flutter_analyze_test:
 #    name: Run flutter test, analyze
 #    runs-on: ubuntu-latest
