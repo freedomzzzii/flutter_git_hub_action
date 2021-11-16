@@ -12,7 +12,6 @@ platform:android do
     lane:test_lab do
         sh("pwd");
         sh("ls -la");
-        sh("./gradlew --help");
         sh("../gradlew --help");
         sh("../../gradlew --help");
         sh("../../android/gradlew app:assembleAndroidTest --settings-file=../../android/settings.gradle")
