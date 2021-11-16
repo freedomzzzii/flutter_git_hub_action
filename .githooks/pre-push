@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# if has error is not run next step
+set -e
+
+echo "Run integration test"
+make integration-test/run/ios
+make integration-test/run/android
+make project/run/chromedriver
+make integration-test/run/web
+
+echo "Run all integration test is Succeed"
+
+exit 0

@@ -1,0 +1,9 @@
+{
+  "createBottomMenu": "สร้าง",
+  "listBottomMenu": "รายการงาน",
+  "updateBottomMenu": "แก้ไขงาน",
+  "notFoundPage": "404 ไม่มีหน้านี้",
+  "appBarTaskGet": "สร้างรายการ",
+  "oopsErrorTaskGet": "ไม่สามารถโหลดรายการได้",
+  "oopsErrorEnv": "มีข้อผิดพลาดบางอย่าง"
+}

@@ -127,7 +127,6 @@ app.*.map.json
 
 # Environtment variable
 .env
-.env-cicd
 
 # Mock file
 *.mocks.dart

@@ -58,7 +58,7 @@ jobs:
           cd android; cat << EOF >> key.properties
           ${{ secrets.KEY_PROPERTIES_ANDROID }}
           EOF
-
+          
       - run: cd android; ls -la
       - run: pwd
       - name: Install dependencies
@@ -74,14 +74,15 @@ jobs:
           gradle-executable: ./android/gradlew
           arguments: wrapper
       - name: Build file .apk
-        #         run: make android/build/apk
+#         run: make android/build/apk
         run: flutter build apk  --release
       - run: cd android; ls -la
-      #       - uses: ruby/setup-ruby@v1
-      #         with:
-      #           ruby-version: 2.6
-      #           bundler-cache: true
+#       - uses: ruby/setup-ruby@v1
+#         with:
+#           ruby-version: 2.6
+#           bundler-cache: true
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'test_lab'
           subdirectory: 'android'
+

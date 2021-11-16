@@ -1,0 +1,9 @@
+{
+  "appBarTaskGet": "Task",
+  "createBottomMenu": "Create",
+  "listBottomMenu": "List",
+  "updateBottomMenu": "Update",
+  "notFoundPage": "404 Not Found",
+  "oopsErrorTaskGet": "Error get task",
+  "oopsErrorEnv": "Error something went wrong."
+}

@@ -252,8 +252,6 @@ rapid Flutter development
 ├── benchmark/
 ├── web/
 ├── .env
-├── .env-cicd
-├── .env-cicd.example
 ├── .env.example
 ├── .gitignore
 ├── .dockerignore
