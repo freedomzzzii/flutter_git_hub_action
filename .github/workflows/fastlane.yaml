@@ -87,6 +87,8 @@ jobs:
           build-root-directory: ./android/gradlew
           gradle-executable: ./android/gradlew
           arguments: wrapper
+      - name: Change permission file gradlew
+        run: cd android; chmod +x gradlew
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'test_lab'
