@@ -13,8 +13,8 @@ platform:android do
         sh("pwd");
         sh("ls -la");
         sh("../gradlew --help");
-        sh("../gradlew/gradlew app:assembleAndroidTest --settings-file=../settings.gradle")
-        sh("../gradlew/gradlew app:assembleDebug --settings-file=../settings.gradle -Ptarget=integration_test/main_integration_test.dart")
+        sh("../gradlew app:assembleAndroidTest --settings-file=../settings.gradle")
+        sh("../gradlew app:assembleDebug --settings-file=../settings.gradle -Ptarget=integration_test/main_integration_test.dart")
 
         slack(
             message: "Test android in Firebase test lab is success",
