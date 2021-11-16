@@ -1,15 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.flutter_git_hub_action">
+          package="com.hugeman.flutterstarterkit">
     <application
-            android:label="flutter_git_hub_action"
-            android:icon="@mipmap/ic_launcher">
+            android:label="poc_clean_arch"
+            android:icon="@mipmap/ic_launcher"
+            android:requestLegacyExternalStorage="true">
         <activity
                 android:name=".MainActivity"
                 android:launchMode="singleTop"
                 android:theme="@style/LaunchTheme"
                 android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
                 android:hardwareAccelerated="true"
-                android:windowSoftInputMode="adjustResize">
+                android:windowSoftInputMode="adjustResize"
+                android:showWhenLocked="true"
+                android:turnScreenOn="true">
+            <!-- Setting schedule full-screen intent notifications (flutter local notification) [showWhenLocked, turnScreenOn] -->
+            <!-- see more in https://github.com/MaikuB/flutter_local_notifications/tree/master/flutter_local_notifications#full-screen-intent-notifications -->
+
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -37,5 +43,20 @@
         <meta-data
                 android:name="flutterEmbedding"
                 android:value="2"/>
+        <!--    firebase    -->
+        <meta-data
+                android:name="firebase_performance_logcat_enabled"
+                android:value="true"/>
+        <!-- Add below permission inside 'application' tag -->
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
     </application>
+    <!-- Add below permission inside 'manifest' tag -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
 </manifest>

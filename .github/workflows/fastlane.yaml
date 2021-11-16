@@ -1,0 +1,87 @@
+name: CI/CD fastlane for iOS/Android
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup java version 12.x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Setup flutter version stable
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - name: Create file .env
+        run: |
+          cat << EOF >> .env
+          API_URL=${{ secrets.API_URL_DEV }}
+          FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
+          FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
+          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
+          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
+          APPLE_ID=${{ secrets.APPLE_ID }}
+          APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
+          APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
+          APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
+          APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
+          GRPC_HOST=${{ secrets.GRPC_HOST }}
+          GRPC_PORT=${{ secrets.GRPC_PORT }}
+          GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
+          EOF
+      - name: Create file google-services.json
+        run: |
+          cd android/app; cat << EOF >> google-services.json
+          ${{ secrets.GOOGLE_SERVICES_ANDROID }}
+          EOF
+      - name: Create file encode-upload-keystore.jks
+        run: |
+          cd android; cat << EOF >> encode-upload-keystore.jks
+          ${{ secrets.UPLOAD_KEYSTORE }}
+          EOF
+      - name: Create file upload-keystore.jks
+        run: base64 -d android/encode-upload-keystore.jks > android/upload-keystore.jks
+      - name: Create file play-store-credentials.json
+        run: |
+          cat << EOF >> play-store-credentials.json
+          ${{ secrets.PLAY_STORE_CREDENTIALS }}
+          EOF
+      - name: Create file key.properties
+        run: |
+          cd android; cat << EOF >> key.properties
+          ${{ secrets.KEY_PROPERTIES_ANDROID }}
+          EOF
+
+      - run: cd android; ls -la
+      - run: pwd
+      - name: Install dependencies
+        run: make project/install/package
+      - name: Generate l10n
+        run: make l10n/generate
+      - name: Generate mock file for test
+        run: make test/generate/mock-file
+      - uses: gradle/gradle-build-action@v1
+        with:
+          gradle-version: 6.7
+          build-root-directory: ./android/gradlew
+          gradle-executable: ./android/gradlew
+          arguments: wrapper
+      - name: Build file .apk
+        #         run: make android/build/apk
+        run: flutter build apk  --release
+      - run: cd android; ls -la
+      #       - uses: ruby/setup-ruby@v1
+      #         with:
+      #           ruby-version: 2.6
+      #           bundler-cache: true
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'test_lab'
+          subdirectory: 'android'
