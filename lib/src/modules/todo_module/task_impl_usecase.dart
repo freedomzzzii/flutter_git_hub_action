@@ -1,7 +1,7 @@
-import '../../utils/error_code_util.dart';
+import '../../utils/error_code/error_code_util.dart';
 import 'commons/errors/usecase_error.dart';
 import 'commons/exceptions/usecase_exception.dart';
-import 'configs/usecasae_message/usecase_message_config.dart';
+import 'configs/usecasae_messages/usecase_message_config.dart';
 import 'domains/entities/task_create_entity.dart';
 import 'domains/entities/task_delete_entity.dart';
 import 'domains/entities/task_get_entity.dart';

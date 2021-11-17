@@ -3,29 +3,29 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular_test/flutter_modular_test.dart';
+import 'package:flutter_starter_kit/src/configs/l10n/app_localizations.dart';
+import 'package:flutter_starter_kit/src/configs/routes/route_config.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/configs/widget_key/widget_key_config.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_create_screen.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/todo_module.dart';
+import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:poc_clean_arch/src/configs/l10n/app_localizations.dart';
-import 'package:poc_clean_arch/src/configs/routes/route_config.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/configs/widget_key/widget_key_config.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/presentations/screens/task_create_screen.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/todo_module.dart';
 
-import '../../../../../test_data/mock_test_data.dart';
-import '../../../../helpers/image_picker/image_picker_util_test.mocks.dart';
+import '../../../../utils/image_picker/image_picker_util_test.mocks.dart';
 import '../../../app_module_test.mocks.dart';
 import '../../applications/bloc/task_bloc/task_bloc_test.mocks.dart';
 
 void main() {
-  final MockTaskBloc bloc = MockTaskBloc();
-  final MockImagePickerUtil mockSelectImage = MockImagePickerUtil();
+  final MockTaskBloc mockBloc = MockTaskBloc();
+  final MockImagePickerUtil mockImagePickerUtil = MockImagePickerUtil();
 
   setUp(() {
     initModule(
       TodoModule(),
       replaceBinds: <Bind<Object>>[
-        Bind<Object>((_) => bloc),
+        Bind<Object>((_) => mockBloc),
       ],
     );
 
@@ -40,13 +40,13 @@ void main() {
     testWidgets('Should have mandatory menu', (WidgetTester tester) async {
       late BuildContext testContext;
 
-      when(bloc.stream).thenAnswer(
+      when(mockBloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           TaskInitialState(),
           expectTaskCreateStateSuccess,
         ]),
       );
-      when(bloc.state).thenReturn(TaskInitialState());
+      when(mockBloc.state).thenReturn(TaskInitialState());
 
       await tester.pumpWidget(
         MaterialApp(
@@ -54,7 +54,9 @@ void main() {
             builder: (BuildContext context) {
               testContext = context;
 
-              return TaskCreateScreenWidget(imagePickerUtil: mockSelectImage);
+              return TaskCreateScreenWidget(
+                imagePickerUtil: mockImagePickerUtil,
+              );
             },
           ),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -77,18 +79,18 @@ void main() {
     });
 
     testWidgets('Should have mandatory app bar', (WidgetTester tester) async {
-      when(bloc.stream).thenAnswer(
+      when(mockBloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           TaskInitialState(),
           expectTaskCreateStateSuccess,
         ]),
       );
-      when(bloc.state).thenReturn(TaskInitialState());
+      when(mockBloc.state).thenReturn(TaskInitialState());
 
       await tester.pumpWidget(
         MaterialApp(
           home: TaskCreateScreenWidget(
-            imagePickerUtil: mockSelectImage,
+            imagePickerUtil: mockImagePickerUtil,
           ),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -101,13 +103,13 @@ void main() {
     testWidgets('Should have mandatory form', (WidgetTester tester) async {
       late BuildContext testContext;
 
-      when(bloc.stream).thenAnswer(
+      when(mockBloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           TaskInitialState(),
           expectTaskCreateStateSuccess,
         ]),
       );
-      when(bloc.state).thenReturn(TaskInitialState());
+      when(mockBloc.state).thenReturn(TaskInitialState());
 
       await tester.pumpWidget(
         MaterialApp(
@@ -115,7 +117,9 @@ void main() {
             builder: (BuildContext context) {
               testContext = context;
 
-              return TaskCreateScreenWidget(imagePickerUtil: mockSelectImage);
+              return TaskCreateScreenWidget(
+                imagePickerUtil: mockImagePickerUtil,
+              );
             },
           ),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -124,11 +128,11 @@ void main() {
       );
 
       expect(
-        find.text(AppLocalizations.of(testContext).titlePlaceholderTaskCreate),
+        find.text(AppLocalizations.of(testContext).selectImage),
         findsOneWidget,
       );
       expect(
-        find.text(AppLocalizations.of(testContext).selectImageBtnTaskCreate),
+        find.text(AppLocalizations.of(testContext).textFieldPlaceHolder),
         findsOneWidget,
       );
       expect(find.byKey(const Key(titleTextFieldWidgetKey)), findsOneWidget);
@@ -137,30 +141,31 @@ void main() {
 
     testWidgets('Should call bloc to create task - Success case',
         (WidgetTester tester) async {
-      when(bloc.stream).thenAnswer(
+          when(mockBloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           TaskInitialState(),
           expectTaskCreateStateSuccess,
         ]),
       );
-      when(bloc.state).thenReturn(TaskInitialState());
+      when(mockBloc.state).thenReturn(TaskInitialState());
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskCreateScreenWidget(imagePickerUtil: mockSelectImage),
+          home: TaskCreateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
       );
 
-      when(bloc.add(TaskCreatedEvent(model: expectTaskCreateRequestBlocModel)))
-          .thenAnswer(
+      when(
+        mockBloc.add(TaskCreatedEvent(model: expectTaskCreateRequestBlocModel)),
+      ).thenAnswer(
         (_) => Future<TaskState>.value(
           expectTaskCreateStateSuccess,
         ),
       );
 
-      when(mockSelectImage.getBase64Image()).thenAnswer(
+      when(mockImagePickerUtil.getBase64Image()).thenAnswer(
         (_) => Future<String>.value(expectTaskCreateResponseEntity.imageUrl),
       );
 
@@ -178,7 +183,7 @@ void main() {
 
       expect(find.byKey(const Key(snackBarSuccessWidgetKey)), findsOneWidget);
 
-      verify(mockSelectImage.getBase64Image()).called(1);
+      verify(mockImagePickerUtil.getBase64Image()).called(1);
 
       verify(Modular.to.pushNamed(initialRoute)).called(1);
     });
@@ -186,16 +191,16 @@ void main() {
     testWidgets('''
 Should call bloc to create task - Failure case (error in _selectImage method)''',
         (WidgetTester tester) async {
-      when(bloc.stream).thenAnswer(
+          when(mockBloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           TaskInitialState(),
         ]),
       );
-      when(bloc.state).thenReturn(TaskInitialState());
+      when(mockBloc.state).thenReturn(TaskInitialState());
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskCreateScreenWidget(imagePickerUtil: mockSelectImage),
+          home: TaskCreateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -204,7 +209,8 @@ Should call bloc to create task - Failure case (error in _selectImage method)'''
       expect(find.byKey(const Key(snackBarSuccessWidgetKey)), findsNothing);
       expect(find.byKey(const Key(snackBarFailureWidgetKey)), findsNothing);
 
-      when(mockSelectImage.getBase64Image()).thenThrow(expectImagePickerError);
+      when(mockImagePickerUtil.getBase64Image())
+          .thenThrow(expectImagePickerError);
 
       await tester.enterText(
         find.byKey(const Key(titleTextFieldWidgetKey)),
@@ -217,7 +223,7 @@ Should call bloc to create task - Failure case (error in _selectImage method)'''
 
       expect(find.byKey(const Key(snackBarFailureWidgetKey)), findsOneWidget);
 
-      verify(mockSelectImage.getBase64Image()).called(1);
+      verify(mockImagePickerUtil.getBase64Image()).called(1);
     });
   });
 }

@@ -1,5 +1,5 @@
 import '../../../../commons/errors/app_error.dart';
-import '../../../../utils/error_code_util.dart';
+import '../../../../utils/error_code/error_code_util.dart';
 
 class TaskCreateUseCaseError implements AppError {
   TaskCreateUseCaseError({

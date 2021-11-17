@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_starter_kit/src/configs/routes/route_config.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_create_screen.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_get_screen.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_update_screen.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/todo_module.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:poc_clean_arch/src/configs/routes/route_config.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/presentations/screens/task_create_screen.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/presentations/screens/task_get_screen.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/presentations/screens/task_update_screen.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/todo_module.dart';
 
-import '../../helpers/image_picker/image_picker_util_test.mocks.dart';
+import '../../utils/image_picker/image_picker_util_test.mocks.dart';
 
 void main() {
   final TodoModule expectTodoModule = TodoModule();

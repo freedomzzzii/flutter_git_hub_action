@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular_test/flutter_modular_test.dart';
+import 'package:flutter_starter_kit/src/configs/l10n/app_localizations.dart';
+import 'package:flutter_starter_kit/src/configs/routes/route_config.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/presentations/widgets/bottom_menu_bar_widget.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/todo_module.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:poc_clean_arch/src/configs/l10n/app_localizations.dart';
-import 'package:poc_clean_arch/src/configs/routes/route_config.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/presentations/widgets/bottom_menu_bar_widget.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/todo_module.dart';
 
 import '../../../app_module_test.mocks.dart';
 import '../../task_impl_usecase_test.mocks.dart';

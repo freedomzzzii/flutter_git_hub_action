@@ -1,19 +1,19 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/error_bloc_model.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/exception_bloc_model.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/task_bloc_models/task_create_bloc_model.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/task_bloc_models/task_delete_bloc_model.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/task_bloc_models/task_update_bloc_model.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_create_entity.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_delete_entity.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_get_entity.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_update_entity.dart';
+import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/models/error_bloc_model.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/models/exception_bloc_model.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/models/task_bloc_models/task_create_bloc_model.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/models/task_bloc_models/task_delete_bloc_model.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/applications/models/task_bloc_models/task_update_bloc_model.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_create_entity.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_delete_entity.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_get_entity.dart';
-import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_update_entity.dart';
 
-import '../../../../../../test_data/mock_test_data.dart';
 import '../../../task_impl_usecase_test.mocks.dart';
 
 @GenerateMocks(<Type>[TaskBloc])

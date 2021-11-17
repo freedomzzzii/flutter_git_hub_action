@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../../commons/constants/api_constant.dart';
 import '../../../../commons/constants/env_constant.dart';
-import '../../../../utils/error_code_util.dart';
+import '../../../../utils/error_code/error_code_util.dart';
 import '../../commons/errors/datasource_error.dart';
 import '../../domains/datasources/datasource.dart';
 import '../commons/response_json_key.dart';
