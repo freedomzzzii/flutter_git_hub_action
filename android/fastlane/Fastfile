@@ -12,27 +12,12 @@ platform:android do
     lane:test_lab do
         sh("../../android/gradlew app:assembleAndroidTest --settings-file=../../android/settings.gradle")
         sh("../../android/gradlew app:assembleDebug --settings-file=../../android/settings.gradle -Ptarget=integration_test/main_integration_test.dart")
-        sh("flutter build apk")
-
-        slack(
-            message: "Test android in Firebase test lab is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
     # run this lane before deploy to firebase app distribute
     desc "Build file .apk for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-        sh("flutter build apk")
-
-        slack(
-            message: "Build file .apk for deploy firebase app distribute is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
+        sh("flutter build apk --release")
     end
 
     # branches: feature, develop, bugfix, hotfix, release
@@ -42,13 +27,6 @@ platform:android do
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "developer",
             apk_path: "../build/app/outputs/apk/release/app-release.apk"
-        )
-
-        slack(
-            message: "Deploy a beta version to the Firebase App Distribute for Developer testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
         )
     end
 
@@ -77,13 +55,6 @@ platform:android do
             groups: "user",
             apk_path: "../build/app/outputs/apk/release/app-release.apk"
         )
-
-        slack(
-            message: "Deploy a beta version to the Firebase App Distribute for User testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
     # tag: master
@@ -98,25 +69,9 @@ platform:android do
             aab:"../build/app/outputs/bundle/release/app-release.aab",
             release_status: 'draft',
         )
-
-        slack(
-            message: "Deploy a beta version to the Play store is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
     error do |lane, exception, options|
-        slack(
-            message: "#{lane} -- #{exception.to_s}",
-            success: false,
-            payload: {
-                "Output" => exception.error_info.to_s,
-            },
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
+        # trigger jenkins
     end
 end
