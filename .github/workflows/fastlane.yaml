@@ -35,6 +35,7 @@ jobs:
           GRPC_HOST=${{ secrets.GRPC_HOST }}
           GRPC_PORT=${{ secrets.GRPC_PORT }}
           GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
+          FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
           EOF
       - name: Create file google-services.json
         run: |
