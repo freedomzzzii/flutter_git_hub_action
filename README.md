@@ -12,7 +12,7 @@ rapid Flutter development
     - Android add file `google-services.json` in `/android/app/`
     - iOS add file `GoogleService-Info.plist` into project see more
       in https://firebase.flutter.dev/docs/installation/ios
-    - Web update firebase config in file `/web/firebase-config-service.js`
+    - Web update firebase config in file `/web/firebase-config-sw.js`
   - Update value environment variable in ile `.env`
 - Start your simulator ios simulator or android emulator
 - Run Command `flutter run`
@@ -252,8 +252,6 @@ rapid Flutter development
 ├── benchmark/
 ├── web/
 ├── .env
-├── .env-cicd
-├── .env-cicd.example
 ├── .env.example
 ├── .gitignore
 ├── .dockerignore

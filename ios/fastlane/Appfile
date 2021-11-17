@@ -1,8 +1,8 @@
-app_identifier("com.hugeman.flutterstarterkit") # The bundle identifier of your app
-apple_id("tee.theeraporn@hugeman.co") # Your Apple email address
+require('dotenv')
+Dotenv.load '../../.env'
 
-itc_team_id("123293570") # App Store Connect Team ID
-team_id("F5TTGBJ3W4") # Developer Portal Team ID
+app_identifier(ENV["APP_BUNDLE_ID"])
+apple_id(ENV["APPLE_ID"])
 
-# For more information about the Appfile, see:
-#     https://docs.fastlane.tools/advanced/#appfile
+itc_team_id(ENV["APPLE_ITC_TEAM_ID"])
+team_id(ENV["APPLE_TEAM_ID"])

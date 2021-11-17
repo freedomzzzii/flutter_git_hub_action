@@ -21,6 +21,8 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+// Configure gradle to use your upload key when building your app in release mode
+// see more in https://flutter.dev/docs/deployment/android#configure-signing-in-gradle
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -30,7 +32,8 @@ if (keystorePropertiesFile.exists()) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-//firebase
+// apply plugin firebase
+// see more in https://firebase.flutter.dev/docs/installation/android
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -43,16 +46,23 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.hugeman.flutterstarterkit"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        // Android Device Testing (firebase test lab) uses androidx's version of AndroidJUnitRunner and has androidx libraries as a dependency.
+        // see more in https://github.com/flutter/flutter/tree/master/packages/integration_test#android-device-testing
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // if your minSdkVersion is set to 20 or lower, then you must use the multidex support library
+        // see more in https://firebase.flutter.dev/docs/installation/android, https://developer.android.com/studio/build/multidex#mdex-gradle
         multiDexEnabled true
     }
 
+    // Configure gradle to use your upload key when building your app
+    // see more in https://flutter.dev/docs/deployment/android#configure-signing-in-gradle
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -62,7 +72,10 @@ android {
         }
     }
     buildTypes {
-        release {
+        debug { // for mode debug
+            signingConfig signingConfigs.debug
+        }
+        release { // for distribute app (with credential to deploy play store)
             signingConfig signingConfigs.release
         }
     }
@@ -74,10 +87,22 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Android Device Testing (firebase test lab) uses androidx's version of AndroidJUnitRunner and has androidx libraries as a dependency.
+    // see more in https://github.com/flutter/flutter/tree/master/packages/integration_test#android-device-testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // if your minSdkVersion is set to 20 or lower, then you must use the multidex support library
+    // see more in https://firebase.flutter.dev/docs/installation/android, https://developer.android.com/studio/build/multidex#mdex-gradle
     implementation 'com.android.support:multidex:1.0.3'
+
+    // Add Firebase SDKs to your app
+    // see more in https://firebase.google.com/docs/android/setup?authuser=0
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
+
+    // Add Firebase performance monitoring to your app
+    // see more in https://firebase.google.com/docs/perf-mon/get-started-android
     implementation 'com.google.firebase:firebase-perf'
 }

@@ -1,6 +1,6 @@
 importScripts("https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js");
-importScripts("firebase-config-service.js");
+importScripts("firebase-config-sw.js");
 
 firebase.initializeApp(config);
 

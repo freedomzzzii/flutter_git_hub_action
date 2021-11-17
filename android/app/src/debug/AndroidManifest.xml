@@ -4,6 +4,8 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--  Enabling use of Firebase Emulator Suite (firebase)  -->
+    <!--  see more in https://firebase.flutter.dev/docs/installation/android#enabling-use-of-firebase-emulator-suite  -->
     <application android:usesCleartextTraffic="true">
         <!-- possibly other elements -->
     </application>

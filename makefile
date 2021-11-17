@@ -1,16 +1,17 @@
 project/init: project/cleanup git-hooks/setup project/install/package l10n/generate test/generate/mock-file
-	cp .env.example .env; cp ./web/example-firebase-config-service.js ./web/firebase-config-service.js
+	cp .env.example .env; cp ./web/example-firebase-config-sw.js ./web/firebase-config-sw.js
 
-# flutter pub get VS dart pub get
-# see more in https://dart.dev/tools/pub/cmd
 project/install/package:
-	dart pub get
+	flutter pub get; dart pub get
 
 project/cleanup: analysis/cleanup
 	flutter clean
 
 project/repair/package:
 	flutter pub cache repair
+
+project/template:
+	rm -rf lib; rm -rf test; cp -R example lib
 
 project/run/ios:
 	bash ./tool/run-ios-simulator.sh
@@ -69,17 +70,20 @@ android/build/appbundle/release:
 android/build/appbundle/debug:
 	flutter build appbundle --debug
 
-android/build/apk/release:
-	flutter build apk  --release
-
-android/build/apk/debug:
-	flutter build apk --debug
+android/build/apk:
+	flutter build apk
 
 android/build/test:
 	./android/gradlew app:assembleAndroidTest --settings-file=./android/settings.gradle
 
 android/build/test-debug:
 	./android/gradlew app:assembleDebug --settings-file=./android/settings.gradle -Ptarget=integration_test/main_integration_test.dart
+
+ios/build/ipa/adhoc:
+	flutter build ipa --export-options-plist=ios/Runner/exportOptionsAdHoc.plist
+
+ios/build/ipa/distribute:
+	flutter build ipa --export-options-plist=ios/Runner/exportOptions.plist
 
 ios/build/test:
 	flutter build ios integration_test/main_integration_test.dart --release

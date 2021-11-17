@@ -1,10 +1,98 @@
 default_platform(:android)
 
-platform :android do
+fastlane_require 'dotenv'
 
-    desc "Deploy a beta version to the Google Play"
+before_all do
+  Dotenv.overload '../../.env'
+end
+
+platform:android do
+    # branch: all branch
+    desc "Test android in Firebase test lab"
+    lane:test_lab do
+        sh("../../android/gradlew app:assembleAndroidTest --settings-file=../../android/settings.gradle")
+        sh("../../android/gradlew app:assembleDebug --settings-file=../../android/settings.gradle -Ptarget=integration_test/main_integration_test.dart")
+        sh("flutter build apk")
+
+        slack(
+            message: "Test android in Firebase test lab is success",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
+            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+        )
+    end
+
+    # run this lane before deploy to firebase app distribute
+    desc "Build file .apk for deploy firebase app distribute"
+    lane:build_file_for_app_distribution do
+        sh("flutter build apk")
+
+        slack(
+            message: "Build file .apk for deploy firebase app distribute is success",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
+            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+        )
+    end
+
+    # branches: feature, develop, bugfix, hotfix, release
+    desc "Deploy a beta version to the Firebase App Distribute for Developer testing"
+    lane:app_distribution_group_developer do
+        firebase_app_distribution(
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
+            groups: "developer",
+            apk_path: "../build/app/outputs/apk/release/app-release.apk"
+        )
+
+        slack(
+            message: "Deploy a beta version to the Firebase App Distribute for Developer testing is success",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
+            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+        )
+    end
+
+    # branches: feature, develop, bugfix, hotfix, release, master(pre-prod)[tag]
+    desc "Deploy a beta version to the Firebase App Distribute for QA testing"
+    lane:app_distribution_group_qa do
+        firebase_app_distribution(
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
+            groups: "qa",
+            apk_path: "../build/app/outputs/apk/release/app-release.apk"
+       )
+
+        slack(
+            message: "Deploy a beta version to the Firebase App Distribute for QA testing is success",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
+            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+        )
+    end
+
+    # branch: release
+    desc "Deploy a beta version to the Firebase App Distribute for User testing"
+    lane:app_distribution_group_user do
+        firebase_app_distribution(
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
+            groups: "user",
+            apk_path: "../build/app/outputs/apk/release/app-release.apk"
+        )
+
+        slack(
+            message: "Deploy a beta version to the Firebase App Distribute for User testing is success",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
+            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+        )
+    end
+
+    # tag: master
+    desc "Deploy a beta version to the Play store"
     lane:beta do
-        sh("flutter build appbundle")
+        sh("flutter build appbundle --release")
+
+        # Release status (used when uploading new apks/aabs)
+        # see more in http://docs.fastlane.tools/actions/upload_to_play_store/#upload_to_play_store
         upload_to_play_store(
             track: 'beta',
             aab:"../build/app/outputs/bundle/release/app-release.aab",
@@ -12,54 +100,22 @@ platform :android do
         )
 
         slack(
-            message: "Deploy a beta version to the Google Play",
-            channel: "#test-integrate-firebase-pocflutter",
-            slack_url: "https://hooks.slack.com/services/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",
+            message: "Deploy a beta version to the Play store is success",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
             default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
-    end
-
-    desc "Deploy a new release build to the App Distribute"
-    lane :app_distribution do
-        sh("flutter build apk")
-
-        firebase_app_distribution(
-           app: "1:523370163800:android:399e19c561c6d237a5e42d",
-           groups: "developer",
-           apk_path: "../build/app/outputs/apk/release/app-release.apk"
-       )
-
-       slack(
-            message: "Deploy android application to app distribution",
-            channel: "#test-integrate-firebase-pocflutter",
-            slack_url: "https://hooks.slack.com/services/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",
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-       )
-    end
-
-    desc "Test android in Firebase test lab"
-    lane :test_lab do
-        sh("../../android/gradlew app:assembleAndroidTest --settings-file=../../android/settings.gradle")
-        sh("../../android/gradlew app:assembleDebug --settings-file=../../android/settings.gradle -Ptarget=integration_test/main_integration_test.dart")
-        sh("flutter build apk")
-
-        slack(
-           message: "Test android in Firebase test lab is success",
-           channel: "#test-integrate-firebase-pocflutter",  # Optional, by default will post to the default channel configured for the POST URL.
-           slack_url: "https://hooks.slack.com/services/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",
-           default_payloads: ["lane", "test_result", "git_branch", "git_author"]
         )
     end
 
     error do |lane, exception, options|
         slack(
-           message: "#{lane} -- #{exception.to_s}",
-           success: false,
-           payload: {
+            message: "#{lane} -- #{exception.to_s}",
+            success: false,
+            payload: {
                 "Output" => exception.error_info.to_s,
             },
-            channel: "#test-integrate-firebase-pocflutter",
-            slack_url: "https://hooks.slack.com/services/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",
+            channel: ENV["FASTLANE_SLACK_CHANNEL"],
+            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
             default_payloads: ["lane", "test_result", "git_branch", "git_author"]
         )
     end
