@@ -1,1 +1,1 @@
-// this file for api constant
+// this file for api constant e.g. const String taskResourceApi = '/tasks';

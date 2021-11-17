@@ -11,8 +11,8 @@ void main() {
     });
 
     test('Should have mandatory properties', () {
-      expect(expectImagePickerUtilError.code, expectDataSourceError.code);
-      expect(expectImagePickerUtilError.message, expectDataSourceError.message);
+      expect(expectImagePickerError.code, expectDataSourceError.code);
+      expect(expectImagePickerError.message, expectDataSourceError.message);
     });
   });
 }

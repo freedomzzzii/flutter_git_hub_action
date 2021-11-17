@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../../configs/l10n/app_localizations.dart';
 import '../widgets/bottom_menu_bar_widget.dart';
 
-class NotFoundScreen extends StatelessWidget {
-  const NotFoundScreen({Key? key}) : super(key: key);
+class NotFoundPage extends StatelessWidget {
+  const NotFoundPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

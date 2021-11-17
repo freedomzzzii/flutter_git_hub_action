@@ -1,6 +1,5 @@
 import 'package:faker/faker.dart';
 
-import '../../helpers/check_os/check_os_helper.dart';
 import '../../modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
 import '../../modules/todo_module/applications/models/error_bloc_model.dart';
 import '../../modules/todo_module/applications/models/exception_bloc_model.dart';
@@ -12,7 +11,6 @@ import '../../modules/todo_module/commons/errors/datasource_error.dart';
 import '../../modules/todo_module/commons/errors/repository_error.dart';
 import '../../modules/todo_module/commons/errors/usecase_error.dart';
 import '../../modules/todo_module/commons/exceptions/usecase_exception.dart';
-import '../../modules/todo_module/configs/grpc/task.pbgrpc.dart';
 import '../../modules/todo_module/configs/usecasae_messages/usecase_message_config.dart';
 import '../../modules/todo_module/domains/entities/task_create_entity.dart';
 import '../../modules/todo_module/domains/entities/task_delete_entity.dart';
@@ -20,12 +18,10 @@ import '../../modules/todo_module/domains/entities/task_get_entity.dart';
 import '../../modules/todo_module/domains/entities/task_update_entity.dart';
 import '../../modules/todo_module/services/commons/request_query.dart';
 import '../../modules/todo_module/services/models/task_create_datasource_model.dart';
-import '../../modules/todo_module/services/models/task_delete_datasource_model.dart';
 import '../../modules/todo_module/services/models/task_get_datasource_model.dart';
 import '../../modules/todo_module/services/models/task_update_datasource_model.dart';
 import '../error_code/error_code_util.dart';
-import '../firebase_message/firebase_message_util.dart';
-import '../grpc/grpc_util.dart';
+import '../firebase/firebase_message_util.dart';
 import '../image_picker/image_picker_util.dart';
 
 final Faker faker = Faker();
@@ -61,7 +57,7 @@ final DataSourceError expectDataSourceError = DataSourceError(
   code: appErrorCodes.missingRequiredFields,
 );
 
-final ImagePickerUtilError expectImagePickerUtilError = ImagePickerUtilError(
+final ImagePickerUtilError expectImagePickerError = ImagePickerUtilError(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
@@ -362,35 +358,6 @@ final FirebaseMessagingUtilError expectFirebaseMessagingUtilError =
 
 final LocalNotificationUtilError expectLocalNotificationUtilError =
     LocalNotificationUtilError(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final GrpcClientUtilError expectGrpcClientUtilError = GrpcClientUtilError(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final TaskFetchWithMetaDataMessage expectGetTasksResponse =
-    TaskFetchWithMetaDataMessage(
-  data: <Task>[
-    Task(
-      id: expectTaskGetResponseEntity.id,
-      title: expectTaskGetResponseEntity.title,
-      imageUrl: expectTaskGetResponseEntity.imageUrl,
-      isDone: expectTaskGetResponseEntity.isDone,
-      createdAt: expectTaskGetResponseEntity.createdAt.toString(),
-    )
-  ],
-);
-
-final TaskDeleteQueryParamsRequestDataSourceModel
-    expectTaskDeleteQueryParamsRequestDataSourceModel =
-    TaskDeleteQueryParamsRequestDataSourceModel(
-  id: expectTaskGetResponseEntity.id,
-);
-
-final GetOsError expectGetOsError = GetOsError(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );

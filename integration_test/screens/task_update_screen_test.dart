@@ -59,7 +59,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAA
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskUpdateScreen(imagePickerUtil: mockImagePickerUtil),
+          home: TaskUpdateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),

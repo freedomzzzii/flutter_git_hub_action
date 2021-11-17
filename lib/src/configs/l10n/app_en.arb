@@ -3,7 +3,6 @@
   "appBarTaskGet": "Task",
   "createBottomMenu": "Create",
   "listBottomMenu": "List",
-  "grpcBottomMenu": "gRPC",
   "updateBottomMenu": "Update",
   "updateTaskAppBar": "Update Task",
   "saveUpdateTaskBtn": "Save",

@@ -54,7 +54,7 @@ void main() {
             builder: (BuildContext context) {
               testContext = context;
 
-              return TaskCreateScreen(
+              return TaskCreateScreenWidget(
                 imagePickerUtil: mockImagePickerUtil,
               );
             },
@@ -89,7 +89,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskCreateScreen(
+          home: TaskCreateScreenWidget(
             imagePickerUtil: mockImagePickerUtil,
           ),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -117,7 +117,7 @@ void main() {
             builder: (BuildContext context) {
               testContext = context;
 
-              return TaskCreateScreen(
+              return TaskCreateScreenWidget(
                 imagePickerUtil: mockImagePickerUtil,
               );
             },
@@ -151,7 +151,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskCreateScreen(imagePickerUtil: mockImagePickerUtil),
+          home: TaskCreateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -200,7 +200,7 @@ Should call bloc to create task - Failure case (error in _selectImage method)'''
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskCreateScreen(imagePickerUtil: mockImagePickerUtil),
+          home: TaskCreateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -210,7 +210,7 @@ Should call bloc to create task - Failure case (error in _selectImage method)'''
       expect(find.byKey(const Key(snackBarFailureWidgetKey)), findsNothing);
 
       when(mockImagePickerUtil.getBase64Image())
-          .thenThrow(expectImagePickerUtilError);
+          .thenThrow(expectImagePickerError);
 
       await tester.enterText(
         find.byKey(const Key(titleTextFieldWidgetKey)),

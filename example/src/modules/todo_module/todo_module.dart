@@ -33,7 +33,7 @@ class TodoModule extends Module {
   List<ModularRoute<dynamic>> get routes => <ModularRoute<dynamic>>[
         ChildRoute<String>(
           initialRoute,
-          child: (_, __) => TaskGetScreen(),
+          child: (_, __) => TaskGetScreenWidget(),
         ),
       ];
 }

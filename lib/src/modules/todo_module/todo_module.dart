@@ -2,15 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../configs/routes/route_config.dart';
-import '../../utils/grpc/grpc_util.dart';
 import '../../utils/image_picker/image_picker_util.dart';
 import 'applications/bloc/task_bloc/task_bloc.dart';
 import 'presentations/screens/task_create_screen.dart';
-import 'presentations/screens/task_get_grpc_screen.dart';
 import 'presentations/screens/task_get_screen.dart';
 import 'presentations/screens/task_update_screen.dart';
 import 'services/datasources/api_datasource.dart';
-import 'services/datasources/grpc_datasource.dart';
 import 'task_impl_repository.dart';
 import 'task_impl_usecase.dart';
 
@@ -38,32 +35,18 @@ class TodoModule extends Module {
   List<ModularRoute<dynamic>> get routes => <ModularRoute<dynamic>>[
         ChildRoute<String>(
           initialRoute,
-          child: (_, __) => TaskGetScreen(),
+          child: (_, __) => TaskGetScreenWidget(),
         ),
         ChildRoute<String>(
           createTaskRoute,
-          child: (_, __) => TaskCreateScreen(
+          child: (_, __) => TaskCreateScreenWidget(
             imagePickerUtil: _imagePicker,
           ),
         ),
         ChildRoute<String>(
           updateTaskRoute,
-          child: (_, __) => TaskUpdateScreen(
+          child: (_, __) => TaskUpdateScreenWidget(
             imagePickerUtil: _imagePicker,
-          ),
-        ),
-        ChildRoute<String>(
-          getTaskGrpcRoute,
-          child: (_, __) => TaskGetGrpcScreen(
-            bloc: TaskBloc(
-              usecase: TaskImplUseCase(
-                repository: TaskImplRepository(
-                  dataSource: GprcDataSource(
-                    grpcClient: GrpcClientUtil(),
-                  ),
-                ),
-              ),
-            ),
           ),
         ),
       ];

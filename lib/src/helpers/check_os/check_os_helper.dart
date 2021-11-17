@@ -40,7 +40,8 @@ class GetOsError implements AppError {
   final String _message;
   final appErrorCodes _code;
 
-  static const String errorContext = 'Error in function check os:';
+  static const String errorContext =
+      'An error occurred in the check os function:';
 
   @override
   String get message => _message;

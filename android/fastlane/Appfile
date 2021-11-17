@@ -1,5 +1,5 @@
 require('dotenv')
-Dotenv.load '../../.env'
+Dotenv.load '../../.env-cicd'
 
 json_key_file("../play-store-credentials.json")
 package_name(ENV["APP_BUNDLE_ID"])

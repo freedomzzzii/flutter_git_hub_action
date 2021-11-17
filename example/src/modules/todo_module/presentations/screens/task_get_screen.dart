@@ -9,8 +9,8 @@ import '../../configs/widget_key/widget_key_config.dart';
 import '../../services/commons/request_query.dart';
 import '../widgets/bottom_menu_bar_widget.dart';
 
-class TaskGetScreen extends StatelessWidget {
-  TaskGetScreen({Key? key}) : super(key: key);
+class TaskGetScreenWidget extends StatelessWidget {
+  TaskGetScreenWidget({Key? key}) : super(key: key);
 
   final TaskBloc _bloc = Modular.get<TaskBloc>();
 

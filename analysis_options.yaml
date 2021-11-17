@@ -4,9 +4,8 @@ analyzer:
   exclude:
     - "**.mocks.dart"
     - lib/generated_plugin_registrant.dart
-    - lib/src/configs/l10n/**
+    - lib/src/configs/l10n/app_localizations.dart
     - example/**
-    - lib/src/modules/todo_module/configs/grpc/**
 
 linter:
   rules:

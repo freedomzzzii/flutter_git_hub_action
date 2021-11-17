@@ -127,6 +127,7 @@ app.*.map.json
 
 # Environtment variable
 .env
+.env-cicd
 
 # Mock file
 *.mocks.dart
@@ -152,4 +153,4 @@ play-store-credentials.json
 # credential firebase
 GoogleService-Info.plist
 google-services.json
-web/firebase-config-sw.js
+web/firebase-config-service.js

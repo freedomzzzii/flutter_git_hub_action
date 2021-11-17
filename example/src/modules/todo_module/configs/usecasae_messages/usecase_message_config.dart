@@ -1,1 +1,1 @@
-// this file for error message on usecase
+// this file for error message on usecase e.g. const String requiredTitleMessage = 'title';

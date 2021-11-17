@@ -1,0 +1,63 @@
+{
+  "entries": {
+    "brew": {
+      "swiftformat": {
+        "version": "0.48.16",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/swiftformat/blobs/sha256:6e754174bb20c391ccebe2685d1ab2dcba66020f0bb0eb118c09272d9daebbbd",
+              "sha256": "6e754174bb20c391ccebe2685d1ab2dcba66020f0bb0eb118c09272d9daebbbd"
+            },
+            "big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/swiftformat/blobs/sha256:a6d4e1a74a8904358df45ea9cc694dbf9b228e6fcf1bcf88bb9f5e18681411ac",
+              "sha256": "a6d4e1a74a8904358df45ea9cc694dbf9b228e6fcf1bcf88bb9f5e18681411ac"
+            },
+            "catalina": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/swiftformat/blobs/sha256:c88cdbc2ade1ad4635fdafcb9b3ad23b6ba12aa50f5507bd2615dca2f9d21530",
+              "sha256": "c88cdbc2ade1ad4635fdafcb9b3ad23b6ba12aa50f5507bd2615dca2f9d21530"
+            },
+            "mojave": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/swiftformat/blobs/sha256:0a4d4a8b561e961e8cd98c216fb4589cbbcf127c26fc25c81f794360295950ec",
+              "sha256": "0a4d4a8b561e961e8cd98c216fb4589cbbcf127c26fc25c81f794360295950ec"
+            }
+          }
+        }
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "catalina": {
+        "HOMEBREW_VERSION": "3.2.0-77-gd305f72",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "0b13b342053d414d1b241c2c7a446b74d79cc90e",
+        "CLT": "11.0.0.33.12",
+        "Xcode": "12.4",
+        "macOS": "10.15.7"
+      },
+      "big_sur": {
+        "HOMEBREW_VERSION": "3.2.16",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "f01e43d7cecd622bb39ab48504bb01e350ab36db",
+        "CLT": "13.0.0.0.1.1630607135",
+        "Xcode": "13.0",
+        "macOS": "11.6"
+      },
+      "monterey": {
+        "HOMEBREW_VERSION": "3.2.13-55-ga6959e4",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "3fb109275770551bba03c7055d75ceec2c38b1b2",
+        "CLT": "13.0.0.0.1.1628499445",
+        "Xcode": "13.0",
+        "macOS": "12.0"
+      }
+    }
+  }
+}

@@ -70,8 +70,7 @@ class ApiDataSource implements DataSource {
 ${dotenv.env[apiUrlEnv]}$taskResourceApi${TaskGetRequestDataSourceModel(sortBy: query.sortBy, orderBy: query.orderBy).toQueryString()}''',
       );
 
-      return (response.data[dataJsonKey] as List<dynamic>?)
-          ?.map((dynamic data) {
+      return (response.data[dataJsonKey] as List<Object>?)?.map((Object data) {
         return TaskGetResponseDataSourceModel.fromJson(
           data as Map<String, dynamic>,
         );

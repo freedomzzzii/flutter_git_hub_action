@@ -1,5 +1,5 @@
 require('dotenv')
-Dotenv.load '../../.env'
+Dotenv.load '../../.env-cicd'
 
 app_identifier(ENV["APP_BUNDLE_ID"])
 apple_id(ENV["APPLE_ID"])

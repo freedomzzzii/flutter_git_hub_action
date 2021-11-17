@@ -54,7 +54,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskUpdateScreen(imagePickerUtil: mockImagePickerUtil),
+          home: TaskUpdateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -73,7 +73,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskUpdateScreen(imagePickerUtil: mockImagePickerUtil),
+          home: TaskUpdateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -89,7 +89,7 @@ void main() {
         (WidgetTester tester) async {
           await tester.pumpWidget(
         MaterialApp(
-          home: TaskUpdateScreen(imagePickerUtil: mockImagePickerUtil),
+          home: TaskUpdateScreenWidget(imagePickerUtil: mockImagePickerUtil),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),

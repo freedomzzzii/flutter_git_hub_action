@@ -18,7 +18,7 @@ import '../main_integration_test.mocks.dart';
 void screenTest(MockTaskBloc mockTaskBloc) {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('TaskGetScreen Class', () {
+  group('TaskGetScreenWidget Class', () {
     testWidgets('Should have mandatory menu', (WidgetTester tester) async {
       late BuildContext testContext;
 
@@ -35,7 +35,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
             builder: (BuildContext context) {
               testContext = context;
 
-              return TaskGetScreen();
+              return TaskGetScreenWidget();
             },
           ),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -67,7 +67,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -86,7 +86,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -110,7 +110,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -132,7 +132,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -206,7 +206,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -300,7 +300,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -385,7 +385,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -433,7 +433,7 @@ void screenTest(MockTaskBloc mockTaskBloc) {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -540,7 +540,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAA
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -629,7 +629,7 @@ Should call bloc to update task - Failure case (error from bloc update btn)''',
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -720,7 +720,7 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -821,7 +821,7 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -922,7 +922,7 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
 
       await tester.pumpWidget(
         MaterialApp(
-          home: TaskGetScreen(),
+          home: TaskGetScreenWidget(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),

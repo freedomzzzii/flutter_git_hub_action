@@ -23,7 +23,7 @@ void screenTest(
 
     await tester.pumpWidget(
       MaterialApp(
-        home: TaskCreateScreen(imagePickerUtil: mockImagePickerUtil),
+        home: TaskCreateScreenWidget(imagePickerUtil: mockImagePickerUtil),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
       ),
