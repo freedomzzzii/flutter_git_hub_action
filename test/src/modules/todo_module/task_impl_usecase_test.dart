@@ -1,27 +1,27 @@
-import 'package:flutter_starter_kit/src/modules/todo_module/commons/errors/usecase_error.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/commons/exceptions/usecase_exception.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/configs/usecasae_messages/usecase_message_config.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_create_entity.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_delete_entity.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_get_entity.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_update_entity.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/task_impl_usecase.dart';
-import 'package:flutter_starter_kit/src/utils/error_code/error_code_util.dart';
-import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/commons/errors/usecase_error.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/commons/exceptions/usecase_exception.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/configs/usecasae_message/usecase_message_config.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_create_entity.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_delete_entity.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_get_entity.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_update_entity.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/task_impl_usecase.dart';
+import 'package:poc_clean_arch/src/utils/error_code_util.dart';
 
-import 'task_impl_repository_test.mocks.dart';
+import '../../../test_data/mock_test_data.dart';
+import 'services/repositories/task_impl_repository_test.mocks.dart';
 
 @GenerateMocks(<Type>[TaskImplUseCase])
 void main() {
-  final MockTaskImplRepository mockTaskImpRepository = MockTaskImplRepository();
+  final MockTaskImplRepository mockTaskRepository = MockTaskImplRepository();
   final TaskImplUseCase expectTaskImplUseCase =
-      TaskImplUseCase(repository: mockTaskImpRepository);
+      TaskImplUseCase(repository: mockTaskRepository);
 
   tearDown(() {
-    clearInteractions(mockTaskImpRepository);
+    clearInteractions(mockTaskRepository);
   });
 
   group('TaskImplUseCase Class', () {
@@ -30,29 +30,29 @@ void main() {
     });
 
     test('Should have mandatory properties', () async {
-      expect(expectTaskImplUseCase.repository, mockTaskImpRepository);
+      expect(expectTaskImplUseCase.repository, mockTaskRepository);
     });
   });
 
   group('Create method', () {
     test('Should have create method - Success case', () async {
       when(
-        mockTaskImpRepository.create(
+        mockTaskRepository.create(
           task: argThat(isA<TaskCreateRequestEntity>(), named: 'task'),
         ),
       ).thenAnswer(
-            (_) => Future<TaskCreateResponseEntity>.value(
+        (_) => Future<TaskCreateResponseEntity>.value(
           expectTaskCreateResponseEntity,
         ),
       );
 
       final TaskCreateResponseEntity expectValue =
-      await expectTaskImplUseCase.create(
+          await expectTaskImplUseCase.create(
         task: expectTaskCreateRequestEntity,
       );
 
       verify(
-        mockTaskImpRepository.create(
+        mockTaskRepository.create(
           task: argThat(isA<TaskCreateRequestEntity>(), named: 'task'),
         ),
       ).called(1);
@@ -66,29 +66,29 @@ void main() {
 
     test('Should have create method - Failure case (title empty)', () async {
       final TaskCreateRequestEntity expectTaskCreateRequestEntityTitleEmpty =
-      TaskCreateRequestEntity(
+          TaskCreateRequestEntity(
         imageUrl: faker.image.image(),
         title: '',
       );
 
       expect(
-            () async => expectTaskImplUseCase.create(
+        () async => expectTaskImplUseCase.create(
           task: expectTaskCreateRequestEntityTitleEmpty,
         ),
         throwsA(isA<TaskCreateUseCaseError>()),
       );
 
       expect(
-            () async => expectTaskImplUseCase.create(
+        () async => expectTaskImplUseCase.create(
           task: expectTaskCreateRequestEntityTitleEmpty,
         ),
         throwsA(
           predicate(
-                (Error e) =>
-            e is TaskCreateUseCaseError &&
+            (Error e) =>
+                e is TaskCreateUseCaseError &&
                 e.toString().contains(
-                  expectTaskFieldValidationExceptionTitleEmpty.toString(),
-                ),
+                      expectTaskFieldValidationExceptionTitleEmpty.toString(),
+                    ),
           ),
         ),
       );
@@ -96,36 +96,36 @@ void main() {
 
     test('Should have create method - Failure case (imageUrl empty)', () async {
       final TaskCreateRequestEntity expectTaskCreateRequestEntityImageUrlEmpty =
-      TaskCreateRequestEntity(
+          TaskCreateRequestEntity(
         imageUrl: '',
         title: faker.person.name(),
       );
       const FieldValidationException
-      expectTaskFieldValidationExceptionImageUrlEmpty =
-      FieldValidationException(
+          expectTaskFieldValidationExceptionImageUrlEmpty =
+          FieldValidationException(
         message: requiredImageUrlMessage,
         code: appErrorCodes.missingRequiredFields,
       );
 
       expect(
-            () async => expectTaskImplUseCase.create(
+        () async => expectTaskImplUseCase.create(
           task: expectTaskCreateRequestEntityImageUrlEmpty,
         ),
         throwsA(isA<TaskCreateUseCaseError>()),
       );
 
       expect(
-            () async => expectTaskImplUseCase.create(
+        () async => expectTaskImplUseCase.create(
           task: expectTaskCreateRequestEntityImageUrlEmpty,
         ),
         throwsA(
           predicate(
-                (Error e) =>
-            e is TaskCreateUseCaseError &&
+            (Error e) =>
+                e is TaskCreateUseCaseError &&
                 e.toString().contains(
-                  expectTaskFieldValidationExceptionImageUrlEmpty
-                      .toString(),
-                ),
+                      expectTaskFieldValidationExceptionImageUrlEmpty
+                          .toString(),
+                    ),
           ),
         ),
       );
@@ -133,58 +133,58 @@ void main() {
 
     test('''
 Should have create method - Failure case (throw error from repository)''',
-            () async {
-          when(
-            mockTaskImpRepository.create(
+        () async {
+      when(
+        mockTaskRepository.create(
           task: argThat(isA<TaskCreateRequestEntity>(), named: 'task'),
         ),
-          ).thenThrow(expectRepositoryError);
+      ).thenThrow(expectRepositoryError);
 
-          expect(
-                () async => expectTaskImplUseCase.create(
-              task: expectTaskCreateRequestEntity,
-            ),
-            throwsA(isA<TaskCreateUseCaseError>()),
-          );
+      expect(
+        () async => expectTaskImplUseCase.create(
+          task: expectTaskCreateRequestEntity,
+        ),
+        throwsA(isA<TaskCreateUseCaseError>()),
+      );
 
-          expect(
-                () async => expectTaskImplUseCase.create(
-              task: expectTaskCreateRequestEntity,
-            ),
-            throwsA(
-              predicate(
-                    (Error e) =>
+      expect(
+        () async => expectTaskImplUseCase.create(
+          task: expectTaskCreateRequestEntity,
+        ),
+        throwsA(
+          predicate(
+            (Error e) =>
                 e is TaskCreateUseCaseError &&
-                    e.toString().contains(expectRepositoryError.toString()),
-              ),
-            ),
-          );
+                e.toString().contains(expectRepositoryError.toString()),
+          ),
+        ),
+      );
 
-          verify(
-            mockTaskImpRepository.create(
+      verify(
+        mockTaskRepository.create(
           task: argThat(isA<TaskCreateRequestEntity>(), named: 'task'),
         ),
-          ).called(2);
-        });
+      ).called(2);
+    });
   });
 
   group('Get method', () {
     test('Should have get method - Success case', () async {
       when(
-        mockTaskImpRepository.get(
+        mockTaskRepository.get(
           query: argThat(isA<TaskGetRequestEntity>(), named: 'query'),
         ),
       ).thenAnswer(
-            (_) => Future<List<TaskGetResponseEntity>>.value(
+        (_) => Future<List<TaskGetResponseEntity>>.value(
           expectTaskGetResponseEntityList,
         ),
       );
 
       final List<TaskGetResponseEntity>? expectValue =
-      await expectTaskImplUseCase.get(query: expectTaskGetRequestEntity);
+          await expectTaskImplUseCase.get(query: expectTaskGetRequestEntity);
 
       verify(
-        mockTaskImpRepository.get(
+        mockTaskRepository.get(
           query: argThat(isA<TaskGetRequestEntity>(), named: 'query'),
         ),
       ).called(1);
@@ -200,33 +200,33 @@ Should have create method - Failure case (throw error from repository)''',
 
     test('Should have create method - Failure case', () async {
       when(
-        mockTaskImpRepository.get(
+        mockTaskRepository.get(
           query: argThat(isA<TaskGetRequestEntity>(), named: 'query'),
         ),
       ).thenThrow(expectRepositoryError);
 
       expect(
-            () async => expectTaskImplUseCase.get(
+        () async => expectTaskImplUseCase.get(
           query: expectTaskGetRequestEntity,
         ),
         throwsA(isA<TaskGetUseCaseError>()),
       );
 
       expect(
-            () async => expectTaskImplUseCase.get(
+        () async => expectTaskImplUseCase.get(
           query: expectTaskGetRequestEntity,
         ),
         throwsA(
           predicate(
-                (Error e) =>
-            e is TaskGetUseCaseError &&
+            (Error e) =>
+                e is TaskGetUseCaseError &&
                 e.toString().contains(expectRepositoryError.toString()),
           ),
         ),
       );
 
       verify(
-        mockTaskImpRepository.get(
+        mockTaskRepository.get(
           query: argThat(isA<TaskGetRequestEntity>(), named: 'query'),
         ),
       ).called(2);
@@ -236,7 +236,7 @@ Should have create method - Failure case (throw error from repository)''',
   group('Update method', () {
     test('Should have update method - Success case', () async {
       when(
-        mockTaskImpRepository.update(
+        mockTaskRepository.update(
           task: argThat(isA<TaskUpdateBodyRequestEntity>(), named: 'task'),
           queryParams: argThat(
             isA<TaskUpdateQueryParamsRequestEntity>(),
@@ -244,13 +244,13 @@ Should have create method - Failure case (throw error from repository)''',
           ),
         ),
       ).thenAnswer(
-            (_) => Future<TaskUpdateResponseEntity>.value(
+        (_) => Future<TaskUpdateResponseEntity>.value(
           expectTaskUpdateResponseEntity,
         ),
       );
 
       final TaskUpdateResponseEntity expectValue =
-      await expectTaskImplUseCase.update(
+          await expectTaskImplUseCase.update(
         task: expectTaskUpdateRequestEntity,
         queryParams: expectTaskUpdateQueryParamsRequestEntity,
       );
@@ -267,125 +267,125 @@ Should have create method - Failure case (throw error from repository)''',
 
     test('''
 Should have update method - Failure case (title empty string and image null and isDone empty string)''',
-            () async {
-          const TaskUpdateBodyRequestEntity emptyValue =
+        () async {
+      const TaskUpdateBodyRequestEntity emptyValue =
           TaskUpdateBodyRequestEntity(
-            title: '',
-            imageUrl: '',
-          );
+        title: '',
+        imageUrl: '',
+      );
 
-          when(
-            mockTaskImpRepository.update(
+      when(
+        mockTaskRepository.update(
           task: argThat(isA<TaskUpdateBodyRequestEntity>(), named: 'task'),
           queryParams: argThat(
             isA<TaskUpdateQueryParamsRequestEntity>(),
             named: 'queryParams',
           ),
         ),
-          ).thenThrow(expectFieldValidationExceptionAtLeastOne);
+      ).thenThrow(expectFieldValidationExceptionAtLeastOne);
 
-          expect(
-                () async => expectTaskImplUseCase.update(
-              task: emptyValue,
-              queryParams: expectTaskUpdateQueryParamsRequestEntity,
-            ),
-            throwsA(isA<TaskUpdateUseCaseError>()),
-          );
-
-          expect(
-                () async => expectTaskImplUseCase.update(
-              task: emptyValue,
-              queryParams: expectTaskUpdateQueryParamsRequestEntity,
-            ),
-            throwsA(
-              predicate(
-                    (Error e) =>
-                e is TaskUpdateUseCaseError &&
-                    e.toString().contains(
-                      expectFieldValidationExceptionAtLeastOne.toString(),
-                    ),
-              ),
-            ),
-          );
-
-          verifyNever(
-            mockTaskImpRepository.update(
+      expect(
+        () async => expectTaskImplUseCase.update(
           task: emptyValue,
           queryParams: expectTaskUpdateQueryParamsRequestEntity,
         ),
-          );
-        });
+        throwsA(isA<TaskUpdateUseCaseError>()),
+      );
+
+      expect(
+        () async => expectTaskImplUseCase.update(
+          task: emptyValue,
+          queryParams: expectTaskUpdateQueryParamsRequestEntity,
+        ),
+        throwsA(
+          predicate(
+            (Error e) =>
+                e is TaskUpdateUseCaseError &&
+                e.toString().contains(
+                      expectFieldValidationExceptionAtLeastOne.toString(),
+                    ),
+          ),
+        ),
+      );
+
+      verifyNever(
+        mockTaskRepository.update(
+          task: emptyValue,
+          queryParams: expectTaskUpdateQueryParamsRequestEntity,
+        ),
+      );
+    });
 
     test('''
 Should have update method - Failure case (title imageUrl isDone is null)''',
-            () async {
-          const TaskUpdateBodyRequestEntity emptyValue =
+        () async {
+      const TaskUpdateBodyRequestEntity emptyValue =
           TaskUpdateBodyRequestEntity();
 
-          when(
-            mockTaskImpRepository.update(
+      when(
+        mockTaskRepository.update(
           task: argThat(isA<TaskUpdateBodyRequestEntity>(), named: 'task'),
           queryParams: argThat(
             isA<TaskUpdateQueryParamsRequestEntity>(),
             named: 'queryParams',
           ),
         ),
-          ).thenThrow(expectFieldValidationExceptionAtLeastOne);
+      ).thenThrow(expectFieldValidationExceptionAtLeastOne);
 
-          expect(
-                () async => expectTaskImplUseCase.update(
-              task: emptyValue,
-              queryParams: expectTaskUpdateQueryParamsRequestEntity,
-            ),
-            throwsA(isA<TaskUpdateUseCaseError>()),
-          );
-
-          expect(
-                () async => expectTaskImplUseCase.update(
-              task: emptyValue,
-              queryParams: expectTaskUpdateQueryParamsRequestEntity,
-            ),
-            throwsA(
-              predicate(
-                    (Error e) =>
-                e is TaskUpdateUseCaseError &&
-                    e.toString().contains(
-                      expectFieldValidationExceptionAtLeastOne.toString(),
-                    ),
-              ),
-            ),
-          );
-
-          verifyNever(
-            mockTaskImpRepository.update(
+      expect(
+        () async => expectTaskImplUseCase.update(
           task: emptyValue,
           queryParams: expectTaskUpdateQueryParamsRequestEntity,
         ),
-          );
-        });
+        throwsA(isA<TaskUpdateUseCaseError>()),
+      );
+
+      expect(
+        () async => expectTaskImplUseCase.update(
+          task: emptyValue,
+          queryParams: expectTaskUpdateQueryParamsRequestEntity,
+        ),
+        throwsA(
+          predicate(
+            (Error e) =>
+                e is TaskUpdateUseCaseError &&
+                e.toString().contains(
+                      expectFieldValidationExceptionAtLeastOne.toString(),
+                    ),
+          ),
+        ),
+      );
+
+      verifyNever(
+        mockTaskRepository.update(
+          task: emptyValue,
+          queryParams: expectTaskUpdateQueryParamsRequestEntity,
+        ),
+      );
+    });
 
     test('Should have update method - Failure case (id empty)', () async {
       const TaskUpdateBodyRequestEntity requestValue =
-      TaskUpdateBodyRequestEntity(
+          TaskUpdateBodyRequestEntity(
         title: 'expect_title',
         imageUrl: 'expect_img_url',
       );
 
       const TaskUpdateQueryParamsRequestEntity
-      noValueIdInTaskUpdateQueryParamsRequestEntity =
-      TaskUpdateQueryParamsRequestEntity(
+          noValueIdInTaskUpdateQueryParamsRequestEntity =
+          TaskUpdateQueryParamsRequestEntity(
         id: '',
       );
 
       when(
-        mockTaskImpRepository.update(
+        mockTaskRepository.update(
           task: requestValue,
           queryParams: noValueIdInTaskUpdateQueryParamsRequestEntity,
         ),
       ).thenThrow(expectFieldRequiredExceptionId);
 
       expect(
-            () async => expectTaskImplUseCase.update(
+        () async => expectTaskImplUseCase.update(
           task: requestValue,
           queryParams: noValueIdInTaskUpdateQueryParamsRequestEntity,
         ),
@@ -393,14 +393,14 @@ Should have update method - Failure case (title imageUrl isDone is null)''',
       );
 
       expect(
-            () async => expectTaskImplUseCase.update(
+        () async => expectTaskImplUseCase.update(
           task: requestValue,
           queryParams: noValueIdInTaskUpdateQueryParamsRequestEntity,
         ),
         throwsA(
           predicate(
-                (Error e) =>
-            e is TaskUpdateUseCaseError &&
+            (Error e) =>
+                e is TaskUpdateUseCaseError &&
                 e
                     .toString()
                     .contains(expectFieldRequiredExceptionId.toString()),
@@ -409,7 +409,7 @@ Should have update method - Failure case (title imageUrl isDone is null)''',
       );
 
       verifyNever(
-        mockTaskImpRepository.update(
+        mockTaskRepository.update(
           task: requestValue,
           queryParams: noValueIdInTaskUpdateQueryParamsRequestEntity,
         ),
@@ -420,35 +420,35 @@ Should have update method - Failure case (title imageUrl isDone is null)''',
   group('Delete method', () {
     test('Should have delete method - Failure case (id empty)', () async {
       const TaskDeleteQueryParamsRequestEntity
-      emptyValueTaskDeleteQueryParamsRequestEntity =
-      TaskDeleteQueryParamsRequestEntity(id: '');
+          emptyValueTaskDeleteQueryParamsRequestEntity =
+          TaskDeleteQueryParamsRequestEntity(id: '');
 
       final TaskDeleteUseCaseError expectTaskUpdateRequestEntityErrorNoId =
-      TaskDeleteUseCaseError(
+          TaskDeleteUseCaseError(
         message: expectFieldRequiredExceptionId.toString(),
       );
 
       when(
-        mockTaskImpRepository.delete(
+        mockTaskRepository.delete(
           queryParams: emptyValueTaskDeleteQueryParamsRequestEntity,
         ),
       ).thenThrow(expectTaskUpdateRequestEntityErrorNoId);
 
       expect(
-            () async => expectTaskImplUseCase.delete(
+        () async => expectTaskImplUseCase.delete(
           queryParams: emptyValueTaskDeleteQueryParamsRequestEntity,
         ),
         throwsA(isA<TaskDeleteUseCaseError>()),
       );
 
       expect(
-            () async => expectTaskImplUseCase.delete(
+        () async => expectTaskImplUseCase.delete(
           queryParams: emptyValueTaskDeleteQueryParamsRequestEntity,
         ),
         throwsA(
           predicate(
-                (Error e) =>
-            e is TaskDeleteUseCaseError &&
+            (Error e) =>
+                e is TaskDeleteUseCaseError &&
                 e.toString() ==
                     expectTaskUpdateRequestEntityErrorNoId.toString(),
           ),
@@ -456,35 +456,35 @@ Should have update method - Failure case (title imageUrl isDone is null)''',
       );
 
       verifyNever(
-        mockTaskImpRepository.delete(
+        mockTaskRepository.delete(
           queryParams: emptyValueTaskDeleteQueryParamsRequestEntity,
         ),
       );
     });
 
     test('Should have call task repository delete method - Success case',
-            () async {
-          when(
-            mockTaskImpRepository.delete(
+        () async {
+      when(
+        mockTaskRepository.delete(
           queryParams: argThat(
             isA<TaskDeleteQueryParamsRequestEntity>(),
             named: 'queryParams',
           ),
         ),
-          ).thenAnswer((_) => Future<void>.value());
+      ).thenAnswer((_) => Future<void>.value());
 
-          await expectTaskImplUseCase.delete(
-            queryParams: expectTaskDeleteQueryParamsRequestEntity,
-          );
+      await expectTaskImplUseCase.delete(
+        queryParams: expectTaskDeleteQueryParamsRequestEntity,
+      );
 
-          verify(
-            mockTaskImpRepository.delete(
+      verify(
+        mockTaskRepository.delete(
           queryParams: argThat(
             isA<TaskDeleteQueryParamsRequestEntity>(),
             named: 'queryParams',
           ),
         ),
-          ).called(1);
-        });
+      ).called(1);
+    });
   });
 }

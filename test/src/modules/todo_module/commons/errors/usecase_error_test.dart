@@ -1,6 +1,7 @@
-import 'package:flutter_starter_kit/src/modules/todo_module/commons/errors/usecase_error.dart';
-import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/commons/errors/usecase_error.dart';
+
+import '../../../../../test_data/mock_test_data.dart';
 
 void main() {
   group('TaskCreateUseCaseError Class', () {

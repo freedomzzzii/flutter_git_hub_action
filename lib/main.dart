@@ -7,6 +7,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'src/configs/env/env_config.dart';
 import 'src/configs/l10n/app_localizations.dart';
 import 'src/configs/routes/route_config.dart';
+import 'src/helpers/firebase_message/firebase_message_helper.dart';
 import 'src/modules/app_module.dart';
 import 'src/modules/app_screen.dart';
 
@@ -14,6 +15,8 @@ Future<void> main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+
+    firebaseMessage();
 
     final Trace myTrace = FirebasePerformance.instance.newTrace('dot_env');
 

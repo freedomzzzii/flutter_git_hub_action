@@ -1,140 +1,96 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
 default_platform(:ios)
 
-fastlane_require 'dotenv'
+platform :ios do
+#     before_all do
+#       Dir.chdir("../") do
+#         cocoapods
+#       end
 
-before_all do
-  Dotenv.overload '../../.env-cicd'
-end
+  desc "Push a new release build to the App Store"
+  lane :release do
+    cert
+    sigh(force: true)
+    build_app(
+        workspace: "Runner.xcworkspace",
+        scheme: "Runner",
+        configuration: "release",
+        xcargs: "-allowProvisioningUpdates",
+        export_method: "app-store",
+        export_options: {
+            provisioningProfiles: {
+                "com.hugeman.flutterstarterkit" => "PoC flutter",
+            }
+        })
+    upload_to_app_store
+    slack(
+        message: "Upload ios application to app store",
+        channel: "#test-integrate-firebase-pocflutter",
+        slack_url: "https://hooks.slack.com/services/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",
+        default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+    )
+  end
 
-platform:ios do
-    # branch: all branch
-    desc "Test ios in Firebase test lab"
-    lane:test_lab do
-        cert
-        sigh(force: true)
-
-        Dir.chdir("../") do
-            sh("pod install")
-        end
-
-        sh("flutter build ios --config-only integration_test/main_integration_test.dart")
-        sh("flutter", "build", "ios", "integration_test/main_integration_test.dart", "--release")
-        xcodebuild(
-            workspace: "Runner.xcworkspace",
-            configuration: "../Flutter/Release.xcconfig",
-            scheme: "Runner",
-            derivedDataPath: "../build/ios_integ",
-            xcargs: "-sdk iphoneos build-for-testing",
-        )
-
-        slack(
-            message: "Test ios in Firebase test lab is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
-    end
-
-    # run this lane before deploy to firebase app distribute
-    desc "Build file for deploy firebase app distribute"
-    lane:build_file_for_app_distribution do
-        cert
-        sigh(force: true)
-
-        build_app(
+    lane :app_distribution do
+      cert
+      sigh(force: true)
+      build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "release",
           xcargs: "-allowProvisioningUpdates",
           export_method: "app-store",
           export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_DISTRIBUTE"],
-                }
-            }
-        )
-
-        slack(
-            message: "Build file for deploy firebase app distribute is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
+              provisioningProfiles: {
+                  "com.hugeman.flutterstarterkit" => "PoC flutter",
+              }
+          })
+       firebase_app_distribution(
+           app: "1:523370163800:ios:edf025ae64e61308a5e42d",
+           groups: "developer",
+           release_notes: "Lots of amazing new features to test out!",
+       )
+       slack(
+            message: "Upload ios application to app distribution",
+            channel: "#test-integrate-firebase-pocflutter",
+            slack_url: "https://hooks.slack.com/services/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",
             default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
+       )
     end
 
-    # branches: feature, develop, bugfix, hotfix, release
-    desc "Deploy a release version to the Firebase App Distribute for Developer testing"
-    lane:app_distribution_group_developer do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "developer",
-      )
-
-        slack(
-            message: "Deploy a release version to the Firebase App Distribute for Developer testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
-    end
-
-    # branches: feature, develop, bugfix, hotfix, release, master(pre-prod)[tag]
-    desc "Deploy a release version to the Firebase App Distribute for QA testing"
-    lane:app_distribution_group_qa do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "qa",
-      )
-
-        slack(
-            message: "Deploy a release version to the Firebase App Distribute for QA testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
-    end
-
-     # branch: release
-    desc "Deploy a release version to the Firebase App Distribute for User testing"
-    lane:app_distribution_group_user do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "user",
-      )
-
-        slack(
-            message: "Deploy a release version to the Firebase App Distribute for User testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
-    end
-
-    # tag: master
-    desc "Deploy a release version to the App store"
-    lane:release do
+        lane :test_lab do
         cert
         sigh(force: true)
-
-        build_app(
-            workspace: "Runner.xcworkspace",
-            scheme: "Runner",
-            configuration: "release",
-            xcargs: "-allowProvisioningUpdates",
-            export_method: "ad-hoc",
-            export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_ADHOC"],
-                }
-            }
+              Dir.chdir("../") do
+                 sh("pod install")
+              end
+        sh("flutter build ios --config-only integration_test/main_integration_test.dart")
+        sh("flutter", "build", "ios", "integration_test/main_integration_test.dart", "--release")
+        xcodebuild(
+          workspace: "Runner.xcworkspace",
+          configuration: "../Flutter/Release.xcconfig",
+          scheme: "Runner",
+          derivedDataPath: "../build/ios_integ",
+          xcargs: "-sdk iphoneos build-for-testing",
         )
-        upload_to_app_store
-
         slack(
-            message: "Deploy a release version to the App store is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
+           message: "Build ios for test lab success",
+           channel: "#test-integrate-firebase-pocflutter",  # Optional, by default will post to the default channel configured for the POST URL.
+           slack_url: "https://hooks.slack.com/services/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",
+           default_payloads: ["lane", "test_result", "git_branch", "git_author"]
         )
-    end
+        end
 end

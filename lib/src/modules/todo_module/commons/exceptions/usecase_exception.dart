@@ -1,5 +1,5 @@
 import '../../../../commons/exceptions/app_exception.dart';
-import '../../../../utils/error_code/error_code_util.dart';
+import '../../../../utils/error_code_util.dart';
 
 class FieldRequiredException implements AppException {
   const FieldRequiredException({

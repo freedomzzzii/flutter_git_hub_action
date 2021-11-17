@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../configs/l10n/app_localizations.dart';
 import '../../../../configs/routes/route_config.dart';
-import '../../../../utils/image_picker/image_picker_util.dart';
+import '../../../../helpers/image_picker/image_picker_helper.dart';
 import '../../applications/bloc/task_bloc/task_bloc.dart';
 import '../../applications/models/task_bloc_models/task_create_bloc_model.dart';
 import '../../configs/widget_key/widget_key_config.dart';
@@ -101,8 +101,8 @@ class TaskCreateScreenWidget extends StatelessWidget {
                         key: const Key(titleTextFieldWidgetKey),
                         controller: _titleTextController,
                         decoration: InputDecoration(
-                          hintText:
-                              AppLocalizations.of(context).textFieldPlaceHolder,
+                          hintText: AppLocalizations.of(context)
+                              .titlePlaceholderTaskCreate,
                         ),
                       ),
                       Padding(
@@ -111,7 +111,8 @@ class TaskCreateScreenWidget extends StatelessWidget {
                           key: const Key(buttonSelectImageWidgetKey),
                           onPressed: () => _selectImage(context),
                           child: Text(
-                            AppLocalizations.of(context).selectImage,
+                            AppLocalizations.of(context)
+                                .selectImageBtnTaskCreate,
                           ),
                         ),
                       ),

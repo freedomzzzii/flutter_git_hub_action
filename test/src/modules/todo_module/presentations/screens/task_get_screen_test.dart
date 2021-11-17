@@ -3,30 +3,30 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_modular_test/flutter_modular_test.dart';
-import 'package:flutter_starter_kit/src/configs/l10n/app_localizations.dart';
-import 'package:flutter_starter_kit/src/configs/routes/route_config.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/task_bloc_models/task_get_bloc_model.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/task_bloc_models/task_update_bloc_model.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/configs/widget_key/widget_key_config.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_get_screen.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/services/commons/request_query.dart';
-import 'package:flutter_starter_kit/src/modules/todo_module/todo_module.dart';
-import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:poc_clean_arch/src/configs/l10n/app_localizations.dart';
+import 'package:poc_clean_arch/src/configs/routes/route_config.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/applications/models/task_bloc_models/task_get_bloc_model.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/applications/models/task_bloc_models/task_update_bloc_model.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/configs/widget_key/widget_key_config.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/presentations/screens/task_get_screen.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/services/commons/request_query.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/todo_module.dart';
 
+import '../../../../../test_data/mock_test_data.dart';
 import '../../../app_module_test.mocks.dart';
 import '../../applications/bloc/task_bloc/task_bloc_test.mocks.dart';
 
 void main() {
-  final MockTaskBloc mockBloc = MockTaskBloc();
+  final MockTaskBloc bloc = MockTaskBloc();
 
   setUp(() {
     initModule(
       TodoModule(),
       replaceBinds: <Bind<Object>>[
-        Bind<Object>((_) => mockBloc),
+        Bind<Object>((_) => bloc),
       ],
     );
 
@@ -41,12 +41,12 @@ void main() {
     testWidgets('Should have mandatory menu', (WidgetTester tester) async {
       late BuildContext testContext;
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -77,12 +77,12 @@ void main() {
     });
 
     testWidgets('Should have mandatory app bar', (WidgetTester tester) async {
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -96,12 +96,12 @@ void main() {
     });
 
     testWidgets('Should show load data text', (WidgetTester tester) async {
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskInitialState,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskInitialState);
+      when(bloc.state).thenReturn(expectTaskInitialState);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -120,12 +120,12 @@ void main() {
   group('Should call bloc to get task', () {
     testWidgets('Should call bloc to get task - Success case (data empty)',
         (WidgetTester tester) async {
-          when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccessDataEmpty,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccessDataEmpty);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccessDataEmpty);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -142,12 +142,12 @@ void main() {
 
     testWidgets('Should call bloc to get task - Success case (have data)',
         (WidgetTester tester) async {
-          when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -215,13 +215,13 @@ void main() {
         ],
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateTwoData,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -281,7 +281,7 @@ void main() {
       await tester.pump();
 
       when(
-        mockBloc.add(
+        bloc.add(
           const TaskGotEvent(
             model: TaskGetRequestBlocModel(
               sortBy: titleQueryValue,
@@ -309,13 +309,13 @@ void main() {
         ],
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateTwoData,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -376,7 +376,7 @@ void main() {
       await tester.pump();
 
       when(
-        mockBloc.add(
+        bloc.add(
           const TaskGotEvent(
             model: TaskGetRequestBlocModel(
               sortBy: createdAtQueryValue,
@@ -395,12 +395,12 @@ void main() {
 
     testWidgets('Should call bloc to get task - Failure case (error from bloc)',
         (WidgetTester tester) async {
-          when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateError,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateError);
+      when(bloc.state).thenReturn(expectTaskGetStateError);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -441,14 +441,14 @@ void main() {
         ],
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateUpdateIsDone,
           expectTaskGetStateSuccessIsDone,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -505,7 +505,7 @@ void main() {
       );
 
       when(
-        mockBloc.add(
+        bloc.add(
           TaskUpdatedEvent(
             model: expectTaskUpdateBodyRequestBlocModelIsDone,
             queryParams: expectTaskUpdateQueryParamsRequestBlocModel,
@@ -515,7 +515,7 @@ void main() {
         (_) => Future<TaskState>.value(expectBlocStateUpdateIsDone),
       );
 
-      when(mockBloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)))
+      when(bloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)))
           .thenAnswer(
         (_) => Future<TaskState>.value(expectBlocStateUpdateIsDone),
       );
@@ -551,13 +551,13 @@ iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAA
 
       when(Modular.to.pushNamed(updateTaskRoute))
           .thenAnswer((_) => Future<void>.value());
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateUpdateIsDone,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -614,7 +614,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAA
       );
 
       when(
-        mockBloc.add(
+        bloc.add(
           TaskSelectedToUpdatedEvent(
             model: expectTaskUpdateBlocModelTitleImageUrl,
           ),
@@ -636,17 +636,17 @@ iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAA
     testWidgets('''
 Should call bloc to update task - Failure case (error from bloc update btn)''',
         (WidgetTester tester) async {
-          const TaskUpdateState expectBlocStateUpdate = TaskUpdateState(
+      const TaskUpdateState expectBlocStateUpdate = TaskUpdateState(
         status: taskStatusState.failure,
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateUpdate,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -703,7 +703,7 @@ Should call bloc to update task - Failure case (error from bloc update btn)''',
       );
 
       when(
-        mockBloc.add(
+        bloc.add(
           TaskSelectedToUpdatedEvent(
             model: expectTaskUpdateBlocModel,
           ),
@@ -727,17 +727,17 @@ Should call bloc to update task - Failure case (error from bloc update btn)''',
     testWidgets('''
 Should call bloc to update task - Failure case (error from bloc isDone btn)''',
         (WidgetTester tester) async {
-          const TaskUpdateState expectBlocStateUpdate = TaskUpdateState(
+      const TaskUpdateState expectBlocStateUpdate = TaskUpdateState(
         status: taskStatusState.failure,
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateUpdate,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -794,7 +794,7 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
       );
 
       when(
-        mockBloc.add(
+        bloc.add(
           TaskUpdatedEvent(
             model: const TaskUpdateBodyRequestBlocModel(
               isDone: true,
@@ -831,14 +831,14 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
         data: const <TaskGetResponseBlocModel>[],
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateDelete,
           expectTaskGetStateSuccessDelete,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -895,14 +895,14 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
       );
 
       when(
-        mockBloc.add(
+        bloc.add(
           TaskDeletedEvent(
             queryParams: expectTaskDeleteQueryParamsRequestBlocModel,
           ),
         ),
       ).thenAnswer((_) => Future<TaskState>.value(expectBlocStateDelete));
 
-      when(mockBloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)))
+      when(bloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)))
           .thenAnswer(
         (_) => Future<TaskState>.value(expectTaskGetStateSuccessDelete),
       );
@@ -922,17 +922,17 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
     testWidgets(
         'Should call bloc to delete task - Failure case (error from bloc)',
         (WidgetTester tester) async {
-          const TaskDeleteState expectBlocStateDelete = TaskDeleteState(
+      const TaskDeleteState expectBlocStateDelete = TaskDeleteState(
         status: taskStatusState.failure,
       );
 
-      when(mockBloc.stream).thenAnswer(
+      when(bloc.stream).thenAnswer(
         (_) => Stream<TaskState>.fromIterable(<TaskState>[
           expectTaskGetStateSuccess,
           expectBlocStateDelete,
         ]),
       );
-      when(mockBloc.state).thenReturn(expectTaskGetStateSuccess);
+      when(bloc.state).thenReturn(expectTaskGetStateSuccess);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -989,7 +989,7 @@ Should call bloc to update task - Failure case (error from bloc isDone btn)''',
       );
 
       when(
-        mockBloc.add(
+        bloc.add(
           TaskDeletedEvent(
             queryParams: expectTaskDeleteQueryParamsRequestBlocModel,
           ),

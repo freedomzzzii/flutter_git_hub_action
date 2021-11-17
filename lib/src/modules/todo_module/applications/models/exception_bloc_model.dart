@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../utils/error_code/error_code_util.dart';
+import '../../../../utils/error_code_util.dart';
 
 class ExceptionBlocModel extends Equatable {
   const ExceptionBlocModel({

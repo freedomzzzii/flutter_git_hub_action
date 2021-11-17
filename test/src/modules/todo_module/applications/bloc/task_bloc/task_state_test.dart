@@ -1,6 +1,7 @@
-import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+
+import '../../../../../../test_data/mock_test_data.dart';
 
 void main() {
   group('taskStateStatus enum', () {

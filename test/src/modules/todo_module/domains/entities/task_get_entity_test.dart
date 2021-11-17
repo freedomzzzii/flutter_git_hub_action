@@ -1,6 +1,7 @@
-import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_get_entity.dart';
-import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/domains/entities/task_get_entity.dart';
+
+import '../../../../../test_data/mock_test_data.dart';
 
 void main() {
   group('TaskGetRequestEntity Class', () {

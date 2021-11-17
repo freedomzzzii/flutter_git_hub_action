@@ -1,6 +1,7 @@
-import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:poc_clean_arch/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+
+import '../../../../../../test_data/mock_test_data.dart';
 
 void main() {
   group('TaskCreatedEvent Class', () {
@@ -23,7 +24,7 @@ void main() {
 
     test('Should have mandatory properties', () {
       final TaskGotEvent expectTaskGotEvent =
-      TaskGotEvent(model: expectTaskGetRequestBlocModel);
+          TaskGotEvent(model: expectTaskGetRequestBlocModel);
 
       expect(expectTaskGotEvent.model, expectTaskGetRequestBlocModel);
     });
@@ -58,7 +59,7 @@ void main() {
 
     test('Should have mandatory properties', () {
       final TaskSelectedToUpdatedEvent expectTaskSelectedToUpdateEvent =
-      TaskSelectedToUpdatedEvent(model: expectTaskUpdateBlocModel);
+          TaskSelectedToUpdatedEvent(model: expectTaskUpdateBlocModel);
 
       expect(expectTaskSelectedToUpdateEvent.model, expectTaskUpdateBlocModel);
     });
