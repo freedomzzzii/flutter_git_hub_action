@@ -11,13 +11,21 @@ platform:ios do
     desc "Test ios in Firebase test lab"
     lane:test_lab do
         create_keychain(
-           name: 'mykeychain',
-           pass: 'mypass',
-           default_keychain: true,
-           unlock: true,
-           timeout: 3600,
-           lock_when_sleeps: true
+          name: "Keychain",
+          default_keychain: true,
+          unlock: true,
+          timeout: 3600,
+          lock_when_sleeps: true,
+          password: "Password"
         )
+
+#         puts `ls -ll`
+#         puts `pwd`
+
+#         import_certificate(
+#           keychain_name: "Keychain",
+#           certificate_path: "CERTIFICATE_DEV.cer"
+#         )
       
         cert
         sigh(force: true)
