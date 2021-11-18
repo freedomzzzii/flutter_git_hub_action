@@ -29,6 +29,11 @@ platform:ios do
       
 #         cert
 #         sigh(force: true)
+        sh("pwd")
+        sh("ls la")
+        sh("--chmod=+x ../ios")
+        sh("pwd")
+        sh("ls la")
         get_certificates(
           output_path: "/",
         )
