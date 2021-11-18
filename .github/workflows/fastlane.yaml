@@ -75,29 +75,22 @@ jobs:
 #           name: apk-build
 #           path: build/app/outputs/apk/release
 # test lab
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'test_lab'
-          subdirectory: 'android'
 #       - name: Set up Cloud SDK
 #         uses: google-github-actions/setup-gcloud@master
 #         with:
 #           project_id: ${{ secrets.GCP_PROJECT_ID }}
 #           service_account_key: ${{ secrets.GCP_SA_KEY }}
-#       - name: Run test on firebase test lab
-#         run: gcloud firebase test android run --type instrumentation --app build/app/outputs/apk/debug/app-debug.apk --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Pixel2,version=28,locale=pl,orientation=portrait
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'test_lab'
+#           subdirectory: 'android'
 # app distribute
 #       - uses: maierj/fastlane-action@v2.0.1
 #         with:
 #           lane: 'app_distribution_group_developer'
 #           subdirectory: 'android'
 # play store
-#       - uses: maierj/fastlane-action@v2.0.1
-#         with:
-#           lane: 'beta'
-#           subdirectory: 'android'
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'beta'
+          subdirectory: 'android'
