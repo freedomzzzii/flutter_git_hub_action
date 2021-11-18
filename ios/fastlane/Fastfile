@@ -27,8 +27,8 @@ platform:ios do
 #           certificate_path: "CERTIFICATE_DEV.cer"
 #         )
       
-        cert
-        sigh(force: true)
+#         cert
+#         sigh(force: true)
 #         sh("pwd")
 #         sh("ls -la ../../")
 #         sh("chmod +x ../../ios")
@@ -41,16 +41,24 @@ platform:ios do
 #         sh("ls")
       
 #         get_provisioning_profile   # invokes sigh
-        create_keychain(
-          name: "keychain",
-#           default_keychain: true,
-#           unlock: true,
-#           timeout: 3600,
-#           lock_when_sleeps: true,
-          password: "password",
-          path: ENV["KEYCHAIN_PATH"],
-          keychain_path: ENV["KEYCHAIN_PATH"]
+#         create_keychain(
+#           name: "keychain",
+# #           default_keychain: true,
+# #           unlock: true,
+# #           timeout: 3600,
+# #           lock_when_sleeps: true,
+#           password: "password",
+#           path: ENV["KEYCHAIN_PATH"],
+#           keychain_path: ENV["KEYCHAIN_PATH"]
+#         )
+      
+        setup_ci
+
+        sync_code_signing(  
+          type: "appstore",
+          readonly: is_ci
         )
+      
 
         Dir.chdir("../") do
             sh("pod install")
