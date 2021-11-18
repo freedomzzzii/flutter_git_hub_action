@@ -10,14 +10,14 @@ platform:ios do
     # branch: all branch
     desc "Test ios in Firebase test lab"
     lane:test_lab do
-        create_keychain(
-          name: "Keychain",
-          default_keychain: true,
-          unlock: true,
-          timeout: 3600,
-          lock_when_sleeps: true,
-          password: "Password"
-        )
+#         create_keychain(
+#           name: "Keychain",
+#           default_keychain: true,
+#           unlock: true,
+#           timeout: 3600,
+#           lock_when_sleeps: true,
+#           password: "Password"
+#         )
 
 #         puts `ls -ll`
 #         puts `pwd`
@@ -27,8 +27,10 @@ platform:ios do
 #           certificate_path: "CERTIFICATE_DEV.cer"
 #         )
       
-        cert
-        sigh(force: true)
+#         cert
+#         sigh(force: true)
+        get_certificates           # invokes cert
+        get_provisioning_profile   # invokes sigh
 
         Dir.chdir("../") do
             sh("pod install")
