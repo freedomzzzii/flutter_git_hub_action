@@ -29,7 +29,13 @@ platform:ios do
       
 #         cert
 #         sigh(force: true)
-        get_certificates           # invokes cert
+        get_certificates(
+          keychain_path: './',
+          keychain_password: 'pass'
+        )
+      
+        sh("ls")
+      
         get_provisioning_profile   # invokes sigh
         create_keychain(
           name: "Keychain",
