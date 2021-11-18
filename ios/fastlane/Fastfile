@@ -34,13 +34,14 @@ platform:ios do
 #         sh("chmod +x ../../ios")
 #         sh("pwd")
 #         sh("ls -la ../../")
-        get_certificates(
-          output_path: "/",
-        )
+#         get_certificates(
+#           output_path: "/",
+#           username: 
+#         )
       
 #         sh("ls")
       
-        get_provisioning_profile   # invokes sigh
+#         get_provisioning_profile   # invokes sigh
         create_keychain(
           name: "keychain",
           default_keychain: true,
@@ -50,7 +51,7 @@ platform:ios do
           password: "password",
           path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
           keychain_path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
-          username: "tee.theeraporn@hugeman.co"
+#           username: "tee.theeraporn@hugeman.co"
         )
       
 #         setup_ci
