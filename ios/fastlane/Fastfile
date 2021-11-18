@@ -11,6 +11,8 @@ platform:ios do
     desc "Test ios in Firebase test lab"
     lane:test_lab do
         create_keychain(
+           name: 'mykeychain',
+           pass: 'mypass',
            default_keychain: true,
            unlock: true,
            timeout: 3600,
@@ -33,13 +35,6 @@ platform:ios do
             derivedDataPath: "../build/ios_integ",
             xcargs: "-sdk iphoneos build-for-testing",
         )
-
-        slack(
-            message: "Test ios in Firebase test lab is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
     # run this lane before deploy to firebase app distribute
@@ -60,13 +55,6 @@ platform:ios do
                 }
             }
         )
-
-        slack(
-            message: "Build file for deploy firebase app distribute is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
@@ -76,13 +64,6 @@ platform:ios do
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
             groups: "developer",
       )
-
-        slack(
-            message: "Deploy a release version to the Firebase App Distribute for Developer testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release, master(pre-prod)[tag]
@@ -92,13 +73,6 @@ platform:ios do
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
             groups: "qa",
       )
-
-        slack(
-            message: "Deploy a release version to the Firebase App Distribute for QA testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 
      # branch: release
@@ -107,13 +81,6 @@ platform:ios do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
             groups: "user",
-      )
-
-        slack(
-            message: "Deploy a release version to the Firebase App Distribute for User testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
         )
     end
 
@@ -136,12 +103,5 @@ platform:ios do
             }
         )
         upload_to_app_store
-
-        slack(
-            message: "Deploy a release version to the App store is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
     end
 end
