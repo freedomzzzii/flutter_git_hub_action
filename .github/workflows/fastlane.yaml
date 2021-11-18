@@ -75,6 +75,11 @@ jobs:
 #           name: apk-build
 #           path: build/app/outputs/apk/release
 # test lab
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'test_lab'
