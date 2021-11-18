@@ -27,27 +27,27 @@ platform:ios do
 #           certificate_path: "CERTIFICATE_DEV.cer"
 #         )
       
-#         cert
-#         sigh(force: true)
-        sh("pwd")
-        sh("ls -la ../../")
-        sh("chmod +x ../../ios")
-        sh("pwd")
-        sh("ls -la ../../")
-        get_certificates(
-          output_path: "/",
-        )
+        cert
+        sigh(force: true)
+#         sh("pwd")
+#         sh("ls -la ../../")
+#         sh("chmod +x ../../ios")
+#         sh("pwd")
+#         sh("ls -la ../../")
+#         get_certificates(
+#           output_path: "/",
+#         )
       
-        sh("ls")
+#         sh("ls")
       
-        get_provisioning_profile   # invokes sigh
+#         get_provisioning_profile   # invokes sigh
         create_keychain(
-          name: "Keychain",
-          default_keychain: true,
-          unlock: true,
-          timeout: 3600,
-          lock_when_sleeps: true,
-          password: "Password"
+          name: "keychain",
+#           default_keychain: true,
+#           unlock: true,
+#           timeout: 3600,
+#           lock_when_sleeps: true,
+          password: "password"
         )
 
         Dir.chdir("../") do
