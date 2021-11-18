@@ -8,83 +8,105 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Create file .env
-        run: |
-          cat << EOF >> .env
-          API_URL=${{ secrets.API_URL_DEV }}
-          FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
-          FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
-          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
-          APPLE_ID=${{ secrets.APPLE_ID }}
-          APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
-          APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
-          APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
-          APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
-          GRPC_HOST=${{ secrets.GRPC_HOST }}
-          GRPC_PORT=${{ secrets.GRPC_PORT }}
-          GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
-          FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
-          GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
-          EOF
-#          KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}
-#          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
-      - name: Create file google-services.json
-        run: |
-          cd android/app; cat << EOF >> google-services.json
-          ${{ secrets.GOOGLE_SERVICES_ANDROID }}
-          EOF
-      - name: Create file encode-upload-keystore.jks
-        run: |
-          cd android; cat << EOF >> encode-upload-keystore.jks
-          ${{ secrets.UPLOAD_KEYSTORE }}
-          EOF
-      - name: Create file upload-keystore.jks
-        run: base64 -d android/encode-upload-keystore.jks > android/upload-keystore.jks
-      - name: Create file play-store-credentials.json
-        run: |
-          cat << EOF >> play-store-credentials.json
-          ${{ secrets.PLAY_STORE_CREDENTIALS }}
-          EOF
-      - name: Create file key.properties
-        run: |
-          cd android; cat << EOF >> key.properties
-          ${{ secrets.KEY_PROPERTIES_ANDROID }}
-          EOF
-      - name: Install dependencies
-        run: make project/install/package
-      - name: Generate l10n
-        run: make l10n/generate
-      - name: Generate mock file for test
-        run: make test/generate/mock-file
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{ secrets.github_token }}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: perl -i -pe 's/^((version:\s+\d+\.\d+\.\d+\+)|(version:\s+\d+\.\d+\.\d+\-\w+\+))(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
-# android
-#       - name: Build file .apk
-#         run: flutter build apk  --release
-#       - name: Upload apk
-#         uses: actions/upload-artifact@v2
+      - run: security list-keychains
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Setup java version 12.x
+#         uses: actions/setup-java@v1
 #         with:
-#           name: apk-build
-#           path: build/app/outputs/apk/release
-# test lab
+#           java-version: '12.x'
+#       - name: Setup flutter version stable
+#         uses: subosito/flutter-action@v1
+#         with:
+#           channel: 'stable'
+#       - name: Create file .env
+#         run: |
+#           cat << EOF >> .env
+#           API_URL=${{ secrets.API_URL_DEV }}
+#           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
+#           FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
+#           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+#           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
+#           APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
+#           APPLE_ID=${{ secrets.APPLE_ID }}
+#           APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
+#           APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
+#           APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
+#           APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
+#           GRPC_HOST=${{ secrets.GRPC_HOST }}
+#           GRPC_PORT=${{ secrets.GRPC_PORT }}
+#           GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
+#           FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
+#           GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
+#           EOF
+# #          KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}
+# #          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
+#       - name: Create file google-services.json
+#         run: |
+#           cd android/app; cat << EOF >> google-services.json
+#           ${{ secrets.GOOGLE_SERVICES_ANDROID }}
+#           EOF
+#       - name: Create file encode-upload-keystore.jks
+#         run: |
+#           cd android; cat << EOF >> encode-upload-keystore.jks
+#           ${{ secrets.UPLOAD_KEYSTORE }}
+#           EOF
+#       - name: Create file upload-keystore.jks
+#         run: base64 -d android/encode-upload-keystore.jks > android/upload-keystore.jks
+#       - name: Create file play-store-credentials.json
+#         run: |
+#           cat << EOF >> play-store-credentials.json
+#           ${{ secrets.PLAY_STORE_CREDENTIALS }}
+#           EOF
+#       - name: Create file key.properties
+#         run: |
+#           cd android; cat << EOF >> key.properties
+#           ${{ secrets.KEY_PROPERTIES_ANDROID }}
+#           EOF
+#       - name: Install dependencies
+#         run: make project/install/package
+#       - name: Generate l10n
+#         run: make l10n/generate
+#       - name: Generate mock file for test
+#         run: make test/generate/mock-file
+#       - name: Generate build number
+#         uses: einaregilsson/build-number@v3
+#         with:
+#           token: ${{ secrets.github_token }}
+#       - name: Print new build number and run number
+#         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+#       - name: Increate version code
+#         run: perl -i -pe 's/^((version:\s+\d+\.\d+\.\d+\+)|(version:\s+\d+\.\d+\.\d+\-\w+\+))(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
+# # android
+# #       - name: Build file .apk
+# #         run: flutter build apk  --release
+# #       - name: Upload apk
+# #         uses: actions/upload-artifact@v2
+# #         with:
+# #           name: apk-build
+# #           path: build/app/outputs/apk/release
+# # test lab
+# #       - name: Set up Cloud SDK
+# #         uses: google-github-actions/setup-gcloud@master
+# #         with:
+# #           project_id: ${{ secrets.GCP_PROJECT_ID }}
+# #           service_account_key: ${{ secrets.GCP_SA_KEY }}
+# #       - uses: maierj/fastlane-action@v2.0.1
+# #         with:
+# #           lane: 'test_lab'
+# #           subdirectory: 'android'
+# # app distribute
+# #       - uses: maierj/fastlane-action@v2.0.1
+# #         with:
+# #           lane: 'app_distribution_group_developer'
+# #           subdirectory: 'android'
+# # play store
+# #       - uses: maierj/fastlane-action@v2.0.1
+# #         with:
+# #           lane: 'beta'
+# #           subdirectory: 'android'
+# # ios
+# # test lab
 #       - name: Set up Cloud SDK
 #         uses: google-github-actions/setup-gcloud@master
 #         with:
@@ -93,68 +115,47 @@ jobs:
 #       - uses: maierj/fastlane-action@v2.0.1
 #         with:
 #           lane: 'test_lab'
-#           subdirectory: 'android'
-# app distribute
+#           subdirectory: 'ios'
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+# #           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+# #           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+# # build file
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'build_file_for_app_distribution'
+#           subdirectory: 'ios'
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+# #           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+# #           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+# # app distribute
 #       - uses: maierj/fastlane-action@v2.0.1
 #         with:
 #           lane: 'app_distribution_group_developer'
-#           subdirectory: 'android'
-# play store
+#           subdirectory: 'ios'
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+# #           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+# #           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+# # play store
 #       - uses: maierj/fastlane-action@v2.0.1
 #         with:
 #           lane: 'beta'
-#           subdirectory: 'android'
-# ios
-# test lab
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'test_lab'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# build file
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'build_file_for_app_distribution'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# app distribute
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'app_distribution_group_developer'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# play store
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'beta'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+#           subdirectory: 'ios'
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+# #           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+# #           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
