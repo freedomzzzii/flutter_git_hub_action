@@ -48,7 +48,8 @@ platform:ios do
 #           timeout: 3600,
 #           lock_when_sleeps: true,
           password: "password",
-          path: ENV["KEYCHAIN_PATH"]
+          path: ENV["KEYCHAIN_PATH"],
+          keychain_path: ENV["KEYCHAIN_PATH"]
         )
 
         Dir.chdir("../") do
