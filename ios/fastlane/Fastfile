@@ -30,8 +30,7 @@ platform:ios do
 #         cert
 #         sigh(force: true)
         get_certificates(
-          keychain_path: ENV["GITHUB_WORKSPACE"],
-          keychain_password: 'pass'
+          output_path: "/",
         )
       
         sh("ls")
