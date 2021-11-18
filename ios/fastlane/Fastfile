@@ -31,6 +31,14 @@ platform:ios do
 #         sigh(force: true)
         get_certificates           # invokes cert
         get_provisioning_profile   # invokes sigh
+        create_keychain(
+          name: "Keychain",
+          default_keychain: true,
+          unlock: true,
+          timeout: 3600,
+          lock_when_sleeps: true,
+          password: "Password"
+        )
 
         Dir.chdir("../") do
             sh("pod install")
