@@ -66,6 +66,14 @@ jobs:
         run: make l10n/generate
       - name: Generate mock file for test
         run: make test/generate/mock-file
+      - name: Generate build number
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{secrets.github_token}}
+      - name: Print new build number and run number
+        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+      - name: Increate version code
+        run: perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
 # android
       - name: Build file .apk
         run: flutter build apk  --release
