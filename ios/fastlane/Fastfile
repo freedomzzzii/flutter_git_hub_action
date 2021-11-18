@@ -43,12 +43,12 @@ platform:ios do
       
 #         get_provisioning_profile   # invokes sigh
         create_keychain(
-          name: "keychain",
-          default_keychain: true,
-          unlock: true,
-          timeout: 3600,
-          lock_when_sleeps: true,
-          password: "password",
+#           name: "keychain",
+#           default_keychain: true,
+#           unlock: true,
+#           timeout: 3600,
+#           lock_when_sleeps: true,
+#           password: "password",
 #           path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
 #           keychain_path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
 #           username: "tee.theeraporn@hugeman.co"
