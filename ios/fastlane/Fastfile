@@ -34,35 +34,35 @@ platform:ios do
 #         sh("chmod +x ../../ios")
 #         sh("pwd")
 #         sh("ls -la ../../")
-#         get_certificates(
-#           output_path: "/",
-#         )
+        get_certificates(
+          output_path: "/",
+        )
       
 #         sh("ls")
       
-#         get_provisioning_profile   # invokes sigh
-#         create_keychain(
-#           name: "keychain",
-# #           default_keychain: true,
-# #           unlock: true,
-# #           timeout: 3600,
-# #           lock_when_sleeps: true,
-#           password: "password",
-#           path: ENV["KEYCHAIN_PATH"],
-#           keychain_path: ENV["KEYCHAIN_PATH"]
-#         )
-      
-        setup_ci
-      
-#         git_url(ENV['GIT_URL'])
-        puts ENV["MATCH_PASSWORD"]
-
-        sync_code_signing(  
-          type: "appstore",
-#           readonly: is_ci,
-          git_url: ENV['GIT_URL'],
-          app_identifier: ENV["APP_BUNDLE_ID"]
+        get_provisioning_profile   # invokes sigh
+        create_keychain(
+          name: "keychain",
+          default_keychain: true,
+          unlock: true,
+          timeout: 3600,
+          lock_when_sleeps: true,
+          password: "password",
+          path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
+          keychain_path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/"
         )
+      
+#         setup_ci
+      
+# #         git_url(ENV['GIT_URL'])
+#         puts ENV["MATCH_PASSWORD"]
+
+#         sync_code_signing(  
+#           type: "appstore",
+# #           readonly: is_ci,
+#           git_url: ENV['GIT_URL'],
+#           app_identifier: ENV["APP_BUNDLE_ID"]
+#         )
       
 
         Dir.chdir("../") do
