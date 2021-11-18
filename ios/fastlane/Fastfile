@@ -31,7 +31,7 @@ platform:ios do
 #         sigh(force: true)
         sh("pwd")
         sh("ls -la ../../")
-        sh("--chmod=+x ../../ios")
+        sh("chmod +x ../../ios")
         sh("pwd")
         sh("ls -la ../../")
         get_certificates(
