@@ -117,6 +117,7 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
 # build file
       - uses: maierj/fastlane-action@v2.0.1
         with:
@@ -126,6 +127,7 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
 # app distribute
       - uses: maierj/fastlane-action@v2.0.1
         with:
@@ -135,6 +137,7 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
 # play store
       - uses: maierj/fastlane-action@v2.0.1
         with:
@@ -144,3 +147,4 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
