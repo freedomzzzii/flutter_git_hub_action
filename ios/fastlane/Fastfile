@@ -55,6 +55,7 @@ platform:ios do
         setup_ci
       
 #         git_url(ENV['GIT_URL'])
+        puts ENV["MATCH_PASSWORD"]
 
         sync_code_signing(  
           type: "appstore",
