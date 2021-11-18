@@ -57,14 +57,15 @@ platform:ios do
 #         setup_ci
       
 #         git_url(ENV['GIT_URL'])
-        puts ENV["MATCH_PASSWORD"]
+#         puts ENV["MATCH_PASSWORD"]
 
-        sync_code_signing(  
-          type: "appstore",
-#           readonly: is_ci,
-          git_url: ENV['GIT_URL'],
-          app_identifier: ENV["APP_BUNDLE_ID"]
-        )
+#         sync_code_signing(  
+#           type: "appstore",
+# #           readonly: is_ci,
+#           git_url: ENV['GIT_URL'],
+#           app_identifier: ENV["APP_BUNDLE_ID"]
+#         )
+        match(readonly: true)
       
 
         Dir.chdir("../") do
