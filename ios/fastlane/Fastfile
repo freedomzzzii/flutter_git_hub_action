@@ -11,8 +11,6 @@ platform:ios do
     desc "Test ios in Firebase test lab"
     lane:test_lab do
         create_keychain(
-           name: ENV["KEYCHAIN_NAME"],
-           password: ENV["KEYCHAIN_PASSWORD"],
            default_keychain: true,
            unlock: true,
            timeout: 3600,
