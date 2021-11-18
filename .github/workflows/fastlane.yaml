@@ -98,7 +98,33 @@ jobs:
 #           lane: 'app_distribution_group_developer'
 #           subdirectory: 'android'
 # play store
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'beta'
+#           subdirectory: 'android'
+# ios
+# test lab
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'test_lab'
+          subdirectory: 'ios'
+# build file
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'build_file_for_app_distribution'
+          subdirectory: 'ios'
+# app distribute
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_distribution_group_developer'
+          subdirectory: 'ios'
+# play store
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'beta'
-          subdirectory: 'android'
+          subdirectory: 'ios'
