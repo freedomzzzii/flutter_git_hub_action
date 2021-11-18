@@ -12,6 +12,8 @@ platform:android do
     lane:test_lab do
         sh("../../android/gradlew app:assembleAndroidTest --settings-file=../../android/settings.gradle")
         sh("../../android/gradlew app:assembleDebug --settings-file=../../android/settings.gradle -Ptarget=integration_test/main_integration_test.dart")
+      
+        sh("gcloud firebase test android run --type instrumentation --app build/app/outputs/apk/debug/app-debug.apk --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Pixel2,version=28,locale=pl,orientation=portrait")
     end
 
     # run this lane before deploy to firebase app distribute
