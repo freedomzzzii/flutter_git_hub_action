@@ -60,7 +60,11 @@ platform:ios do
 #         puts ENV["MATCH_PASSWORD"]
       
           setup_ci if ENV['CI']
-          match(type: 'appstore', username: ENV["MATCH_USERNAME"])
+          match(
+            type: 'appstore', 
+            app_identifier: ENV["APP_BUNDLE_ID"]
+#             username: ENV["MATCH_USERNAME"]
+          )
       
 #           setup_ci
 #           sync_code_signing(  
