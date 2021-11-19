@@ -59,12 +59,12 @@ platform:ios do
 #         git_url(ENV['GIT_URL'])
 #         puts ENV["MATCH_PASSWORD"]
 
-#         sync_code_signing(  
-#           type: "appstore",
-# #           readonly: is_ci,
-#           git_url: ENV['GIT_URL'],
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
+        sync_code_signing(  
+          type: "appstore",
+#           readonly: is_ci,
+          git_url: ENV['GIT_URL'],
+          app_identifier: ENV["APP_BUNDLE_ID"]
+        )
 #         match(readonly: true)
       
 #       puts ENV["FASTLANE_SESSION"]
@@ -94,16 +94,16 @@ platform:ios do
 #       )
       
 #         cert
-        get_certificates(
-          username: "tee.theeraporn@hugeman.co",
-          force: true,
-          development: true
-        )
-        sigh(
-          force: true, 
-          username: "tee.theeraporn@hugeman.co", 
-          app_identifier: ENV["APP_BUNDLE_ID"]
-        )
+#         get_certificates(
+#           username: "tee.theeraporn@hugeman.co",
+#           force: true,
+#           development: true
+#         )
+#         sigh(
+#           force: true, 
+#           username: "tee.theeraporn@hugeman.co", 
+#           app_identifier: ENV["APP_BUNDLE_ID"]
+#         )
       
 
         Dir.chdir("../") do
