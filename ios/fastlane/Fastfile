@@ -99,7 +99,11 @@ platform:ios do
           force: true,
           development: true
         )
-        sigh(force: true, username: "tee.theeraporn@hugeman.co")
+        sigh(
+          force: true, 
+          username: "tee.theeraporn@hugeman.co", 
+          app_identifier: ENV["APP_BUNDLE_ID"]
+        )
       
 
         Dir.chdir("../") do
