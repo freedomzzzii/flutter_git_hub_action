@@ -72,6 +72,15 @@ platform:ios do
       puts ENV["SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER"]
       puts ENV["MATCH_USERNAME"]
       puts ENV["APP_BUNDLE_ID"]
+      
+      create_keychain(
+        name: "my_keychain",
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: true,
+        password: "1234"
+      )
 
       setup_ci(force: true) if ENV['CI']
       match(
@@ -80,7 +89,8 @@ platform:ios do
         skip_confirmation: true,
         username: ENV["MATCH_USERNAME"],
         app_identifier: ENV["APP_BUNDLE_ID"],
-        keychain_name: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/login.keychain"
+        keychain_name: "my_keychain",
+        keychain_password: "1234"
       )
       
 
