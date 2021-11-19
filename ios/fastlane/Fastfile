@@ -95,7 +95,9 @@ platform:ios do
       
 #         cert
         get_certificates(
-          username: "tee.theeraporn@hugeman.co"
+          username: "tee.theeraporn@hugeman.co",
+          force: true,
+          development: true
         )
         sigh(force: true)
       
