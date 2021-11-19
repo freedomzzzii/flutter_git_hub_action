@@ -1,7 +1,7 @@
-#name: CI/CD fastlane for Android
-#
-#on:
-#  push:
+name: CI/CD fastlane for Android
+
+on:
+ push:
 #
 #jobs:
 #  build:
