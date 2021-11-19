@@ -77,8 +77,7 @@ platform:ios do
         type: 'appstore', 
         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
         skip_confirmation: true,
-        username: ENV["MATCH_USERNAME"],
-        password: ENV["MATCH_PASSWORD"]
+        username: ENV["MATCH_USERNAME"]
       )
       
 
