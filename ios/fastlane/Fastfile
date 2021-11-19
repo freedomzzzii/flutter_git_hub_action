@@ -62,7 +62,7 @@ platform:ios do
           setup_ci if ENV['CI']
           match(
             type: 'appstore', 
-            app_identifier: ENV["APP_BUNDLE_ID"]
+            app_identifier: ENV["APP_BUNDLE_ID"],
             generate_apple_certs: false
 #             username: ENV["MATCH_USERNAME"]
           )
