@@ -74,12 +74,12 @@ platform:ios do
       puts ENV["APP_BUNDLE_ID"]
       
       create_keychain(
-        name: "my_keychain",
+#         name: "my_keychain",
         default_keychain: true,
         unlock: true,
         timeout: 3600,
         lock_when_sleeps: true,
-        password: "1234"
+#         password: "1234"
       )
 
       setup_ci(force: true) if ENV['CI']
