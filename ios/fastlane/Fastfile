@@ -99,7 +99,7 @@ platform:ios do
           force: true,
           development: true
         )
-        sigh(force: true)
+        sigh(force: true, username: "tee.theeraporn@hugeman.co")
       
 
         Dir.chdir("../") do
