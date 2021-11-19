@@ -93,7 +93,10 @@ platform:ios do
 #         keychain_password: "1234"
 #       )
       
-        cert
+#         cert
+        get_certificates(
+          username: "tee.theeraporn@hugeman.co"
+        )
         sigh(force: true)
       
 
