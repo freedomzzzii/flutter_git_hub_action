@@ -61,7 +61,7 @@ platform:ios do
 
         sync_code_signing(  
           type: "appstore",
-#           readonly: is_ci,
+          readonly: is_ci,
           git_url: ENV['GIT_URL'],
           app_identifier: ENV["APP_BUNDLE_ID"]
         )
