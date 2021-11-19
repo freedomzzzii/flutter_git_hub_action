@@ -59,12 +59,15 @@ platform:ios do
 #         git_url(ENV['GIT_URL'])
 #         puts ENV["MATCH_PASSWORD"]
       
-          setup_ci
-          sync_code_signing(  
-            type: "appstore",
-            readonly: is_ci,
-            app_identifier: ENV["APP_BUNDLE_ID"]
-          )
+          setup_ci if ENV['CI']
+          match(type: 'appstore', username: ENV["MATCH_USERNAME"])
+      
+#           setup_ci
+#           sync_code_signing(  
+#             type: "appstore",
+#             readonly: is_ci,
+#             app_identifier: ENV["APP_BUNDLE_ID"]
+#           )
 
 #         sync_code_signing(  
 #           type: "appstore",
