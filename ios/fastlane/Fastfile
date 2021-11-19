@@ -126,7 +126,7 @@ platform:ios do
         end
 
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
-        sh("flutter build ios integration_test/main_integration_test.dart --release --no-codesign ")
+        sh("flutter", "build", "ios", "integration_test/main_integration_test.dart", "--release")
         xcodebuild(
             workspace: "Runner.xcworkspace",
             configuration: "../Flutter/Release.xcconfig",
