@@ -44,6 +44,7 @@ jobs:
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
           APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PATH=$RUNNER_TEMP/test-cert.keychain-db
           EOF
       #          KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}
       #          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
@@ -128,6 +129,7 @@ jobs:
           MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PATH: ${{ secrets.seKEYCHAIN_PATH}}
 # app distribute
       - uses: maierj/fastlane-action@v2.0.1
         with:
