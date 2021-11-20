@@ -1,22 +1,19 @@
 default_platform(:ios)
 
-DEVELOPER_APP_ID = "tee.theeraporn@hugeman.co"
-DEVELOPER_APP_IDENTIFIER = "com.hugeman.flutterstarterkit"
-PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.hugeman.flutterstarterkit"
-TEMP_KEYCHAIN_USER = "tee.theeraporn@hugeman.co"
-TEMP_KEYCHAIN_PASSWORD = "hugeman123"
-TEST_NAME = "test-cert.keychain-db"
-TEST_PASS = "hugeman123"
-
 
 platform :ios do
   lane :test do
-    keychain_name = TEMP_KEYCHAIN_USER
-    keychain_password = TEMP_KEYCHAIN_PASSWORD
+    DEVELOPER_APP_ID = "tee.theeraporn@hugeman.co"
+    DEVELOPER_APP_IDENTIFIER = "com.hugeman.flutterstarterkit"
+    PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.hugeman.flutterstarterkit"
+    TEMP_KEYCHAIN_USER = "tee.theeraporn@hugeman.co"
+    TEMP_KEYCHAIN_PASSWORD = "hugeman123"
+    TEST_NAME = "test-cert.keychain-db"
+    TEST_PASS = "hugeman123"
 
     delete_keychain(
         name: "test-cert.keychain-db"
-      ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+      ) if File.exist? File.expand_path("~/Library/Keychains/test-cert.keychain-db")
 
       create_keychain(
           name: "test-cert.keychain-db",
