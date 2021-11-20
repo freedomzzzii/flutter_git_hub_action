@@ -1,249 +1,68 @@
 default_platform(:ios)
 
-fastlane_require 'dotenv'
+DEVELOPER_APP_ID = "tee.theeraporn@hugeman.co"
+DEVELOPER_APP_IDENTIFIER = "com.hugeman.flutterstarterkit"
+PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.hugeman.flutterstarterkit"
+TEMP_KEYCHAIN_USER = "tee.theeraporn@hugeman.co"
+TEMP_KEYCHAIN_PASSWORD = "hugeman123"
 
-before_all do
-  Dotenv.overload '../../.env'
+def delete_temp_keychain(name)
+  delete_keychain(
+    name: name
+  ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
 end
 
-platform:ios do
-    # branch: all branch
-    desc "Test ios in Firebase test lab"
-    lane:test_lab do
-#         create_keychain(
-#           name: "Keychain",
-#           default_keychain: true,
-#           unlock: true,
-#           timeout: 3600,
-#           lock_when_sleeps: true,
-#           password: "Password"
-#         )
+def create_temp_keychain(name, password)
+  create_keychain(
+    name: name,
+    password: password,
+    unlock: false,
+    timeout: false
+  )
+end
 
-#         puts `ls -ll`
-#         puts `pwd`
+def ensure_temp_keychain(name, password)
+  delete_temp_keychain(name)
+  create_temp_keychain(name, password)
+end
 
-#         import_certificate(
-#           keychain_name: "Keychain",
-#           certificate_path: "CERTIFICATE_DEV.cer"
-#         )
+platform :ios do
+  lane :test do
+    keychain_name = TEMP_KEYCHAIN_USER
+    keychain_password = TEMP_KEYCHAIN_PASSWORD
+    ensure_temp_keychain(keychain_name, keychain_password)
 
-#         cert
-#         sigh(force: true)
-#         sh("pwd")
-#         sh("ls -la ../../")
-#         sh("chmod +x ../../ios")
-#         sh("pwd")
-#         sh("ls -la ../../")
-#         get_certificates(
-#           output_path: "/",
-#           username:
-#         )
+    match(
+      type: 'appstore',
+      app_identifier: "#{DEVELOPER_APP_IDENTIFIER}",
+      git_basic_authorization: Base64.strict_encode64(ENV["GIT_AUTHORIZATION"]),
+      readonly: true,
+      keychain_name: keychain_name,
+      keychain_password: keychain_password
+    )
 
-#         sh("ls")
-
-#         get_provisioning_profile   # invokes sigh
-#         create_keychain(
-#           name: "keychain",
-#           default_keychain: true,
-#           unlock: true,
-#           timeout: 3600,
-#           lock_when_sleeps: true,
-#           password: "password",
-#           path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
-#           keychain_path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
-#           username: "tee.theeraporn@hugeman.co"
-#         )
-
-#         setup_ci
-
-#         git_url(ENV['GIT_URL'])
-        puts ENV["MATCH_PASSWORD"]
-        puts ENV["FASTLANE_SESSION"]
-
-#           setup_ci if ENV['CI']
-          match(
-            type: 'appstore',
-            app_identifier: ENV["APP_BUNDLE_ID"],
-            generate_apple_certs: false,
-#             readonly: true
-#             username: ENV["MATCH_USERNAME"]
-          )
-
-#           setup_ci
-#           sync_code_signing(
-#             type: "appstore",
-#             readonly: is_ci,
-#             app_identifier: ENV["APP_BUNDLE_ID"]
-#           )
-
-#         sync_code_signing(
-#           type: "appstore",
-#           readonly: is_ci,
-#           git_url: ENV['GIT_URL'],
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-#         match(readonly: true)
-
-#       puts ENV["FASTLANE_SESSION"]
-#       puts ENV["MATCH_PASSWORD"]
-#       puts ENV["SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER"]
-#       puts ENV["MATCH_USERNAME"]
-#       puts ENV["APP_BUNDLE_ID"]
-
-#       create_keychain(
-#         name: "my_keychain",
-#         default_keychain: true,
-#         unlock: true,
-#         timeout: 3600,
-#         lock_when_sleeps: true,
-#         password: "1234"
-#       )
-
-#       setup_ci(force: true) if ENV['CI']
-#       match(
-#         type: 'appstore',
-#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#         skip_confirmation: true,
-#         username: ENV["MATCH_USERNAME"],
-#         app_identifier: ENV["APP_BUNDLE_ID"],
-#         keychain_name: "my_keychain",
-#         keychain_password: "1234"
-#       )
-
-#         cert
-#         get_certificates(
-#           username: "tee.theeraporn@hugeman.co",
-#           force: true,
-#           generate_apple_certs: false
-#         )
-#         sigh(
-#           force: true,
-#           username: "tee.theeraporn@hugeman.co",
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-
-
-        Dir.chdir("../") do
-            sh("pod install")
-        end
-
-        sh("flutter build ios --config-only integration_test/main_integration_test.dart")
-        sh("flutter build ios integration_test/main_integration_test.dart --release --no-codesign")
-        xcodebuild(
-            workspace: "Runner.xcworkspace",
-            configuration: "../Flutter/Release.xcconfig",
-            scheme: "Runner",
-            derivedDataPath: "../build/ios_integ",
-            xcargs: "-sdk iphoneos build-for-testing",
-        )
-    end
-
-    # run this lane before deploy to firebase app distribute
-    desc "Build file for deploy firebase app distribute"
-    lane:build_file_for_app_distribution do
-#         cert
-#         sigh(force: true)
-          cert(
-            username: "tee.theeraporn@hugeman.co",
-            keychain_password: ENV["KEYCHAIN_PASSWORD"],
-            keychain_path: ENV["KEYCHAIN_PATH"],
-            generate_apple_certs: false
-          )
-          sigh(
-          force: true,
-          username: "tee.theeraporn@hugeman.co",
-          app_identifier: ENV["APP_BUNDLE_ID"]
-          )
-
-
-#         get_certificates(
-#           development: true,
-#           username: "tee.theeraporn@hugeman.co",
-# #           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-#         get_provisioning_profile(
-#         username: "tee.theeraporn@hugeman.co",
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-#         sigh(force: true)
-
-#         puts ENV["MATCH_PASSWORD"]
-#         puts ENV["FASTLANE_SESSION"]
+#     gym(
+#       configuration: "Release",
+#       workspace: "Runner.xcworkspace",
+#       scheme: "Runner",
+#       export_method: "app-store",
+#       export_options: {
+#         provisioningProfiles: {
+#             DEVELOPER_APP_ID => PROVISIONING_PROFILE_SPECIFIER
+#         }
+#       }
+#     )
 #
-#           match(
-#             type: 'appstore',
-#             app_identifier: ENV["APP_BUNDLE_ID"],
-#             generate_apple_certs: false,
-#           )
+#     pilot(
+#       apple_id: "#{DEVELOPER_APP_ID}",
+#       app_identifier: "#{DEVELOPER_APP_IDENTIFIER}",
+#       skip_waiting_for_build_processing: true,
+#       skip_submission: true,
+#       distribute_external: false,
+#       notify_external_testers: false,
+#       ipa: "./Runner.ipa"
+#     )
 
-        build_app(
-          workspace: "Runner.xcworkspace",
-          scheme: "Runner",
-          configuration: "release",
-          xcargs: "-allowProvisioningUpdates",
-          export_method: "app-store",
-          export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_DISTRIBUTE"],
-                }
-            }
-        )
-    end
-
-    # branches: feature, develop, bugfix, hotfix, release
-    desc "Deploy a release version to the Firebase App Distribute for Developer testing"
-    lane:app_distribution_group_developer do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "developer",
-      )
-    end
-
-    # branches: feature, develop, bugfix, hotfix, release, master(pre-prod)[tag]
-    desc "Deploy a release version to the Firebase App Distribute for QA testing"
-    lane:app_distribution_group_qa do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "qa",
-      )
-    end
-
-     # branch: release
-    desc "Deploy a release version to the Firebase App Distribute for User testing"
-    lane:app_distribution_group_user do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "user",
-        )
-    end
-
-    # tag: master
-    desc "Deploy a release version to the App store"
-    lane:release do
-        cert
-        sigh(force: true)
-
-#          puts ENV["MATCH_PASSWORD"]
-#         puts ENV["FASTLANE_SESSION"]
-#
-#           match(
-#             type: 'appstore',
-#             app_identifier: ENV["APP_BUNDLE_ID"],
-#             generate_apple_certs: false,
-#           )
-
-        build_app(
-            workspace: "Runner.xcworkspace",
-            scheme: "Runner",
-            configuration: "release",
-            xcargs: "-allowProvisioningUpdates",
-            export_method: "ad-hoc",
-            export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_ADHOC"],
-                }
-            }
-        )
-        upload_to_app_store
-    end
+    delete_temp_keychain(keychain_name)
+  end
 end

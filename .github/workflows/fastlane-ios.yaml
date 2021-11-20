@@ -103,6 +103,10 @@ jobs:
         with:
            project_id: ${{ secrets.GCP_PROJECT_ID }}
            service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+           lane: 'test'
+           subdirectory: 'ios'
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #           lane: 'test_lab'
@@ -116,41 +120,41 @@ jobs:
 #           MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
 #           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
 # build file
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-           lane: 'build_file_for_app_distribution'
-           subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.seKEYCHAIN_PATH}}
-# app distribute
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-         lane: 'app_distribution_group_developer'
-         subdirectory: 'ios'
-        env:
-         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-         SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-         FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# play store
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-         lane: 'beta'
-         subdirectory: 'ios'
-        env:
-         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-         SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-         FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+#      - uses: maierj/fastlane-action@v2.0.1
+#        with:
+#           lane: 'build_file_for_app_distribution'
+#           subdirectory: 'ios'
+#        env:
+#          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+#          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+#          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+#          KEYCHAIN_PATH: ${{ secrets.seKEYCHAIN_PATH}}
+## app distribute
+#      - uses: maierj/fastlane-action@v2.0.1
+#        with:
+#         lane: 'app_distribution_group_developer'
+#         subdirectory: 'ios'
+#        env:
+#         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#         SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#         FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+##           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+##           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+## play store
+#      - uses: maierj/fastlane-action@v2.0.1
+#        with:
+#         lane: 'beta'
+#         subdirectory: 'ios'
+#        env:
+#         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#         SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#         FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+##           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+##           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
