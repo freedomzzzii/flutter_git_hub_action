@@ -141,8 +141,17 @@ platform:ios do
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-        cert
-        sigh(force: true)
+#         cert
+#         sigh(force: true)
+
+        puts ENV["MATCH_PASSWORD"]
+        puts ENV["FASTLANE_SESSION"]
+
+          match(
+            type: 'appstore',
+            app_identifier: ENV["APP_BUNDLE_ID"],
+            generate_apple_certs: false,
+          )
 
         build_app(
           workspace: "Runner.xcworkspace",
@@ -188,8 +197,17 @@ platform:ios do
     # tag: master
     desc "Deploy a release version to the App store"
     lane:release do
-        cert
-        sigh(force: true)
+#         cert
+#         sigh(force: true)
+
+         puts ENV["MATCH_PASSWORD"]
+        puts ENV["FASTLANE_SESSION"]
+
+          match(
+            type: 'appstore',
+            app_identifier: ENV["APP_BUNDLE_ID"],
+            generate_apple_certs: false,
+          )
 
         build_app(
             workspace: "Runner.xcworkspace",
