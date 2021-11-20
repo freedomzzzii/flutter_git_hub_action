@@ -65,7 +65,7 @@ platform:ios do
             type: 'appstore',
             app_identifier: ENV["APP_BUNDLE_ID"],
             generate_apple_certs: false,
-            readonly: true
+#             readonly: true
 #             username: ENV["MATCH_USERNAME"]
           )
 
