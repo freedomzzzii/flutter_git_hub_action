@@ -143,15 +143,35 @@ platform:ios do
     lane:build_file_for_app_distribution do
 #         cert
 #         sigh(force: true)
-
-        puts ENV["MATCH_PASSWORD"]
-        puts ENV["FASTLANE_SESSION"]
-
-          match(
-            type: 'appstore',
-            app_identifier: ENV["APP_BUNDLE_ID"],
-            generate_apple_certs: false,
+          cert(
+            username: "tee.theeraporn@hugeman.co",
           )
+          sigh(
+          force: true,
+          username: "tee.theeraporn@hugeman.co",
+          app_identifier: ENV["APP_BUNDLE_ID"]
+          )
+
+
+#         get_certificates(
+#           development: true,
+#           username: "tee.theeraporn@hugeman.co",
+# #           app_identifier: ENV["APP_BUNDLE_ID"]
+#         )
+#         get_provisioning_profile(
+#         username: "tee.theeraporn@hugeman.co",
+#           app_identifier: ENV["APP_BUNDLE_ID"]
+#         )
+#         sigh(force: true)
+
+#         puts ENV["MATCH_PASSWORD"]
+#         puts ENV["FASTLANE_SESSION"]
+#
+#           match(
+#             type: 'appstore',
+#             app_identifier: ENV["APP_BUNDLE_ID"],
+#             generate_apple_certs: false,
+#           )
 
         build_app(
           workspace: "Runner.xcworkspace",
@@ -197,17 +217,17 @@ platform:ios do
     # tag: master
     desc "Deploy a release version to the App store"
     lane:release do
-#         cert
-#         sigh(force: true)
+        cert
+        sigh(force: true)
 
-         puts ENV["MATCH_PASSWORD"]
-        puts ENV["FASTLANE_SESSION"]
-
-          match(
-            type: 'appstore',
-            app_identifier: ENV["APP_BUNDLE_ID"],
-            generate_apple_certs: false,
-          )
+#          puts ENV["MATCH_PASSWORD"]
+#         puts ENV["FASTLANE_SESSION"]
+#
+#           match(
+#             type: 'appstore',
+#             app_identifier: ENV["APP_BUNDLE_ID"],
+#             generate_apple_certs: false,
+#           )
 
         build_app(
             workspace: "Runner.xcworkspace",
