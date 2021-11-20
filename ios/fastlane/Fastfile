@@ -146,6 +146,7 @@ platform:ios do
           install_xcode_plugin(github: 'https://github.com/FixIssue/FixCode')
           cert(
             username: "tee.theeraporn@hugeman.co",
+            keychain_password: ENV:["KEYCHAIN_PASSWORD"]
           )
           sigh(
           force: true,

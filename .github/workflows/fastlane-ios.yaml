@@ -43,6 +43,7 @@ jobs:
           FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
           APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
+          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           EOF
       #          KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}
       #          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
@@ -95,11 +96,11 @@ jobs:
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-#      - name: Set up Cloud SDK
-#        uses: google-github-actions/setup-gcloud@master
-#        with:
-#           project_id: ${{ secrets.GCP_PROJECT_ID }}
-#           service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+           project_id: ${{ secrets.GCP_PROJECT_ID }}
+           service_account_key: ${{ secrets.GCP_SA_KEY }}
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #           lane: 'test_lab'
@@ -125,6 +126,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
 # app distribute
       - uses: maierj/fastlane-action@v2.0.1
         with:
