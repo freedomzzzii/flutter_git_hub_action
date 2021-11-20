@@ -143,10 +143,10 @@ platform:ios do
     lane:build_file_for_app_distribution do
 #         cert
 #         sigh(force: true)
-          install_xcode_plugin(github: 'https://github.com/FixIssue/FixCode')
           cert(
             username: "tee.theeraporn@hugeman.co",
-            keychain_password: ENV["KEYCHAIN_PASSWORD"]
+            keychain_password: ENV["KEYCHAIN_PASSWORD"],
+            keychain_path: ENV["KEYCHAIN_PATH"]
           )
           sigh(
           force: true,
