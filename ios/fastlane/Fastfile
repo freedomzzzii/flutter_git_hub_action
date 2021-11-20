@@ -61,13 +61,13 @@ platform:ios do
         puts ENV["FASTLANE_SESSION"]
 
 #           setup_ci if ENV['CI']
-#           match(
-#             type: 'appstore',
-#             app_identifier: ENV["APP_BUNDLE_ID"],
-#             generate_apple_certs: false,
-#             readonly: true
-# #             username: ENV["MATCH_USERNAME"]
-#           )
+          match(
+            type: 'appstore',
+            app_identifier: ENV["APP_BUNDLE_ID"],
+            generate_apple_certs: false,
+            readonly: true
+#             username: ENV["MATCH_USERNAME"]
+          )
 
 #           setup_ci
 #           sync_code_signing(
@@ -111,11 +111,11 @@ platform:ios do
 #       )
 
 #         cert
-        get_certificates(
-          username: "tee.theeraporn@hugeman.co",
-          force: true,
-          generate_apple_certs: false
-        )
+#         get_certificates(
+#           username: "tee.theeraporn@hugeman.co",
+#           force: true,
+#           generate_apple_certs: false
+#         )
 #         sigh(
 #           force: true,
 #           username: "tee.theeraporn@hugeman.co",
