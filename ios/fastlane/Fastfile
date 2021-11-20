@@ -8,31 +8,22 @@ TEMP_KEYCHAIN_PASSWORD = "hugeman123"
 TEST_NAME = "test-cert.keychain-db"
 TEST_PASS = "hugeman123"
 
-def delete_temp_keychain()
-  delete_keychain(
-    name: "test-cert.keychain-db"
-  ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
-end
-
-def create_temp_keychain(name, password)
-  create_keychain(
-    name: "test-cert.keychain-db",
-    password: "hugeman123",
-    unlock: false,
-    timeout: false
-  )
-end
-
-def ensure_temp_keychain(name, password)
-  delete_temp_keychain(name)
-  create_temp_keychain(name, password)
-end
 
 platform :ios do
   lane :test do
     keychain_name = TEMP_KEYCHAIN_USER
     keychain_password = TEMP_KEYCHAIN_PASSWORD
-    ensure_temp_keychain(keychain_name, keychain_password)
+
+    delete_keychain(
+        name: "test-cert.keychain-db"
+      ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+
+      create_keychain(
+          name: "test-cert.keychain-db",
+          password: "hugeman123",
+          unlock: false,
+          timeout: false
+        )
 
     match(
       type: 'appstore',
