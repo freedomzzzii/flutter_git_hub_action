@@ -19,7 +19,7 @@ platform :ios do
           name: "test-cert.keychain-db",
           password: "hugeman123",
           unlock: false,
-          timeout: false
+          timeout: 0
         )
 
     match(
