@@ -188,7 +188,7 @@ platform:ios do
       )
       update_code_signing_settings(
         use_automatic_signing: true,
-        path: "Runner.xcodeproj"
+        path: "Runner.xcworkspace"
       )
 
 
@@ -220,7 +220,7 @@ platform:ios do
           export_method: "app-store",
           export_options: {
                 provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_DISTRIBUTE"],
+                    ENV["APP_BUNDLE_ID"] => "match AppStore com.hugeman.flutterstarterkit",
                 }
             }
         )
