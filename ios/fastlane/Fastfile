@@ -216,19 +216,26 @@ platform:ios do
 
 
 
-        gym(
-          workspace: "Runner.xcworkspace",
-          scheme: "Runner",
-          configuration: "Release",
-          xcconfig: "Flutter/Release.xcconfig",
-          xcargs: "-allowProvisioningUpdates",
-          export_method: "app-store",
-          export_options: {
+#         gym(
+#           workspace: "Runner.xcworkspace",
+#           scheme: "Runner",
+#           configuration: "Release",
+#           xcargs: "-allowProvisioningUpdates",
+#           export_method: "app-store",
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "match AppStore com.hugeman.flutterstarterkit",
+#                 }
+#             }
+#         )
+          build_app(
+              export_method: "app-store",
+              export_options: {
                 provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "match AppStore com.hugeman.flutterstarterkit",
+                  ENV["APP_BUNDLE_ID"] => "match AppStore com.hugeman.flutterstarterkit",
                 }
-            }
-        )
+              }
+            )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
