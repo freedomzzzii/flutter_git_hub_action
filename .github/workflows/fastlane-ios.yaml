@@ -97,7 +97,7 @@ jobs:
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-      - run: security find-identity -v -p codesigning /Users/runner/Library/Keychains/login.keychain-db
+      - run: security find-identity -v -p codesigning /Users/runner/work/_temp/app-signing.keychain-db
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
