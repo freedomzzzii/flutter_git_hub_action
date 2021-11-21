@@ -159,7 +159,7 @@ platform:ios do
 
 
       match_nuke(
-        type: 'development,',
+        type: 'development',
                 git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
                 skip_confirmation: true,
                 username: ENV["MATCH_USERNAME"],
@@ -173,7 +173,7 @@ platform:ios do
                 include_all_certificates: true
         )
       match(
-        type: 'development,',
+        type: 'development',
         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
         skip_confirmation: true,
         username: ENV["MATCH_USERNAME"],
