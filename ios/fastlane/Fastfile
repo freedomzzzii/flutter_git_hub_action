@@ -141,7 +141,7 @@ platform:ios do
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-#         setup_ci
+        setup_ci
 
 #         cert
 #         sigh(force: true)
@@ -164,6 +164,7 @@ platform:ios do
         skip_confirmation: true,
         username: ENV["MATCH_USERNAME"],
         app_identifier: ENV["APP_BUNDLE_ID"],
+        readonly: false,
 #         keychain_name: "my_keychain",
 #         keychain_password: ENV["KEYCHAIN_PASSWORD"],
         verbose: true,
