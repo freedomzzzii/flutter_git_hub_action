@@ -220,6 +220,7 @@ platform:ios do
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "Release",
+          xcconfig: "Flutter/Release.xcconfig",
           xcargs: "-allowProvisioningUpdates",
           export_method: "app-store",
           export_options: {
