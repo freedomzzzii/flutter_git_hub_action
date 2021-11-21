@@ -189,7 +189,7 @@ platform:ios do
       update_code_signing_settings(
         path: "Runner.xcodeproj",
         targets: "Runner",
-        profile_name: "match AppStore com.hugeman.flutterstarterkit",
+        profile_name: "match Development com.hugeman.flutterstarterkit",
         bundle_identifier: ENV["APP_BUNDLE_ID"]
       )
 
@@ -224,7 +224,7 @@ platform:ios do
 #           export_method: "app-store",
 #           export_options: {
 #                 provisioningProfiles: {
-#                     ENV["APP_BUNDLE_ID"] => "match AppStore com.hugeman.flutterstarterkit",
+#                     ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
 #                 }
 #             }
 #         )
@@ -232,7 +232,7 @@ platform:ios do
               export_method: "app-store",
               export_options: {
                 provisioningProfiles: {
-                  ENV["APP_BUNDLE_ID"] => "match AppStore com.hugeman.flutterstarterkit",
+                  ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
                 }
               }
             )
