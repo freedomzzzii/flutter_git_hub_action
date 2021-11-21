@@ -219,7 +219,7 @@ platform:ios do
         gym(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
-          configuration: "release",
+          configuration: "Release",
           xcargs: "-allowProvisioningUpdates",
           export_method: "app-store",
           export_options: {
