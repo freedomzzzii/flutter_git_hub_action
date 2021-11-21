@@ -188,7 +188,10 @@ platform:ios do
       )
       update_code_signing_settings(
         use_automatic_signing: true,
-        path: "Runner.xcodeproj"
+        path: "Runner.xcodeproj",
+        targets: "Runner",
+        profile_name: "match AppStore com.hugeman.flutterstarterkit",
+        bundle_identifier: ENV["APP_BUNDLE_ID"]
       )
 
 
