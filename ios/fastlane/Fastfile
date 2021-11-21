@@ -229,12 +229,16 @@ platform:ios do
 #             }
 #         )
           build_app(
-              export_method: "app-store",
-              export_options: {
+          workspace: "Runner.xcworkspace",
+          scheme: "Runner",
+          configuration: "Release",
+          xcargs: "-allowProvisioningUpdates",
+          export_method: "app-store",
+          export_options: {
                 provisioningProfiles: {
-                  ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
+                    ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
                 }
-              }
+            }
             )
     end
 
