@@ -217,6 +217,7 @@ platform:ios do
          xcodeproj: "Runner.xcodeproj",
 #           profile: "./watch_app_store.mobileprovision",
       )
+      enable_automatic_code_signing(path: "Runner.xcodeproj")
 
 
 #         get_certificates(
