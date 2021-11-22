@@ -210,7 +210,7 @@ platform:ios do
         path: "Runner.xcodeproj",
 #         targets: "Runner",
 #         profile_name: "com.hugeman.flutterstarterkit AppStore",
-        bundle_identifier: ENV["APP_BUNDLE_ID"]
+        bundle_identifier: ENV["APP_BUNDLE_ID"],
         use_automatic_signing: true,
       )
 
