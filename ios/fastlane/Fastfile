@@ -233,7 +233,19 @@ platform:ios do
 #                 }
 #             }
 #         )
-          build_app(
+#         build_app(
+#           workspace: "Runner.xcworkspace",
+#           scheme: "Runner",
+#           configuration: "Release",
+#           xcargs: "-allowProvisioningUpdates",
+#           export_method: "app-store",
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
+#                 }
+#             }
+#         )
+        gym(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "Release",
@@ -241,7 +253,7 @@ platform:ios do
           export_method: "app-store",
           export_options: {
                 provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
+                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_DISTRIBUTE"],
                 }
             }
         )
