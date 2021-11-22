@@ -46,29 +46,10 @@ jobs:
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
           EOF
-      #          KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}
-      #          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
-      - name: Create file google-services.json
+      - name: Create file GoogleService-Info.plist
         run: |
-          cd android/app; cat << EOF >> google-services.json
-          ${{ secrets.GOOGLE_SERVICES_ANDROID }}
-          EOF
-      - name: Create file encode-upload-keystore.jks
-        run: |
-          cd android; cat << EOF >> encode-upload-keystore.jks
-          ${{ secrets.UPLOAD_KEYSTORE }}
-          EOF
-      - name: Create file upload-keystore.jks
-        run: base64 -d android/encode-upload-keystore.jks > android/upload-keystore.jks
-      - name: Create file play-store-credentials.json
-        run: |
-          cat << EOF >> play-store-credentials.json
-          ${{ secrets.PLAY_STORE_CREDENTIALS }}
-          EOF
-      - name: Create file key.properties
-        run: |
-          cd android; cat << EOF >> key.properties
-          ${{ secrets.KEY_PROPERTIES_ANDROID }}
+          cd ios; cat << EOF >> GoogleService-Info.plist
+          ${{ secrets.GOOGLE_SERVICE_IOS }}
           EOF
       - name: Install dependencies
         run: make project/install/package
