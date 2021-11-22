@@ -251,7 +251,7 @@ platform:ios do
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
-          configuration: "release",
+          configuration: "Release",
           xcargs: "-allowProvisioningUpdates",
           export_method: "app-store",
           export_options: {
