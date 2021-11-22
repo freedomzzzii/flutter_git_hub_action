@@ -191,19 +191,6 @@ platform:ios do
                 storage_mode: "git",
                 include_all_certificates: true
         )
-        update_code_signing_settings(
-                path: "Runner.xcodeproj",
-        #         targets: "Runner",
-        #         profile_name: "com.hugeman.flutterstarterkit AppStore",
-                bundle_identifier: ENV["APP_BUNDLE_ID"],
-                use_automatic_signing: true,
-              )
-              update_project_provisioning(
-                 xcodeproj: "Runner.xcodeproj",
-                 build_configuration: "Release",
-                 profile: "match_Development_com.hugeman.flutterstarterkitmobileprovision"
-#                   profile: "./match Development com.hugeman.flutterstarterkit.mobileprovision",
-              )
       match(
         type: 'development',
         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
@@ -216,11 +203,18 @@ platform:ios do
         include_all_certificates: true
       )
       update_code_signing_settings(
-        path: "Runner.xcodeproj",
-        targets: "Runner",
-        profile_name: "match Development com.hugeman.flutterstarterkit",
-        bundle_identifier: ENV["APP_BUNDLE_ID"]
-      )
+                      path: "Runner.xcodeproj",
+              #         targets: "Runner",
+              #         profile_name: "com.hugeman.flutterstarterkit AppStore",
+                      bundle_identifier: ENV["APP_BUNDLE_ID"],
+                      use_automatic_signing: true,
+                    )
+                    update_project_provisioning(
+                       xcodeproj: "Runner.xcodeproj",
+                       build_configuration: "Release",
+                       profile: "match_Development_com.hugeman.flutterstarterkitmobileprovision"
+      #                   profile: "./match Development com.hugeman.flutterstarterkit.mobileprovision",
+                    )
 
           build_app(
           workspace: "Runner.xcworkspace",
