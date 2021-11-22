@@ -206,12 +206,12 @@ platform:ios do
 #         storage_mode: "git",
 #         include_all_certificates: true
 #       )
-#       update_code_signing_settings(
-#         path: "Runner.xcodeproj",
-#         targets: "Runner",
-#         profile_name: "match Development com.hugeman.flutterstarterkit",
-#         bundle_identifier: ENV["APP_BUNDLE_ID"]
-#       )
+      update_code_signing_settings(
+        path: "Runner.xcodeproj",
+        targets: "Runner",
+        profile_name: "com.hugeman.flutterstarterkit AppStore",
+        bundle_identifier: ENV["APP_BUNDLE_ID"]
+      )
 
 
 #         get_certificates(
