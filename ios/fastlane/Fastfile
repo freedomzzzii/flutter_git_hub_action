@@ -212,7 +212,7 @@ platform:ios do
                     update_project_provisioning(
                        xcodeproj: "Runner.xcodeproj",
                        build_configuration: "Release",
-                       profile: "match_Development_comhugemanflutterstarterkit.mobileprovision"
+#                        profile: "match_Development_comhugemanflutterstarterkit.mobileprovision"
       #                   profile: "./match Development com.hugeman.flutterstarterkit.mobileprovision",
                     )
 
