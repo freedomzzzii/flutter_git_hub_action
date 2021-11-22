@@ -145,104 +145,26 @@ platform:ios do
     Dir.chdir("../") do
         sh("pod install")
     end
-    match_nuke(
-    type: 'appstore',
-            git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-            skip_confirmation: true,
-            username: ENV["MATCH_USERNAME"],
-            app_identifier: ENV["APP_BUNDLE_ID"],
-#             readonly: false,
-    #         keychain_name: "my_keychain",
-    #         keychain_password: ENV["KEYCHAIN_PASSWORD"],
-            verbose: true,
-#             generate_apple_certs: false,
-#             storage_mode: "git",
-            include_all_certificates: true
-    )
-    cert(force: true, username: "tee.theeraporn@hugeman.co")
-    sigh(force: true, username: "tee.theeraporn@hugeman.co", app_identifier: ENV["APP_BUNDLE_ID"])
-#         setup_ci
-
-#         cert
-#         sigh(force: true)
-#           cert(
-#             username: "tee.theeraporn@hugeman.co",
-#             keychain_password: ENV["KEYCHAIN_PASSWORD"],
-#             keychain_path: ENV["KEYCHAIN_PATH"],
-#             generate_apple_certs: false
-#           )
-#           sigh(
-#           force: true,
-#           username: "tee.theeraporn@hugeman.co",
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#           )
-
-
-#       match_nuke(
-#         type: 'development',
-#                 git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#                 skip_confirmation: true,
-#                 username: ENV["MATCH_USERNAME"],
-#                 app_identifier: ENV["APP_BUNDLE_ID"],
-#                 readonly: false,
-#         #         keychain_name: "my_keychain",
-#         #         keychain_password: ENV["KEYCHAIN_PASSWORD"],
-#                 verbose: true,
-#                 generate_apple_certs: false,
-#                 storage_mode: "git",
-#                 include_all_certificates: true
-#         )
-#       match(
-#         type: 'development',
-#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#         skip_confirmation: true,
-#         username: ENV["MATCH_USERNAME"],
-#         app_identifier: ENV["APP_BUNDLE_ID"],
-#         readonly: false,
-# #         keychain_name: "my_keychain",
-# #         keychain_password: ENV["KEYCHAIN_PASSWORD"],
-#         verbose: true,
-#         generate_apple_certs: false,
-#         storage_mode: "git",
-#         include_all_certificates: true
-#       )
+#     match_nuke(
+#     type: 'appstore',
+#             git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+#             skip_confirmation: true,
+#             username: ENV["MATCH_USERNAME"],
+#             app_identifier: ENV["APP_BUNDLE_ID"],
+#             verbose: true,
+#             include_all_certificates: true
+#     )
+#     cert(force: true, username: "tee.theeraporn@hugeman.co")
+#     sigh(force: true, username: "tee.theeraporn@hugeman.co", app_identifier: ENV["APP_BUNDLE_ID"])
 #       update_code_signing_settings(
 #         path: "Runner.xcodeproj",
-# #         targets: "Runner",
-# #         profile_name: "com.hugeman.flutterstarterkit AppStore",
 #         bundle_identifier: ENV["APP_BUNDLE_ID"],
 #         use_automatic_signing: true,
 #       )
 #       update_project_provisioning(
 #          xcodeproj: "Runner.xcodeproj",
-# #           profile: "./watch_app_store.mobileprovision",
 #       )
-      enable_automatic_code_signing(path: "Runner.xcodeproj")
-
-
-#         get_certificates(
-#           development: true,
-#           username: "tee.theeraporn@hugeman.co",
-# #           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-#         get_provisioning_profile(
-#         username: "tee.theeraporn@hugeman.co",
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-#         sigh(force: true)
-
-#         puts ENV["MATCH_PASSWORD"]
-#         puts ENV["FASTLANE_SESSION"]
-#
-#           match(
-#             type: 'appstore',
-#             app_identifier: ENV["APP_BUNDLE_ID"],
-#             generate_apple_certs: false,
-#           )
-
-
-
-#         gym(
+#         build_app(
 #           workspace: "Runner.xcworkspace",
 #           scheme: "Runner",
 #           configuration: "Release",
@@ -250,11 +172,44 @@ platform:ios do
 #           export_method: "app-store",
 #           export_options: {
 #                 provisioningProfiles: {
-#                     ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
+#                     ENV["APP_BUNDLE_ID"] => "com.hugeman.flutterstarterkit AppStore",
 #                 }
 #             }
 #         )
-        build_app(
+
+
+
+ match_nuke(
+        type: 'development',
+                git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+                skip_confirmation: true,
+                username: ENV["MATCH_USERNAME"],
+                app_identifier: ENV["APP_BUNDLE_ID"],
+                readonly: false,
+                verbose: true,
+                generate_apple_certs: false,
+                storage_mode: "git",
+                include_all_certificates: true
+        )
+      match(
+        type: 'development',
+        git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+        skip_confirmation: true,
+        username: ENV["MATCH_USERNAME"],
+        app_identifier: ENV["APP_BUNDLE_ID"],
+        verbose: true,
+        generate_apple_certs: false,
+        storage_mode: "git",
+        include_all_certificates: true
+      )
+      update_code_signing_settings(
+        path: "Runner.xcodeproj",
+        targets: "Runner",
+        profile_name: "match Development com.hugeman.flutterstarterkit",
+        bundle_identifier: ENV["APP_BUNDLE_ID"]
+      )
+
+          build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "Release",
@@ -262,10 +217,10 @@ platform:ios do
           export_method: "app-store",
           export_options: {
                 provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "com.hugeman.flutterstarterkit AppStore",
+                    ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
                 }
             }
-        )
+            )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
