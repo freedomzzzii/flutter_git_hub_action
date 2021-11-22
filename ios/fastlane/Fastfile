@@ -209,12 +209,12 @@ platform:ios do
                       bundle_identifier: ENV["APP_BUNDLE_ID"],
                       use_automatic_signing: true,
                     )
-                    update_project_provisioning(
-                       xcodeproj: "Runner.xcodeproj",
-                       build_configuration: "Release",
-#                        profile: "match_Development_comhugemanflutterstarterkit.mobileprovision"
-      #                   profile: "./match Development com.hugeman.flutterstarterkit.mobileprovision",
-                    )
+#                     update_project_provisioning(
+#                        xcodeproj: "Runner.xcodeproj",
+#                        build_configuration: "Release",
+# #                        profile: "match_Development_comhugemanflutterstarterkit.mobileprovision"
+#       #                   profile: "./match Development com.hugeman.flutterstarterkit.mobileprovision",
+#                     )
 
           build_app(
           workspace: "Runner.xcworkspace",
