@@ -143,8 +143,8 @@ platform:ios do
     lane:build_file_for_app_distribution do
 
     Dir.chdir("../") do
-                sh("pod install")
-            end
+        sh("pod install")
+    end
 
 #         setup_ci
 
@@ -244,7 +244,7 @@ platform:ios do
                     ENV["APP_BUNDLE_ID"] => "match Development com.hugeman.flutterstarterkit",
                 }
             }
-            )
+        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
