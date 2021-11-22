@@ -206,17 +206,17 @@ platform:ios do
 #         storage_mode: "git",
 #         include_all_certificates: true
 #       )
-      update_code_signing_settings(
-        path: "Runner.xcodeproj",
-#         targets: "Runner",
-#         profile_name: "com.hugeman.flutterstarterkit AppStore",
-        bundle_identifier: ENV["APP_BUNDLE_ID"],
-        use_automatic_signing: true,
-      )
-      update_project_provisioning(
-         xcodeproj: "Runner.xcodeproj",
-#           profile: "./watch_app_store.mobileprovision",
-      )
+#       update_code_signing_settings(
+#         path: "Runner.xcodeproj",
+# #         targets: "Runner",
+# #         profile_name: "com.hugeman.flutterstarterkit AppStore",
+#         bundle_identifier: ENV["APP_BUNDLE_ID"],
+#         use_automatic_signing: true,
+#       )
+#       update_project_provisioning(
+#          xcodeproj: "Runner.xcodeproj",
+# #           profile: "./watch_app_store.mobileprovision",
+#       )
       enable_automatic_code_signing(path: "Runner.xcodeproj")
 
 
