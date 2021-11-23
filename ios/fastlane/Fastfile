@@ -185,10 +185,10 @@ platform:ios do
                 skip_confirmation: true,
                 username: ENV["MATCH_USERNAME"],
                 app_identifier: ENV["APP_BUNDLE_ID"],
-                readonly: false,
+#                 readonly: false,
                 verbose: true,
-                generate_apple_certs: false,
-                storage_mode: "git",
+#                 generate_apple_certs: false,
+#                 storage_mode: "git",
                 include_all_certificates: true
         )
       match(
@@ -198,14 +198,14 @@ platform:ios do
         username: ENV["MATCH_USERNAME"],
         app_identifier: ENV["APP_BUNDLE_ID"],
         verbose: true,
-        generate_apple_certs: false,
-        storage_mode: "git",
+#         generate_apple_certs: false,
+#         storage_mode: "git",
         include_all_certificates: true
       )
       update_code_signing_settings(
                       path: "Runner.xcodeproj",
               #         targets: "Runner",
-              #         profile_name: "com.hugeman.flutterstarterkit AppStore",
+                      profile_name: "match Development com.hugeman.flutterstarterkit",
                       bundle_identifier: ENV["APP_BUNDLE_ID"],
                       use_automatic_signing: true,
                     )
