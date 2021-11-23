@@ -207,7 +207,7 @@ platform:ios do
               #         targets: "Runner",
                       profile_name: "match Development com.hugeman.flutterstarterkit",
                       bundle_identifier: ENV["APP_BUNDLE_ID"],
-                      use_automatic_signing: true,
+#                       use_automatic_signing: true,
                     )
 #                     update_project_provisioning(
 #                        xcodeproj: "Runner.xcodeproj",
