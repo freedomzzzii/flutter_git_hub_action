@@ -178,14 +178,14 @@ platform:ios do
 #         )
 
 
-setup_ci
+# setup_ci
  match_nuke(
         type: 'development',
                 git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
                 skip_confirmation: true,
                 username: ENV["MATCH_USERNAME"],
                 app_identifier: ENV["APP_BUNDLE_ID"],
-                readonly: is_ci,
+#                 readonly: is_ci,
                 verbose: true,
 #                 generate_apple_certs: false,
 #                 storage_mode: "git",
@@ -198,7 +198,7 @@ setup_ci
         username: ENV["MATCH_USERNAME"],
         app_identifier: ENV["APP_BUNDLE_ID"],
         verbose: true,
-        readonly: is_ci,
+#         readonly: is_ci,
 #         generate_apple_certs: false,
 #         storage_mode: "git",
         include_all_certificates: true
