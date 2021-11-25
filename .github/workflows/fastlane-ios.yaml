@@ -98,12 +98,6 @@ jobs:
         with:
            project_id: ${{ secrets.GCP_PROJECT_ID }}
            service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - name: Install and Update Bundle
-        run: |
-          gem install bundler:1.17.3
-          bundle update
-      - name: Apple Developer Login
-        run: bundle exec fastlane fastlane-credentials add --username FASTLANE_USER --password FASTLANE_PASSWORD
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #           lane: 'test_lab'
