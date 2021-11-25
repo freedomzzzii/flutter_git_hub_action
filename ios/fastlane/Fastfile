@@ -229,34 +229,26 @@ platform:ios do
 #           install_provisioning_profile(path: "match_AppStore_comhugemanflutterstarterkit.mobileprovision")
 
 
-#           sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
-#           sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
-#           build_app(
-#           workspace: "Runner.xcworkspace",
-#           scheme: "Runner",
-#           configuration: "Release",
+          sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
+          sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
+          build_app(
+          workspace: "Runner.xcworkspace",
+          scheme: "Runner",
+          configuration: "Release",
 #           xcargs: "-allowProvisioningUpdates",
-#           export_method: "app-store",
-# #           skip_codesigning: true,
-#           export_team_id: ENV["APPLE_TEAM_ID"],
-# #           export_options: {
-# #                 provisioningProfiles: {
-# #                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-# #                 }
-# #             },
-# #             output_directory: "testbuild/ios",
-# #             output_name: "testbuild",
-# #             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
-# #             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
-#         )
-
-        setup_ci
-         match(
-            type: 'appstore',
-            git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-            app_identifier: ENV["APP_BUNDLE_ID"]
-         )
-            build_app
+          export_method: "app-store",
+#           skip_codesigning: true,
+          export_team_id: ENV["APPLE_TEAM_ID"],
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
+#             output_directory: "testbuild/ios",
+#             output_name: "testbuild",
+#             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
+#             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
+        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
