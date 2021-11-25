@@ -235,7 +235,7 @@ platform:ios do
           configuration: "Release",
           xcargs: "-allowProvisioningUpdates",
           export_method: "app-store",
-#           skip_codesigning: true,
+          skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
 #           export_options: {
 #                 provisioningProfiles: {
@@ -244,7 +244,7 @@ platform:ios do
 #             },
 #             output_directory: "testbuild/ios",
 #             output_name: "testbuild",
-            codesigning_identity: "HUGEMAN CONSULTANT COMPANY LIMITED",
+#             codesigning_identity: "HUGEMAN CONSULTANT COMPANY LIMITED",
             installer_cert_name: "HUGEMAN CONSULTANT COMPANY LIMITED"
         )
     end
