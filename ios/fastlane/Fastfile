@@ -224,20 +224,25 @@ platform:ios do
 # #             build_configuration: "Release",
 #             certificate: "ios_distribution.cer"
 #           )
-           sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+#            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+#             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
 #           install_provisioning_profile(path: "match_AppStore_comhugemanflutterstarterkit.mobileprovision")
-#           build_app(
-#           workspace: "Runner.xcworkspace",
-#           scheme: "Runner",
-#           configuration: "Release",
-# #           xcargs: "-allowProvisioningUpdates",
-#           export_method: "app-store",
+          build_app(
+          workspace: "Runner.xcworkspace",
+          scheme: "Runner",
+          configuration: "Release",
+          xcargs: "-allowProvisioningUpdates",
+          export_method: "app-store",
 #           export_options: {
 #                 provisioningProfiles: {
 #                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
 #                 }
-#             }
-#         )
+#             },
+#             output_directory: "testbuild/ios",
+#             output_name: "testbuild",
+#             codesigning_identity: "iOS Distribution",
+            installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
+        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
