@@ -251,7 +251,10 @@ platform:ios do
 #         )
 
         setup_ci
-            match(type: 'appstore')
+         match(
+            type: 'appstore',
+            git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+         )
             build_app
     end
 
