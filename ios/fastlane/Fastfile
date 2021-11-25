@@ -244,7 +244,7 @@ platform:ios do
 #             },
 #             output_directory: "testbuild/ios",
 #             output_name: "testbuild",
-#             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
+            codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
         )
     end
