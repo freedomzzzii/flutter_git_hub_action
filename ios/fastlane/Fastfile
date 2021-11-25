@@ -244,7 +244,7 @@ platform:ios do
 #             },
 #             output_directory: "testbuild/ios",
 #             output_name: "testbuild",
-#             codesigning_identity: "HUGEMAN CONSULTANT COMPANY LIMITED",
+            codesigning_identity: "HUGEMAN CONSULTANT COMPANY LIMITED",
             installer_cert_name: "HUGEMAN CONSULTANT COMPANY LIMITED"
         )
     end
