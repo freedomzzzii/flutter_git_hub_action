@@ -237,15 +237,15 @@ platform:ios do
           export_method: "app-store",
 #           skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
-          export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-                }
-            },
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
 #             output_directory: "testbuild/ios",
 #             output_name: "testbuild",
-            codesigning_identity: "HUGEMAN CONSULTANT COMPANY LIMITED",
-            installer_cert_name: "HUGEMAN CONSULTANT COMPANY LIMITED"
+#             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
+#             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
         )
     end
 
