@@ -235,7 +235,7 @@ platform:ios do
           configuration: "Release",
           xcargs: "-allowProvisioningUpdates",
           export_method: "app-store",
-          skip_codesigning: true,
+#           skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
           export_options: {
                 provisioningProfiles: {
