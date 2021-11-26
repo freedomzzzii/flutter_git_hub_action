@@ -212,18 +212,13 @@ sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#
                       bundle_identifier: ENV["APP_BUNDLE_ID"],
 #                       use_automatic_signing: true,
                     )
-                    update_project_provisioning(
-                       xcodeproj: "Runner.xcodeproj",
-                       build_configuration: "Release",
-#                        profile: "match_Development_comhugemanflutterstarterkit.mobileprovision"
-      #                   profile: "./match Development com.hugeman.flutterstarterkit.mobileprovision",
-                    )
           import_certificate(certificate_path: "ios_distribution.cer")
           update_project_provisioning(
             xcodeproj: "Runner.xcodeproj",
 #             profile: "iOS_Distribute_comhugemanflutterstarterkit.mobileprovision", # optional if you use sigh
 
 #             build_configuration: "Release",
+            profile_name: "	iOS Distribute com.hugeman.flutterstarterki",
             certificate: "ios_distribution.cer"
           )
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
