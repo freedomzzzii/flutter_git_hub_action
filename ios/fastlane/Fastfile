@@ -231,8 +231,21 @@ platform:ios do
 
           sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
           sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
+          api_key = app_store_connect_api_key(
+              key_id: ENV['APP_STORE_CONNECT_AUTH_KEY_ID'],
+              issuer_id: ENV['APP_STORE_CONNECT_AUTH_ISSUER_ID'],
+              key_filepath: "./app_store_connect_key.p8",
+              in_house: false
+            )
+
+#             match(
+#               type: 'appstore',
+#               app_identifier: ENV["APP_BUNDLE_ID"],
+#               api_key: api_key,
+#               readonly: true
+#             )
 #           sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
-          build_app(
+          gym(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "Release",
