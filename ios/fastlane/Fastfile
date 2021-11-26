@@ -191,18 +191,20 @@ platform:ios do
 # #                 storage_mode: "git",
 #                 include_all_certificates: true
 #         )
-      match(
-        type: 'appstore',
-        git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-        skip_confirmation: true,
-        username: ENV["MATCH_USERNAME"],
-        app_identifier: ENV["APP_BUNDLE_ID"],
-        verbose: true,
-        readonly: true,
-#         generate_apple_certs: false,
-#         storage_mode: "git",
-        include_all_certificates: true
-      )
+#       match(
+#         type: 'appstore',
+#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+#         skip_confirmation: true,
+#         username: ENV["MATCH_USERNAME"],
+#         app_identifier: ENV["APP_BUNDLE_ID"],
+#         verbose: true,
+#         readonly: true,
+# #         generate_apple_certs: false,
+# #         storage_mode: "git",
+#         include_all_certificates: true
+#       )
+sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
+          sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
       update_code_signing_settings(
                       path: "Runner.xcodeproj",
               #         targets: "Runner",
@@ -224,8 +226,8 @@ platform:ios do
 #             build_configuration: "Release",
             certificate: "ios_distribution.cer"
           )
-           sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
-            sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
+#            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+#             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
           install_provisioning_profile(path: "match_AppStore_comhugemanflutterstarterkit.mobileprovision")
         build_app(
           workspace: "Runner.xcworkspace",
