@@ -46,6 +46,9 @@ jobs:
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
           APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}
+          APP_STORE_CONNECT_AUTH_KEY_P8=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
+          APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
+          APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
           EOF
       - name: Create file GoogleService-Info.plist
         run: |

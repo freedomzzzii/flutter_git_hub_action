@@ -231,25 +231,25 @@ platform:ios do
 
           sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
           sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
-          sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
-#           build_app(
-#           workspace: "Runner.xcworkspace",
-#           scheme: "Runner",
-#           configuration: "Release",
-# #           xcargs: "-allowProvisioningUpdates",
-#           export_method: "app-store",
-# #           skip_codesigning: true,
-#           export_team_id: ENV["APPLE_TEAM_ID"],
-# #           export_options: {
-# #                 provisioningProfiles: {
-# #                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-# #                 }
-# #             },
-# #             output_directory: "testbuild/ios",
-# #             output_name: "testbuild",
-# #             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
-# #             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
-#         )
+#           sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+          build_app(
+          workspace: "Runner.xcworkspace",
+          scheme: "Runner",
+          configuration: "Release",
+          xcargs: "-allowProvisioningUpdates -authenticationKeyPath=#{ENV["APP_STORE_CONNECT_AUTH_KEY_P8"]} -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
+          export_method: "app-store",
+#           skip_codesigning: true,
+          export_team_id: ENV["APPLE_TEAM_ID"],
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
+#             output_directory: "testbuild/ios",
+#             output_name: "testbuild",
+#             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
+#             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
+        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
