@@ -46,7 +46,6 @@ jobs:
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
           APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}
-          APP_STORE_CONNECT_AUTH_KEY_P8=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
           APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
           APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
           EOF
@@ -59,6 +58,11 @@ jobs:
         run: |
           cd ios; cat << EOF >> exportOptions.plist
           ${{ secrets.EXPORT_OPTIONS_PLIST }}
+          EOF
+      - name: Create file app_store_connect_key.p8
+        run: |
+          cd ios; cat << EOF >> app_store_connect_key.p8
+          ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
           EOF
       - name: Select Xcode Version
         uses: maxim-lobanov/setup-xcode@v1

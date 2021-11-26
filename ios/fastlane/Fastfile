@@ -236,7 +236,7 @@ platform:ios do
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "Release",
-          xcargs: "-allowProvisioningUpdates -authenticationKeyPath=#{ENV["APP_STORE_CONNECT_AUTH_KEY_P8"]} -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
+          xcargs: "-allowProvisioningUpdates -authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
           export_method: "app-store",
 #           skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
