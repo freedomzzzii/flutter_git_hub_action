@@ -64,13 +64,13 @@ jobs:
           cd ios; cat << EOF >> app_store_connect_key_base64.txt
           ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
           EOF
-      - run: base64 -d app_store_connect_key_base64.txt > app_store_connect_key.p8
+      - run: base64 -d ios/app_store_connect_key_base64.txt > app_store_connect_key.p8
       - name: Create file cert_base64.txt
         run: |
           cd ios; cat << EOF >> cert_base64.txt
           ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
             EOF
-      - run: base64 -d cert_base64.txt > decode_cert.cer
+      - run: base64 -d ios/cert_base64.txt > decode_cert.cer
       - name: Select Xcode Version
         uses: maxim-lobanov/setup-xcode@v1
         with:
