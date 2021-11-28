@@ -206,7 +206,7 @@ platform:ios do
         sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
           sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
       sh("pwd")
-      sh("ls -la")
+      sh("ls -la ../")
         update_project_provisioning(
           xcodeproj: "Runner.xcodeproj",
 #             build_configuration: "Release",
