@@ -203,14 +203,18 @@ platform:ios do
 # #         storage_mode: "git",
 #         include_all_certificates: true
 #       )
-        sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
-          sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
+      sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
+      sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
       sh("pwd")
       sh("ls -la ../")
+      get_certificates(
+#         development: true,
+        username: "tee.theeraporn@hugeman.co"
+      )
         update_project_provisioning(
           xcodeproj: "Runner.xcodeproj",
 #             build_configuration: "Release",
-          profile: "iOS Distribute com.hugeman.flutterstarterkit",
+          profile: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovision",
 #             certificate: "ios_distribution.cer"
         )
       update_code_signing_settings(
@@ -220,10 +224,10 @@ platform:ios do
           bundle_identifier: ENV["APP_BUNDLE_ID"],
 #                       use_automatic_signing: true,
         )
-#           import_certificate(certificate_path: "ios_distribution.cer")
+          import_certificate(certificate_path: "659PD9988F.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
-#           install_provisioning_profile(path: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovisionn")
+        install_provisioning_profile(path: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovision")
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
@@ -232,13 +236,13 @@ platform:ios do
           export_method: "app-store",
 #           skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
-#           export_options: {
-#                 provisioningProfiles: {
-#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-#                 }
-#             },
-#             codesigning_identity: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)",
-#             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
+          export_options: {
+                provisioningProfiles: {
+                    ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+                }
+            },
+            codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
+            installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
         )
 
 
