@@ -111,7 +111,7 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
           # import certificate to keychain
-          security import "$CERTIFICATE_PATH"
+#          security import "$CERTIFICATE_PATH"
 #          security import "$CERTIFICATE_PATH" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
 #          security list-keychain -d user -s $KEYCHAIN_PATH
 
@@ -122,8 +122,9 @@ jobs:
       - uses: yukiarrr/ios-build-action@v1.4.0
         with:
           project-path: ios/Runner.xcodeproj
-          p12-key-base64: ${{ secrets.P12_PASSWORD }}
-          p12-cer-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          p12-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+#          p12-key-base64: ${{ secrets.P12_PASSWORD }}
+#          p12-cer-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           mobileprovision-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           code-signing-identity: iOS Distribution
           team-id: ${{ secrets.APPLE_TEAM_ID }}
