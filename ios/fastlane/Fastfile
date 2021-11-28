@@ -207,7 +207,9 @@ platform:ios do
       sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
       get_certificates(
 #         development: true,
-        username: "tee.theeraporn@hugeman.co"
+        username: "tee.theeraporn@hugeman.co",
+        generate_apple_certs: false,
+        output_path: "../"
       )
       sh("ls -la ../")
         update_project_provisioning(
