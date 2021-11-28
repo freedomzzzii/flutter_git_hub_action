@@ -203,12 +203,12 @@ platform:ios do
 # #         storage_mode: "git",
 #         include_all_certificates: true
 #       )
-sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
-          sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
+        sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
+          sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
       update_code_signing_settings(
                       path: "Runner.xcodeproj",
                       targets: "Runner",
-                      profile_name: "	iOS Distribute com.hugeman.flutterstarterki",
+                      profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
                       bundle_identifier: ENV["APP_BUNDLE_ID"],
 #                       use_automatic_signing: true,
                     )
@@ -216,12 +216,12 @@ sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#
           update_project_provisioning(
             xcodeproj: "Runner.xcodeproj",
 #             build_configuration: "Release",
-            profile: "	iOS Distribute com.hugeman.flutterstarterki",
+            profile: "iOS Distribute com.hugeman.flutterstarterkit",
 #             certificate: "ios_distribution.cer"
           )
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
-          install_provisioning_profile(path: "match_AppStore_comhugemanflutterstarterkit.mobileprovision")
+#           install_provisioning_profile(path: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovisionn")
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
