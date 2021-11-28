@@ -99,7 +99,7 @@ jobs:
           # create variables
           CERTIFICATE_PATH=$GITHUB_WORKSPACE/ios/build_certificate.p12
           PP_PATH=$GITHUB_WORKSPACE/ios/build_pp.mobileprovision
-          KEYCHAIN_PATH=$GITHUB_WORKSPACE/app-signing.keychain-db
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
@@ -114,7 +114,7 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-           apply provisioning profile
+#           apply provisioning profile
 #          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 #          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Set up Cloud SDK
