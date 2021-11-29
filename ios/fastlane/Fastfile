@@ -251,8 +251,8 @@ platform:ios do
                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
                 }
             },
-            codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
-            installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
+#             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
+#             installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
         )
 
 
