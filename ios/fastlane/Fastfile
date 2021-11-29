@@ -235,7 +235,7 @@ platform:ios do
           import_certificate(certificate_path: "decode_cert.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
-#         install_provisioning_profile(path: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovision")
+        install_provisioning_profile(path: "decode_profile.mobileprovision")
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
