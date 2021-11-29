@@ -225,13 +225,14 @@ platform:ios do
 #           profile: "iOS Distribute com.hugeman.flutterstarterkit",
 #             certificate: "build_certificate.cer"
 #         )
-#       update_code_signing_settings(
-#           path: "Runner.xcodeproj",
-#           targets: "Runner",
-#           profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
-#           bundle_identifier: ENV["APP_BUNDLE_ID"],
-# #                       use_automatic_signing: true,
-#         )
+      update_code_signing_settings(
+          path: "Runner.xcodeproj",
+          targets: "Runner",
+          profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
+          bundle_identifier: ENV["APP_BUNDLE_ID"],
+          use_automatic_signing: false,
+          code_sign_identity: "iOS Distribution",
+        )
           import_certificate(certificate_path: "decode_cert.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
