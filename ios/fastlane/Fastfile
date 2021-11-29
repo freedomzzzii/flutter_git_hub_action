@@ -233,7 +233,7 @@ platform:ios do
           use_automatic_signing: false,
 #           code_sign_identity: "iOS Distribution",
         )
-          import_certificate(certificate_path: "decode_cert.cer")
+#           import_certificate(certificate_path: "decode_cert.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
         install_provisioning_profile(path: "decode_profile.mobileprovision")

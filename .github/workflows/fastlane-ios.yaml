@@ -65,12 +65,12 @@ jobs:
           ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
           EOF
       - run: base64 -d ios/app_store_connect_key_base64.txt > ios/app_store_connect_key.p8
-      - name: Create file cert_base64.txt
-        run: |
-          cd ios; cat << EOF >> cert_base64.txt
-          ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-            EOF
-      - run: base64 -d ios/cert_base64.txt > ios/decode_cert.cer
+#      - name: Create file cert_base64.txt
+#        run: |
+#          cd ios; cat << EOF >> cert_base64.txt
+#          ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+#            EOF
+#      - run: base64 -d ios/cert_base64.txt > ios/decode_cert.cer
       - name: Create file profile_base64.txt
         run: |
           cd ios; cat << EOF >> profile_base64.txt
@@ -124,8 +124,8 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
           # import certificate to keychain
-          security import "$CERTIFICATE_PATH"
-#          security import "$CERTIFICATE_PATH" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+#          security import "$CERTIFICATE_PATH"
 #          security list-keychain -d user -s $KEYCHAIN_PATH
 
 #           apply provisioning profile
