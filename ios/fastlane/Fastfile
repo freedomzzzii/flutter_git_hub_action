@@ -57,17 +57,17 @@ platform:ios do
 #         setup_ci
 
 #         git_url(ENV['GIT_URL'])
-#         puts ENV["MATCH_PASSWORD"]
-#         puts ENV["FASTLANE_SESSION"]
-#
-# #           setup_ci if ENV['CI']
-#           match(
-#             type: 'appstore',
-#             app_identifier: ENV["APP_BUNDLE_ID"],
-#             generate_apple_certs: false,
-# #             readonly: true
-# #             username: ENV["MATCH_USERNAME"]
-#           )
+        puts ENV["MATCH_PASSWORD"]
+        puts ENV["FASTLANE_SESSION"]
+
+#           setup_ci if ENV['CI']
+          match(
+            type: 'appstore',
+            app_identifier: ENV["APP_BUNDLE_ID"],
+            generate_apple_certs: false,
+#             readonly: true
+#             username: ENV["MATCH_USERNAME"]
+          )
 
 #           setup_ci
 #           sync_code_signing(
@@ -121,27 +121,26 @@ platform:ios do
 #           username: "tee.theeraporn@hugeman.co",
 #           app_identifier: ENV["APP_BUNDLE_ID"]
 #         )
-#
-#
-#         Dir.chdir("../") do
-#             sh("pod install")
-#         end
-#
-#         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
-#         sh("flutter build ios integration_test/main_integration_test.dart --release --no-codesign")
-#         xcodebuild(
-#             workspace: "Runner.xcworkspace",
-#             configuration: "../Flutter/Release.xcconfig",
-#             scheme: "Runner",
-#             derivedDataPath: "../build/ios_integ",
-#             xcargs: "-sdk iphoneos build-for-testing",
-#         )
-#     end
-#
-#     # run this lane before deploy to firebase app distribute
-#     desc "Build file for deploy firebase app distribute"
-#     lane:build_file_for_app_distribution do
-#
+
+
+        Dir.chdir("../") do
+            sh("pod install")
+        end
+        sh("flutter build ios --config-only integration_test/main_integration_test.dart")
+        sh("flutter build ios integration_test/main_integration_test.dart --release --no-codesign")
+        xcodebuild(
+            workspace: "Runner.xcworkspace",
+            configuration: "../Flutter/Release.xcconfig",
+            scheme: "Runner",
+            derivedDataPath: "../build/ios_integ",
+            xcargs: "-sdk iphoneos build-for-testing",
+        )
+    end
+
+    # run this lane before deploy to firebase app distribute
+    desc "Build file for deploy firebase app distribute"
+    lane:build_file_for_app_distribution do
+            sh("flutter build ios --release --no-codesign")
 #     Dir.chdir("../") do
 #         sh("pod install")
 #     end
@@ -205,7 +204,6 @@ platform:ios do
 #       )
 #       sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
 #       sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
-        sh("flutter build ios --release --no-codesign")
 #       match(
 #           type: "appstore",
 #           readonly: true,
@@ -245,14 +243,14 @@ platform:ios do
 #           export_method: "app-store",
 # #           skip_codesigning: true,
 #           export_team_id: ENV["APPLE_TEAM_ID"],
-# #           export_options: {
-# #                 provisioningProfiles: {
-# #                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-# #                 }
-# #             },
-# #             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
-# #             installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
-#         )
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
+#             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
+#             installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
+        )
 
 
 
