@@ -238,28 +238,28 @@ platform:ios do
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
 #         install_provisioning_profile(path: "decode_profile.mobileprovision")
-        build_app(
-          workspace: "Runner.xcworkspace",
-          scheme: "Runner",
-          configuration: "Release",
-          xcargs: "-allowProvisioningUpdates -authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
-          export_method: "app-store",
-#           skip_codesigning: true,
-          export_team_id: ENV["APPLE_TEAM_ID"],
-#           export_options: {
-#                 provisioningProfiles: {
-#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-#                 }
-#             },
-#             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
-#             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
-        )
+#         build_app(
+#           workspace: "Runner.xcworkspace",
+#           scheme: "Runner",
+#           configuration: "Release",
+#           xcargs: "-allowProvisioningUpdates -authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
+#           export_method: "app-store",
+# #           skip_codesigning: true,
+#           export_team_id: ENV["APPLE_TEAM_ID"],
+# #           export_options: {
+# #                 provisioningProfiles: {
+# #                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+# #                 }
+# #             },
+# #             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
+# #             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
+#         )
 
 
 
 #           sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
 #           sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co")
-#           sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+          sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #           api_key = app_store_connect_api_key(
 #               key_id: ENV['APP_STORE_CONNECT_AUTH_KEY_ID'],
 #               issuer_id: ENV['APP_STORE_CONNECT_AUTH_ISSUER_ID'],
