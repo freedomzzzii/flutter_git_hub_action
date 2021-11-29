@@ -222,8 +222,8 @@ platform:ios do
       sh("ls -la ../../")
         update_project_provisioning(
           xcodeproj: "Runner.xcodeproj",
-            build_configuration: "Release",
-          profile: "iOS Distribute com.hugeman.flutterstarterkit",
+          build_configuration: "Release",
+          profile: "decode_profile.mobileprovision",
 #             certificate: "build_certificate.cer"
         )
       update_code_signing_settings(
