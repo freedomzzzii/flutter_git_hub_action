@@ -219,6 +219,7 @@ platform:ios do
 #         output_path: "../"
 #       )
       sh("ls -la ../")
+      sh("ls -la ../../")
 #         update_project_provisioning(
 #           xcodeproj: "Runner.xcodeproj",
 #             build_configuration: "Release",
@@ -231,7 +232,7 @@ platform:ios do
           profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
           bundle_identifier: ENV["APP_BUNDLE_ID"],
           use_automatic_signing: false,
-#           code_sign_identity: "iOS Distribution",
+          code_sign_identity: "iOS Distribution",
         )
 #           import_certificate(certificate_path: "decode_cert.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
@@ -250,7 +251,7 @@ platform:ios do
                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
                 }
             },
-#             codesigning_identity: "iOS Distribution",
+            codesigning_identity: "iOS Distribution",
             installer_cert_name: "iPhone Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
         )
 
