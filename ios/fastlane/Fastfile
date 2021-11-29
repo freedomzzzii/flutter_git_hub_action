@@ -219,12 +219,12 @@ platform:ios do
 #         output_path: "../"
 #       )
       sh("ls -la ../")
-        update_project_provisioning(
-          xcodeproj: "Runner.xcodeproj",
-            build_configuration: "Release",
-          profile: "iOS Distribute com.hugeman.flutterstarterkit",
-            certificate: "build_certificate.cer"
-        )
+#         update_project_provisioning(
+#           xcodeproj: "Runner.xcodeproj",
+#             build_configuration: "Release",
+#           profile: "iOS Distribute com.hugeman.flutterstarterkit",
+#             certificate: "build_certificate.cer"
+#         )
 #       update_code_signing_settings(
 #           path: "Runner.xcodeproj",
 #           targets: "Runner",
