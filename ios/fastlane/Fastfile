@@ -232,7 +232,7 @@ platform:ios do
 #           bundle_identifier: ENV["APP_BUNDLE_ID"],
 # #                       use_automatic_signing: true,
 #         )
-#           import_certificate(certificate_path: "659PD9988F.cer")
+          import_certificate(certificate_path: "decode_cert.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
 #         install_provisioning_profile(path: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovision")
