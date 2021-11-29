@@ -252,7 +252,7 @@ platform:ios do
                 }
             },
 #             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
-            installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
+#             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
         )
 
 
