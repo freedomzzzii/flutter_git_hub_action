@@ -226,18 +226,18 @@ platform:ios do
 #           profile: "iOS Distribute com.hugeman.flutterstarterkit",
 #             certificate: "build_certificate.cer"
 #         )
-      update_code_signing_settings(
-          path: "Runner.xcodeproj",
-          targets: "Runner",
-          profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
-          bundle_identifier: ENV["APP_BUNDLE_ID"],
-          use_automatic_signing: false,
-#           code_sign_identity: "Distribution",
-        )
-          import_certificate(certificate_path: "decode_p12.p12", certificate_password: ENV["P12_PASSWORD"])
+#       update_code_signing_settings(
+#           path: "Runner.xcodeproj",
+#           targets: "Runner",
+#           profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
+#           bundle_identifier: ENV["APP_BUNDLE_ID"],
+#           use_automatic_signing: false,
+# #           code_sign_identity: "Distribution",
+#         )
+#           import_certificate(certificate_path: "decode_p12.p12", certificate_password: ENV["P12_PASSWORD"])
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
-        install_provisioning_profile(path: "decode_profile.mobileprovision")
+#         install_provisioning_profile(path: "decode_profile.mobileprovision")
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
@@ -246,11 +246,11 @@ platform:ios do
           export_method: "app-store",
 #           skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
-          export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-                }
-            },
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
 #             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
 #             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
         )
