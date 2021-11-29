@@ -218,7 +218,7 @@ platform:ios do
 #         generate_apple_certs: false,
 #         output_path: "../"
 #       )
-      sh("ls -la ../")
+#       sh("ls -la ../")
         update_project_provisioning(
           xcodeproj: "Runner.xcodeproj",
             build_configuration: "Release",
