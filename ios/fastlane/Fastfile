@@ -126,7 +126,6 @@ platform:ios do
         Dir.chdir("../") do
             sh("pod install")
         end
-
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
         sh("flutter build ios integration_test/main_integration_test.dart --release --no-codesign")
         xcodebuild(
@@ -141,10 +140,10 @@ platform:ios do
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-
-    Dir.chdir("../") do
-        sh("pod install")
-    end
+            sh("flutter build ios --release --no-codesign")
+#     Dir.chdir("../") do
+#         sh("pod install")
+#     end
 #     match_nuke(
 #     type: 'appstore',
 #             git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
@@ -203,8 +202,8 @@ platform:ios do
 # #         storage_mode: "git",
 #         include_all_certificates: true
 #       )
-      sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
-      sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
+#       sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
+#       sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
 #       match(
 #           type: "appstore",
 #           readonly: true,
@@ -218,40 +217,39 @@ platform:ios do
 #         generate_apple_certs: false,
 #         output_path: "../"
 #       )
-      sh("ls -la ../")
+#       sh("ls -la ../")
 #         update_project_provisioning(
 #           xcodeproj: "Runner.xcodeproj",
 #             build_configuration: "Release",
-#           profile: "iOS Distribute com.hugeman.flutterstarterkit",
-#             certificate: "build_certificate.cer"
+#           profile: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovision",
+# #             certificate: "ios_distribution.cer"
 #         )
-      update_code_signing_settings(
-          path: "Runner.xcodeproj",
-          targets: "Runner",
-          profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
-          bundle_identifier: ENV["APP_BUNDLE_ID"],
-          use_automatic_signing: false,
-#           code_sign_identity: "iOS Distribution",
-        )
-#           import_certificate(certificate_path: "decode_cert.cer")
+#       update_code_signing_settings(
+#           path: "Runner.xcodeproj",
+#           targets: "Runner",
+#           profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
+#           bundle_identifier: ENV["APP_BUNDLE_ID"],
+# #                       use_automatic_signing: true,
+#         )
+#           import_certificate(certificate_path: "659PD9988F.cer")
 #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
-        install_provisioning_profile(path: "decode_profile.mobileprovision")
-        build_app(
-          workspace: "Runner.xcworkspace",
-          scheme: "Runner",
-          configuration: "Release",
-          xcargs: "-authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
-          export_method: "app-store",
-#           skip_codesigning: true,
-          export_team_id: ENV["APPLE_TEAM_ID"],
-          export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-                }
-            },
-#             codesigning_identity: "iOS Distribution",
-            installer_cert_name: "iPhone Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
+#         install_provisioning_profile(path: "AppStore_c8045722-2dc2-4ccd-80e5-5f0d97f91ca5_com.hugeman.flutterstarterkit.mobileprovision")
+#         build_app(
+#           workspace: "Runner.xcworkspace",
+#           scheme: "Runner",
+#           configuration: "Release",
+#           xcargs: "-allowProvisioningUpdates -authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
+#           export_method: "app-store",
+# #           skip_codesigning: true,
+#           export_team_id: ENV["APPLE_TEAM_ID"],
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
+#             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
+#             installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
         )
 
 
