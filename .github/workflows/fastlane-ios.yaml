@@ -48,6 +48,7 @@ jobs:
           APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}
           APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
           APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
+          P12_PASSWORD=${{ secrets.P12_PASSWORD }}
           EOF
       - name: Create file GoogleService-Info.plist
         run: |
@@ -71,6 +72,12 @@ jobs:
 #          ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
 #            EOF
 #      - run: base64 -d ios/cert_base64.txt > ios/decode_cert.cer
+      - name: Create file p12_base64.txt
+        run: |
+          cd ios; cat << EOF >> p12_base64.txt
+          ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+            EOF
+      - run: base64 -d ios/p12_base64.txt > ios/decode_p12.p12
       - name: Create file profile_base64.txt
         run: |
           cd ios; cat << EOF >> profile_base64.txt
