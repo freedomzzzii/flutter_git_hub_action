@@ -74,7 +74,7 @@ platform:ios do
 
 
 # setup_ci
- match_nuke(
+     match_nuke(
         type: 'appstore',
         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
         skip_confirmation: true,
@@ -82,10 +82,10 @@ platform:ios do
         app_identifier: ENV["APP_BUNDLE_ID"],
 #                 readonly: is_ci,
         verbose: true,
-#                 generate_apple_certs: false,
+        generate_apple_certs: false,
 #                 storage_mode: "git",
         include_all_certificates: true
-        )
+    )
       match(
         type: 'appstore',
         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
@@ -93,10 +93,10 @@ platform:ios do
         username: ENV["MATCH_USERNAME"],
         app_identifier: ENV["APP_BUNDLE_ID"],
         verbose: true,
-        readonly: true,
-#         generate_apple_certs: false,
+#         readonly: true,
+        generate_apple_certs: false,
 #         storage_mode: "git",
-        include_all_certificates: true
+#         include_all_certificates: true
       )
 #       sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
 #       sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
