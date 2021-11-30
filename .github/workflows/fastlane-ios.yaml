@@ -111,6 +111,7 @@ jobs:
         with:
           lane: 'build_file_for_app_distribution'
           subdirectory: 'ios'
+          verbose: true
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
