@@ -10,57 +10,6 @@ platform:ios do
     # branch: all branch
     desc "Test ios in Firebase test lab"
     lane:test_lab do
-#         create_keychain(
-#           name: "Keychain",
-#           default_keychain: true,
-#           unlock: true,
-#           timeout: 3600,
-#           lock_when_sleeps: true,
-#           password: "Password"
-#         )
-
-#         puts `ls -ll`
-#         puts `pwd`
-
-#         import_certificate(
-#           keychain_name: "Keychain",
-#           certificate_path: "CERTIFICATE_DEV.cer"
-#         )
-
-#         cert
-#         sigh(force: true)
-#         sh("pwd")
-#         sh("ls -la ../../")
-#         sh("chmod +x ../../ios")
-#         sh("pwd")
-#         sh("ls -la ../../")
-#         get_certificates(
-#           output_path: "/",
-#           username:
-#         )
-
-#         sh("ls")
-
-#         get_provisioning_profile   # invokes sigh
-#         create_keychain(
-#           name: "keychain",
-#           default_keychain: true,
-#           unlock: true,
-#           timeout: 3600,
-#           lock_when_sleeps: true,
-#           password: "password",
-#           path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
-#           keychain_path: "/home/runner/work/flutter_git_hub_action/flutter_git_hub_action/ios/",
-#           username: "tee.theeraporn@hugeman.co"
-#         )
-
-#         setup_ci
-
-#         git_url(ENV['GIT_URL'])
-        puts ENV["MATCH_PASSWORD"]
-        puts ENV["FASTLANE_SESSION"]
-
-#           setup_ci if ENV['CI']
           match(
             type: 'appstore',
             app_identifier: ENV["APP_BUNDLE_ID"],
@@ -68,60 +17,6 @@ platform:ios do
 #             readonly: true
 #             username: ENV["MATCH_USERNAME"]
           )
-
-#           setup_ci
-#           sync_code_signing(
-#             type: "appstore",
-#             readonly: is_ci,
-#             app_identifier: ENV["APP_BUNDLE_ID"]
-#           )
-
-#         sync_code_signing(
-#           type: "appstore",
-#           readonly: is_ci,
-#           git_url: ENV['GIT_URL'],
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-#         match(readonly: true)
-
-#       puts ENV["FASTLANE_SESSION"]
-#       puts ENV["MATCH_PASSWORD"]
-#       puts ENV["SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER"]
-#       puts ENV["MATCH_USERNAME"]
-#       puts ENV["APP_BUNDLE_ID"]
-
-#       create_keychain(
-#         name: "my_keychain",
-#         default_keychain: true,
-#         unlock: true,
-#         timeout: 3600,
-#         lock_when_sleeps: true,
-#         password: "1234"
-#       )
-
-#       setup_ci(force: true) if ENV['CI']
-#       match(
-#         type: 'appstore',
-#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#         skip_confirmation: true,
-#         username: ENV["MATCH_USERNAME"],
-#         app_identifier: ENV["APP_BUNDLE_ID"],
-#         keychain_name: "my_keychain",
-#         keychain_password: "1234"
-#       )
-
-#         cert
-#         get_certificates(
-#           username: "tee.theeraporn@hugeman.co",
-#           force: true,
-#           generate_apple_certs: false
-#         )
-#         sigh(
-#           force: true,
-#           username: "tee.theeraporn@hugeman.co",
-#           app_identifier: ENV["APP_BUNDLE_ID"]
-#         )
-
 
         Dir.chdir("../") do
             sh("pod install")
@@ -179,65 +74,65 @@ platform:ios do
 
 
 # setup_ci
-#  match_nuke(
-#         type: 'development',
-#                 git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#                 skip_confirmation: true,
-#                 username: ENV["MATCH_USERNAME"],
-#                 app_identifier: ENV["APP_BUNDLE_ID"],
-# #                 readonly: is_ci,
-#                 verbose: true,
-# #                 generate_apple_certs: false,
-# #                 storage_mode: "git",
-#                 include_all_certificates: true
-#         )
-#       match(
-#         type: 'appstore',
-#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#         skip_confirmation: true,
-#         username: ENV["MATCH_USERNAME"],
-#         app_identifier: ENV["APP_BUNDLE_ID"],
-#         verbose: true,
-#         readonly: true,
-# #         generate_apple_certs: false,
-# #         storage_mode: "git",
-#         include_all_certificates: true
-#       )
-      sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
-      sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
-#       match(
-#           type: "appstore",
-#           readonly: true,
-#           generate_apple_certs: false,
-#           git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#           app_identifier: ENV["APP_BUNDLE_ID"],
-#       )
-#       get_certificates(
-# #         development: true,
-#         username: "tee.theeraporn@hugeman.co",
+ match_nuke(
+        type: 'appstore',
+        git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+        skip_confirmation: true,
+        username: ENV["MATCH_USERNAME"],
+        app_identifier: ENV["APP_BUNDLE_ID"],
+#                 readonly: is_ci,
+        verbose: true,
+#                 generate_apple_certs: false,
+#                 storage_mode: "git",
+        include_all_certificates: true
+        )
+      match(
+        type: 'appstore',
+        git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+        skip_confirmation: true,
+        username: ENV["MATCH_USERNAME"],
+        app_identifier: ENV["APP_BUNDLE_ID"],
+        verbose: true,
+        readonly: true,
 #         generate_apple_certs: false,
-#         output_path: "../"
-#       )
-      sh("ls -la ../")
-      sh("ls -la ../../")
-        update_project_provisioning(
-          xcodeproj: "Runner.xcodeproj",
-          build_configuration: "Release",
-          profile: "decode_profile.mobileprovision",
-#             certificate: "build_certificate.cer"
-        )
-      update_code_signing_settings(
-          path: "Runner.xcodeproj",
-          targets: "Runner",
-          profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
-          bundle_identifier: ENV["APP_BUNDLE_ID"],
-          use_automatic_signing: false,
-#           code_sign_identity: "Distribution",
-        )
-#           import_certificate(certificate_path: "decode_p12.p12", certificate_password: ENV["P12_PASSWORD"])
-#            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
-#             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
-        install_provisioning_profile(path: "decode_profile.mobileprovision")
+#         storage_mode: "git",
+        include_all_certificates: true
+      )
+#       sh("fastlane fastlane-credentials add --username=#{ENV["APPLE_ID"]} --password=#{ENV["APPLE_PASSWORD"]}")
+#       sh("fastlane sigh download_all --username=tee.theeraporn@hugeman.co --output_path=../")
+# #       match(
+# #           type: "appstore",
+# #           readonly: true,
+# #           generate_apple_certs: false,
+# #           git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
+# #           app_identifier: ENV["APP_BUNDLE_ID"],
+# #       )
+# #       get_certificates(
+# # #         development: true,
+# #         username: "tee.theeraporn@hugeman.co",
+# #         generate_apple_certs: false,
+# #         output_path: "../"
+# #       )
+#       sh("ls -la ../")
+#       sh("ls -la ../../")
+#         update_project_provisioning(
+#           xcodeproj: "Runner.xcodeproj",
+#           build_configuration: "Release",
+#           profile: "decode_profile.mobileprovision",
+# #             certificate: "build_certificate.cer"
+#         )
+#       update_code_signing_settings(
+#           path: "Runner.xcodeproj",
+#           targets: "Runner",
+#           profile_name: "iOS Distribute com.hugeman.flutterstarterkit",
+#           bundle_identifier: ENV["APP_BUNDLE_ID"],
+#           use_automatic_signing: false,
+# #           code_sign_identity: "Distribution",
+#         )
+# #           import_certificate(certificate_path: "decode_p12.p12", certificate_password: ENV["P12_PASSWORD"])
+# #            sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+# #             sh("xcodebuild -exportArchive -archivePath . -exportPath build/ios -exportOptionsPlist ios/exportOptions.plist -allowProvisioningUpdates")
+#         install_provisioning_profile(path: "decode_profile.mobileprovision")
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
@@ -246,11 +141,11 @@ platform:ios do
           export_method: "app-store",
 #           skip_codesigning: true,
           export_team_id: ENV["APPLE_TEAM_ID"],
-          export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
-                }
-            },
+#           export_options: {
+#                 provisioningProfiles: {
+#                     ENV["APP_BUNDLE_ID"] => "iOS Distribute com.hugeman.flutterstarterkit",
+#                 }
+#             },
 #             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
 #             installer_cert_name: "Apple Development: Theeraporn Tiarawong (W39B24ZGG2)"
         )
