@@ -91,17 +91,17 @@ platform:ios do
        end
 
 
-#         sh('cd ~/Library/MobileDevice/Provisioning\ Profiles && ls')
+        sh('cd ~/Library/MobileDevice/Provisioning\ Profiles && ls')
 #         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
 
 #         sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
-        update_project_provisioning(
-          xcodeproj: "Runner.xcodeproj",
-          build_configuration: "Release",
-          profile: "Distribute_comhugemanflutterstarterkit.mobileprovision",
-          certificate: "distribution.cer",
-          code_signing_identity: "Apple Distribution"
-        )
+#         update_project_provisioning(
+#           xcodeproj: "Runner.xcodeproj",
+#           build_configuration: "Release",
+#           profile: "Distribute_comhugemanflutterstarterkit.mobileprovision",
+#           certificate: "distribution.cer",
+#           code_signing_identity: "Apple Distribution"
+#         )
         update_code_signing_settings(
           path: "Runner.xcodeproj",
           targets: "Runner",
