@@ -67,9 +67,12 @@ platform:ios do
 #       )
 
        if is_ci
+         sh("security list-keychains")
          sh('security create-keychain -p "#{ENV{"KEYCHAIN_PASSWORD"}" ~/Library/Keychains/cicd.keychain-db')
          sh('security set-keychain-settings -lut 21600 ~/Library/Keychains/cicd.keychain-db')
          sh('security unlock-keychain -p "#{ENV{"KEYCHAIN_PASSWORD"}" ~/Library/Keychains/cicd.keychain-db')
+         sh("security list-keychains")
+         sh("security list-keychains -d user")
        else
          create_keychain(
             name: "cicd.keychain-db",
