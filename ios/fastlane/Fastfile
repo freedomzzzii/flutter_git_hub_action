@@ -66,6 +66,16 @@ platform:ios do
 # #         include_all_certificates: true
 #       )
 
+#         create_keychain(
+#           name: "cicd",
+#           default_keychain: true,
+#           unlock: true,
+#           timeout: 3600,
+#           lock_when_sleeps: true,
+#           password: ENV["KEYCHAIN_PASSWORD"]
+#         )
+       setup_ci
+
         import_certificate(certificate_path: "distribution.cer")
         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
         update_project_provisioning(
