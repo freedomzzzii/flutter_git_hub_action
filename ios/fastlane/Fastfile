@@ -66,12 +66,14 @@ platform:ios do
 # #         include_all_certificates: true
 #       )
 
+        import_certificate(certificate_path: "distribution.cer")
+        install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
         update_project_provisioning(
           xcodeproj: "Runner.xcodeproj",
           build_configuration: "Release",
           profile: "Distribute_comhugemanflutterstarterkit.mobileprovision",
           certificate: "distribution.cer",
-          code_signing_identity: "Apple Distribution"
+#           code_signing_identity: "Apple Distribution"
         )
         update_code_signing_settings(
           path: "Runner.xcodeproj",
@@ -80,15 +82,14 @@ platform:ios do
           bundle_identifier: ENV["APP_BUNDLE_ID"],
           use_automatic_signing: false,
           team_id: ENV["APPLE_TEAM_ID"],
-          code_sign_identity:  "Apple Distribution",
+#           code_sign_identity:  "Apple Distribution",
          )
-        import_certificate(certificate_path: "distribution.cer")
-        install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
 
         build_app(
           workspace: "Runner.xcworkspace",
           scheme: "Runner",
           configuration: "Release",
+          clean: true,
 #           xcargs: "-allowProvisioningUpdates -authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
           export_method: "app-store",
 #           skip_codesigning: true,
@@ -98,7 +99,7 @@ platform:ios do
                     ENV["APP_BUNDLE_ID"] => "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
                 }
             },
-#             codesigning_identity: "Apple Distribution",
+#             codesigning_identity: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
 #             installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
         )
 
