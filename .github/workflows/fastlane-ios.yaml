@@ -114,6 +114,7 @@ jobs:
       #          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
       #          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - run: security find-certificate -a -p
+      - run: security find-identity -v -p codesigning
       - run: ls -la
       - uses: maierj/fastlane-action@v2.0.1
         with:
