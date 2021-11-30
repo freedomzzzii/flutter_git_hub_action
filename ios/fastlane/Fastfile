@@ -66,22 +66,22 @@ platform:ios do
 # #         include_all_certificates: true
 #       )
 
-#        if is_ci
+       if is_ci
+         sh('security create-keychain -p "#{ENV{"KEYCHAIN_PASSWORD"}" ~/Library/Keychains/cicd.keychain-db')
+         sh('security set-keychain-settings -lut 21600 ~/Library/Keychains/cicd.keychain-db')
+         sh('security unlock-keychain -p "#{ENV{"KEYCHAIN_PASSWORD"}" ~/Library/Keychains/cicd.keychain-db')
+       else
          create_keychain(
-#            name: "cicd.keychain-db",
-#            default_keychain: true,
-            path: '~/Library/Keychains/cicd.keychain-db',
-           unlock: true,
-           timeout: 0,
-           password: ENV["KEYCHAIN_PASSWORD"],
-         )
-         sh("security list-keychains")
-#        end
+            name: "cicd.keychain-db",
+            unlock: true,
+            timeout: 0,
+            password: ENV["KEYCHAIN_PASSWORD"],
+          )
+       end
 
         import_certificate(
             certificate_path: "distribution.cer",
-#             keychain_name: "cicd.keychain-db",
-            keychain_path: "~/Library/Keychains/cicd.keychain-db",
+            keychain_name: "cicd.keychain-db",
             keychain_password: ENV["KEYCHAIN_PASSWORD"]
         )
         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
