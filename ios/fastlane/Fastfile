@@ -73,6 +73,11 @@ platform:ios do
          sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
          sh("security list-keychains")
          sh("security list-keychains -d user")
+         import_certificate(
+             certificate_path: "distribution.cer",
+             keychain_path: "~/Library/Keychains/cicd.keychain-db",
+             keychain_password: ENV["KEYCHAIN_PASSWORD"]
+         )
        else
          create_keychain(
             name: "cicd.keychain-db",
@@ -80,13 +85,14 @@ platform:ios do
             timeout: 0,
             password: ENV["KEYCHAIN_PASSWORD"],
           )
+          import_certificate(
+              certificate_path: "distribution.cer",
+              keychain_name: "cicd.keychain-db",
+              keychain_password: ENV["KEYCHAIN_PASSWORD"]
+          )
        end
 
-        import_certificate(
-            certificate_path: "distribution.cer",
-            keychain_name: "cicd.keychain-db",
-            keychain_password: ENV["KEYCHAIN_PASSWORD"]
-        )
+
         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
         update_project_provisioning(
           xcodeproj: "Runner.xcodeproj",
