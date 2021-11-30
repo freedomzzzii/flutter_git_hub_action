@@ -81,6 +81,7 @@ platform:ios do
         import_certificate(
             certificate_path: "distribution.cer",
 #             keychain_name: "cicd",
+            keychain_path: "../app-signing.keychain-db",
             keychain_password: ENV["KEYCHAIN_PASSWORD"]
         )
         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
