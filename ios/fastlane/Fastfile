@@ -67,21 +67,21 @@ platform:ios do
 #       )
 
 #        if is_ci
-#          puts "I'm a computer"
-#          create_keychain(
-#            name: "cicd",
+         create_keychain(
+           name: "cicd.keychain-db",
 #            default_keychain: true,
-#            unlock: true,
-#            timeout: 3600,
-#            lock_when_sleeps: true,
-#            password: ENV["KEYCHAIN_PASSWORD"]
-#          )
+           unlock: true,
+           timeout: 3600,
+           lock_when_sleeps: true,
+           password: ENV["KEYCHAIN_PASSWORD"],
+#            path: '.'
+         )
 #        end
 
         import_certificate(
             certificate_path: "distribution.cer",
-#             keychain_name: "cicd",
-            keychain_path: "../app-signing.keychain-db",
+            keychain_name: "cicd.keychain-db",
+#             keychain_path: ".",
             keychain_password: ENV["KEYCHAIN_PASSWORD"]
         )
         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
@@ -90,7 +90,7 @@ platform:ios do
           build_configuration: "Release",
           profile: "Distribute_comhugemanflutterstarterkit.mobileprovision",
           certificate: "distribution.cer",
-#           code_signing_identity: "Apple Distribution"
+          code_signing_identity: "Apple Distribution"
         )
         update_code_signing_settings(
           path: "Runner.xcodeproj",
@@ -99,7 +99,7 @@ platform:ios do
           bundle_identifier: ENV["APP_BUNDLE_ID"],
           use_automatic_signing: false,
           team_id: ENV["APPLE_TEAM_ID"],
-#           code_sign_identity:  "Apple Distribution",
+          code_sign_identity:  "Apple Distribution",
          )
 
         build_app(
