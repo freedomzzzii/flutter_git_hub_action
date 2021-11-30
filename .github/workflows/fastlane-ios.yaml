@@ -121,3 +121,5 @@ jobs:
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+
+# clean credential file
