@@ -73,11 +73,7 @@ platform:ios do
          sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
          sh("security list-keychains")
          sh("security list-keychains -d user")
-         import_certificate(
-             certificate_path: "distribution.cer",
-             keychain_path: "~/Library/Keychains/cicd.keychain-db",
-             keychain_password: ENV["KEYCHAIN_PASSWORD"]
-         )
+         sh("security import ../distribution.cer ~/Library/Keychains/cicd.keychain-db")
        else
          create_keychain(
             name: "cicd.keychain-db",
