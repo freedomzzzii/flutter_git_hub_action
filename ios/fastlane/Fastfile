@@ -9,7 +9,7 @@ end
 platform:ios do
     desc "Setup Certificate"
     lane:setup do
-        if is_ci
+#         if is_ci
             # create keychain
             sh('security create-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
             sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
@@ -23,19 +23,19 @@ platform:ios do
             sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../AdHoc_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
-        else
-            create_keychain(
-                name: "cicd.keychain-db",
-                unlock: true,
-                timeout: 0,
-                password: ENV["KEYCHAIN_PASSWORD"],
-            )
-            import_certificate(
-                certificate_path: "distribution.cer",
-                keychain_name: "cicd.keychain-db",
-                keychain_password: ENV["KEYCHAIN_PASSWORD"]
-            )
-        end
+#         else
+#             create_keychain(
+#                 name: "cicd.keychain-db",
+#                 unlock: true,
+#                 timeout: 0,
+#                 password: ENV["KEYCHAIN_PASSWORD"],
+#             )
+#             import_certificate(
+#                 certificate_path: "distribution.cer",
+#                 keychain_name: "cicd.keychain-db",
+#                 keychain_password: ENV["KEYCHAIN_PASSWORD"]
+#             )
+#         end
     end
     # branch: all branch
     desc "Test ios in Firebase test lab"
