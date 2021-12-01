@@ -7,30 +7,51 @@ before_all do
 end
 
 platform:ios do
+    desc "Setup Certificate"
+    lane:setup do
+        if is_ci
+            # create keychain
+            sh('security create-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
+            # import certificate
+            sh('security import ../distribution.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
+            sh("security import ../distribution.cer ~/Library/Keychains/cicd.keychain-db")
+            # set allow codesign
+            sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            # copy provisioning profile
+            sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
+            sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
+        else
+            create_keychain(
+                name: "cicd.keychain-db",
+                unlock: true,
+                timeout: 0,
+                password: ENV["KEYCHAIN_PASSWORD"],
+            )
+            import_certificate(
+                certificate_path: "distribution.cer",
+                keychain_name: "cicd.keychain-db",
+                keychain_password: ENV["KEYCHAIN_PASSWORD"]
+            )
+        end
+    end
     # branch: all branch
     desc "Test ios in Firebase test lab"
     lane:test_lab do
-          match(
-            type: 'appstore',
-            app_identifier: ENV["APP_BUNDLE_ID"],
-            generate_apple_certs: false,
-#             readonly: true
-#             username: ENV["MATCH_USERNAME"]
-          )
-
         Dir.chdir("../") do
             sh("pod install")
         end
 
+        sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
-        sh("flutter build ios integration_test/main_integration_test.dart --release --no-codesign")
-        xcodebuild(
-            workspace: "Runner.xcworkspace",
-            configuration: "../Flutter/Release.xcconfig",
-            scheme: "Runner",
-            derivedDataPath: "../build/ios_integ",
-            xcargs: "-sdk iphoneos build-for-testing",
-        )
+        sh("flutter build ios integration_test/main_integration_test.dart --release")
+        sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
+
+        sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip .")
+
+        sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --device=model=iphone8,version=13.6,locale=en,orientation=portrait --xcode-version=12.5 ")
     end
 
     # run this lane before deploy to firebase app distribute
@@ -41,97 +62,32 @@ platform:ios do
         sh("pod install")
     end
 
-#      match_nuke(
-#         type: 'appstore',
-#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#         skip_confirmation: true,
-#         username: ENV["MATCH_USERNAME"],
-#         app_identifier: ENV["APP_BUNDLE_ID"],
-# #                 readonly: is_ci,
-#         verbose: true,
-#         generate_apple_certs: false,
-# #                 storage_mode: "git",
-#         include_all_certificates: true
-#     )
-#       match(
-#         type: 'appstore',
-#         git_url: "https://github.com/freedomzzzii/flutter_git_hub_action.git",
-#         skip_confirmation: true,
-#         username: ENV["MATCH_USERNAME"],
-#         app_identifier: ENV["APP_BUNDLE_ID"],
-#         verbose: true,
-# #         readonly: true,
-#         generate_apple_certs: false,
-# #         storage_mode: "git",
-# #         include_all_certificates: true
-#       )
+        sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
 
-       if is_ci
-         sh("security list-keychains")
-         sh('security create-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-         sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-         sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
-         sh("security list-keychains")
-         sh("security list-keychains -d user")
-         sh('security import ../distribution.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
-         sh("security import ../distribution.cer ~/Library/Keychains/cicd.keychain-db")
-         sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-         sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
-         sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
-       else
-         create_keychain(
-            name: "cicd.keychain-db",
-            unlock: true,
-            timeout: 0,
-            password: ENV["KEYCHAIN_PASSWORD"],
-          )
-          import_certificate(
-              certificate_path: "distribution.cer",
-              keychain_name: "cicd.keychain-db",
-              keychain_password: ENV["KEYCHAIN_PASSWORD"]
-          )
-       end
-
-
-        sh('cd ~/Library/MobileDevice/Provisioning\ Profiles && ls')
-#         install_provisioning_profile(path: "Distribute_comhugemanflutterstarterkit.mobileprovision")
-
-#         sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
-#         update_project_provisioning(
-#           xcodeproj: "Runner.xcodeproj",
-#           build_configuration: "Release",
-#           profile: "Distribute_comhugemanflutterstarterkit.mobileprovision",
-#           certificate: "distribution.cer",
-#           code_signing_identity: "Apple Distribution"
-#         )
-        update_code_signing_settings(
-          path: "Runner.xcodeproj",
-          targets: "Runner",
-          profile_name: "Distribute com.hugeman.flutterstarterkit",
-          bundle_identifier: ENV["APP_BUNDLE_ID"],
-          use_automatic_signing: false,
-          team_id: ENV["APPLE_TEAM_ID"],
-          code_sign_identity:  "Apple Distribution",
-         )
-
-        build_app(
-          workspace: "Runner.xcworkspace",
-          scheme: "Runner",
-          configuration: "Release",
-          clean: true,
-#           xcargs: "-allowProvisioningUpdates -authenticationKeyPath=app_store_connect_key.p8 -authenticationKeyID=#{ENV["APP_STORE_CONNECT_AUTH_KEY_ID"]} -authenticationKeyIssuerID=#{ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"]}",
-          export_method: "app-store",
-#           skip_codesigning: true,
-          export_team_id: ENV["APPLE_TEAM_ID"],
-#           export_options: {
-#                 provisioningProfiles: {
-#                     ENV["APP_BUNDLE_ID"] => "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)",
-#                 }
-#             },
-#             codesigning_identity: "Apple Distribution",
-#             installer_cert_name: "Apple Distribution: HUGEMAN CONSULTANT COMPANY LIMITED (F5TTGBJ3W4)"
+       update_code_signing_settings(
+         path: "Runner.xcodeproj",
+         targets: "Runner",
+         profile_name: "Ad-Hoc com.hugeman.flutterstarterkit",
+         bundle_identifier: ENV["APP_BUNDLE_ID"],
+         use_automatic_signing: false,
+         team_id: ENV["APPLE_TEAM_ID"],
+         code_sign_identity:  "Apple Distribution",
         )
 
+       build_app(
+           workspace: "Runner.xcworkspace",
+           scheme: "Runner",
+           configuration: "Release",
+           clean: true,
+#             xcargs: "-allowProvisioningUpdates",
+           export_method: "ad-hoc",
+           export_team_id: ENV["APPLE_TEAM_ID"],
+           export_options: {
+               provisioningProfiles: {
+                   ENV["APP_BUNDLE_ID"] => "Ad-Hoc com.hugeman.flutterstarterkit",
+               }
+           }
+       )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
@@ -164,30 +120,36 @@ platform:ios do
     # tag: master
     desc "Deploy a release version to the App store"
     lane:release do
-        cert
-        sigh(force: true)
+        Dir.chdir("../") do
+            sh("pod install")
+        end
 
-#          puts ENV["MATCH_PASSWORD"]
-#         puts ENV["FASTLANE_SESSION"]
-#
-#           match(
-#             type: 'appstore',
-#             app_identifier: ENV["APP_BUNDLE_ID"],
-#             generate_apple_certs: false,
-#           )
+        sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+
+        update_code_signing_settings(
+          path: "Runner.xcodeproj",
+          targets: "Runner",
+          profile_name: "Distribute com.hugeman.flutterstarterkit",
+          bundle_identifier: ENV["APP_BUNDLE_ID"],
+          use_automatic_signing: false,
+          team_id: ENV["APPLE_TEAM_ID"],
+          code_sign_identity:  "Apple Distribution",
+         )
 
         build_app(
-            workspace: "Runner.xcworkspace",
-            scheme: "Runner",
-            configuration: "release",
-            xcargs: "-allowProvisioningUpdates",
-            export_method: "ad-hoc",
-            export_options: {
-                provisioningProfiles: {
-                    ENV["APP_BUNDLE_ID"] => ENV["APPLE_PROVISIONING_PROFILE_ADHOC"],
-                }
-            }
+          workspace: "Runner.xcworkspace",
+          scheme: "Runner",
+          configuration: "Release",
+          clean: true,
+          export_method: "app-store",
+          export_team_id: ENV["APPLE_TEAM_ID"],
         )
-        upload_to_app_store
+
+        upload_to_app_store(
+            username: ENV["APPLE_ID"],
+            app_identifier: ENV["APP_BUNDLE_ID"],
+            team_id: ENV["APPLE_TEAM_ID"],
+            force: true,
+        )
     end
 end

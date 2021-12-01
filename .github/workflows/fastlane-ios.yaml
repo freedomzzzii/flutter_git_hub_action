@@ -109,7 +109,7 @@ jobs:
       - run: ls -la
       - uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: 'build_file_for_app_distribution'
+          lane: 'setup'
           subdirectory: 'ios'
           verbose: true
         env:
@@ -122,5 +122,66 @@ jobs:
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'release'
+          subdirectory: 'ios'
+          verbose: true
+        env:
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+      - uses: maierj/fastlane-action@v2.0.1
+          with:
+            lane: 'build_file_for_app_distribution'
+            subdirectory: 'ios'
+            verbose: true
+          env:
+            FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+            FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+            SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+            FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+            MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+            MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+            APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+            KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+      - uses: maierj/fastlane-action@v2.0.1
+          with:
+            lane: 'app_distribution_group_developer'
+            subdirectory: 'ios'
+            verbose: true
+          env:
+            FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+            FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+            SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+            FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+            MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+            MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+            APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+            KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+      - uses: maierj/fastlane-action@v2.0.1
+          with:
+            lane: 'test_lab'
+            subdirectory: 'ios'
+            verbose: true
+          env:
+            FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+            FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+            SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+            FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+            MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+            MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+            APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+            KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+
 
 # clean credential file
