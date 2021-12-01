@@ -22,6 +22,7 @@ platform:ios do
             # copy provisioning profile
             sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
+            sh('cp ../AdHoc_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
         else
             create_keychain(
                 name: "cicd.keychain-db",
