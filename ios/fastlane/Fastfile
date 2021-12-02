@@ -62,10 +62,11 @@ platform:ios do
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
 
-    Dir.chdir("../") do
-        sh("pod install")
-    end
+        Dir.chdir("../") do
+            sh("pod install")
+        end
 
+        sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
         sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
 
        update_code_signing_settings(
