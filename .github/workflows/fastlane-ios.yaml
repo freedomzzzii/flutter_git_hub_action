@@ -50,6 +50,7 @@ jobs:
           APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
           P12_PASSWORD=${{ secrets.P12_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          GITHUB_RUN_NUMBER: ${{ GITHUB_RUN_NUMBER }}
           EOF
       - name: Create file GoogleService-Info.plist
         run: |
@@ -82,8 +83,8 @@ jobs:
         run: make test/generate/mock-file
       - name: Print new build number and run number
         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-      - name: Increate version code
-        run: export GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER; perl -i -pe 's/^(version:)((\s+\d+\.\d+\.\d+\+)|(\s+\d+\.\d+\.\d+\-\w+\+))(\d+)$/$1.$2.$ENV{GITHUB_RUN_NUMBER}/e' pubspec.yaml
+#      - name: Increate version code
+#        run: export GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER; perl -i -pe 's/^(version:)((\s+\d+\.\d+\.\d+\+)|(\s+\d+\.\d+\.\d+\-\w+\+))(\d+)$/$1.$2.$ENV{GITHUB_RUN_NUMBER}/e' pubspec.yaml
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
