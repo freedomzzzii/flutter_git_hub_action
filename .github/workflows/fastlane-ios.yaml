@@ -80,6 +80,12 @@ jobs:
         run: make l10n/generate
       - name: Generate mock file for test
         run: make test/generate/mock-file
+      - name: Generate build number
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{ secrets.github_token }}
+      - name: Print new build number
+        run: echo "Build number is $BUILD_NUMBER"
       - name: Print new build number and run number
         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
 #      - name: Increate version code
@@ -106,7 +112,6 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          GITHUB_RUN_NUMBER: ${{ GITHUB_RUN_NUMBER }}
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #          lane: 'release'
