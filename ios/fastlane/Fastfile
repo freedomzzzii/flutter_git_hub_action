@@ -61,7 +61,6 @@ platform:ios do
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-
         Dir.chdir("../") do
             sh("pod install")
         end
