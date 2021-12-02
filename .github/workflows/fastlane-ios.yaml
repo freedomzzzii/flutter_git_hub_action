@@ -50,6 +50,7 @@ jobs:
           APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
           P12_PASSWORD=${{ secrets.P12_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
           EOF
       - name: Create file GoogleService-Info.plist
         run: |
