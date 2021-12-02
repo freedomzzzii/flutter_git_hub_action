@@ -95,7 +95,10 @@ platform:ios do
                provisioningProfiles: {
                    ENV["APP_BUNDLE_ID"] => "Ad-Hoc com.hugeman.flutterstarterkit",
                }
-           }
+           },
+           skip_package_pkg: true,
+#            skip_build_archive: true,
+#            skip_archive: true
        )
     end
 
