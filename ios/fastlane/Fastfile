@@ -83,23 +83,24 @@ platform:ios do
          code_sign_identity:  "Apple Distribution",
         )
 
-       build_app(
-           workspace: "Runner.xcworkspace",
-           scheme: "Runner",
-           configuration: "Release",
-           clean: true,
-#             xcargs: "-allowProvisioningUpdates",
-           export_method: "ad-hoc",
-           export_team_id: ENV["APPLE_TEAM_ID"],
-           export_options: {
-               provisioningProfiles: {
-                   ENV["APP_BUNDLE_ID"] => "Ad-Hoc com.hugeman.flutterstarterkit",
-               }
-           },
-           skip_package_pkg: true,
-#            skip_build_archive: true,
-#            skip_archive: true
-       )
+        sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+#        build_app(
+#            workspace: "Runner.xcworkspace",
+#            scheme: "Runner",
+#            configuration: "Release",
+#            clean: true,
+# #             xcargs: "-allowProvisioningUpdates",
+#            export_method: "ad-hoc",
+#            export_team_id: ENV["APPLE_TEAM_ID"],
+#            export_options: {
+#                provisioningProfiles: {
+#                    ENV["APP_BUNDLE_ID"] => "Ad-Hoc com.hugeman.flutterstarterkit",
+#                }
+#            },
+#            skip_package_pkg: true,
+# #            skip_build_archive: true,
+# #            skip_archive: true
+#        )
     end
 
     # branches: feature, develop, bugfix, hotfix, release
