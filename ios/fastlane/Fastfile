@@ -83,7 +83,7 @@ platform:ios do
          code_sign_identity:  "Apple Distribution",
         )
 
-        sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
+#         sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
 #        build_app(
 #            workspace: "Runner.xcworkspace",
 #            scheme: "Runner",
@@ -101,6 +101,8 @@ platform:ios do
 # #            skip_build_archive: true,
 # #            skip_archive: true
 #        )
+        sh("xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath Release.xcarchive")
+        sh("xcodebuild -exportArchive -archivePath Release.xcarchive -exportOptionsPlist exportOptions.plist -exportPath .")
     end
 
     # branches: feature, develop, bugfix, hotfix, release
