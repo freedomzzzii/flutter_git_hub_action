@@ -111,6 +111,7 @@ platform:ios do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
             groups: "developer",
+            ipa_path: 'build/todo.ipa'
       )
     end
 
