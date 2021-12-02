@@ -101,8 +101,8 @@ platform:ios do
 # #            skip_build_archive: true,
 # #            skip_archive: true
 #        )
-        sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath build/Release.xcarchive")
-        sh("xcodebuild -exportArchive -archivePath build/Release.xcarchive -exportOptionsPlist ../exportOptions.plist -exportPath build/")
+        sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath ../build/Release.xcarchive")
+        sh("xcodebuild -exportArchive -archivePath ../build/Release.xcarchive -exportOptionsPlist ../exportOptions.plist -exportPath ../build/")
     end
 
     # branches: feature, develop, bugfix, hotfix, release
