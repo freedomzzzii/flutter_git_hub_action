@@ -135,16 +135,16 @@ jobs:
           INPUT_FILE_NAME: ios/Runner.ipa
           SCAN_TYPE: ipa
           OUTPUT_FILE_NAME: mobsf-report
-        - name: Upload MobSF Analysis PDF Result
-          uses: actions/upload-artifact@v2
-          with:
-            name: mobsf-report.pdf
-            path: mobsf-report.pdf
-        - name: Upload MobSF Analysis JSON Result
-          uses: actions/upload-artifact@v2
-          with:
-            name: mobsf-report.json
-            path: mobsf-report.json
+      - name: Upload MobSF Analysis PDF Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: mobsf-report.pdf
+          path: mobsf-report.pdf
+      - name: Upload MobSF Analysis JSON Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: mobsf-report.json
+          path: mobsf-report.json
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #          lane: 'release'
