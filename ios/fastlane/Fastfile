@@ -45,6 +45,7 @@ platform:ios do
 
         sh("echo #{ENV['GITHUB_RUN_NUMBER']}")
         sh("cd ../../; ls -la;export GITHUB_RUN_NUMBER=#{ENV['GITHUB_RUN_NUMBER']}; perl -i -pe 's/^(version:)((\\s+\\d+\\.\\d+\\.\\d+\\+)|(\\s+\\d+\\.\\d+\\.\\d+\\-\\w+\\+))(\\d+)$/$1.$2.$ENV{GITHUB_RUN_NUMBER}/e' pubspec.yaml")
+        sh("cd ../../; grep 'version:' pubspec.yaml")
     end
     # branch: all branch
     desc "Test ios in Firebase test lab"
@@ -55,30 +56,26 @@ platform:ios do
 
         sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
         sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-
+        # build file
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
         sh("flutter build ios integration_test/main_integration_test.dart --release")
         update_code_signing_settings(
              path: "Runner.xcodeproj",
              targets: "RunnerTests",
-#              bundle_identifier: ENV["APP_BUNDLE_ID"],
              use_automatic_signing: false,
              team_id: ENV["APPLE_TEAM_ID"],
              code_sign_identity:  "Apple Development",
         )
         sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
-
+        # zip file
         sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip .")
-
+        # upload to firebase test lab
         sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --device=model=iphone8,version=13.6,locale=en,orientation=portrait --xcode-version=12.5 ")
     end
 
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-#         Dir.chdir("../") do
-#             sh("pod install")
-#         end
         cocoapods(
           clean_install: true,
           podfile: "Podfile",
@@ -98,24 +95,6 @@ platform:ios do
          code_sign_identity:  "Apple Distribution",
         )
 
-#         sh("flutter build ipa --export-options-plist=ios/exportOptions.plist")
-#        build_app(
-#            workspace: "Runner.xcworkspace",
-#            scheme: "Runner",
-#            configuration: "Release",
-#            clean: true,
-# #             xcargs: "-allowProvisioningUpdates",
-#            export_method: "ad-hoc",
-#            export_team_id: ENV["APPLE_TEAM_ID"],
-#            export_options: {
-#                provisioningProfiles: {
-#                    ENV["APP_BUNDLE_ID"] => "Ad-Hoc com.hugeman.flutterstarterkit",
-#                }
-#            },
-#            skip_package_pkg: true,
-# #            skip_build_archive: true,
-# #            skip_archive: true
-#        )
         sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath ../build/Release.xcarchive")
         sh("xcodebuild -exportArchive -archivePath ../build/Release.xcarchive -exportOptionsPlist ../exportOptions.plist -exportPath ../build/")
     end
