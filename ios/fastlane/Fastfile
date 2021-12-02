@@ -9,7 +9,7 @@ end
 platform:ios do
     desc "Setup Certificate"
     lane:setup do
-#         if is_ci
+        if is_ci
             # create keychain
             sh('security create-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
             sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
@@ -17,26 +17,31 @@ platform:ios do
             # import certificate
             sh('security import ../distribution.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
             sh("security import ../distribution.cer ~/Library/Keychains/cicd.keychain-db")
-            sh("security import ../development.cer ~/Library/Keychains/cicd.keychain-db")
+            sh('security import ../development.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
             # set allow codesign
             sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
             # copy provisioning profile
             sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../AdHoc_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
-#         else
-#             create_keychain(
-#                 name: "cicd.keychain-db",
-#                 unlock: true,
-#                 timeout: 0,
-#                 password: ENV["KEYCHAIN_PASSWORD"],
-#             )
-#             import_certificate(
-#                 certificate_path: "distribution.cer",
-#                 keychain_name: "cicd.keychain-db",
-#                 keychain_password: ENV["KEYCHAIN_PASSWORD"]
-#             )
-#         end
+        else
+            create_keychain(
+                name: "cicd.keychain-db",
+                unlock: true,
+                timeout: 0,
+                password: ENV["KEYCHAIN_PASSWORD"],
+            )
+            import_certificate(
+                certificate_path: "distribution.cer",
+                keychain_name: "cicd.keychain-db",
+                keychain_password: ENV["KEYCHAIN_PASSWORD"]
+            )
+            import_certificate(
+                certificate_path: "development.cer",
+                keychain_name: "cicd.keychain-db",
+                keychain_password: ENV["KEYCHAIN_PASSWORD"]
+            )
+        end
 
         sh("echo #{ENV['GITHUB_RUN_NUMBER']}")
         sh("cd ../../; ls -la;export GITHUB_RUN_NUMBER=#{ENV['GITHUB_RUN_NUMBER']}; perl -i -pe 's/^(version:)((\\s+\\d+\\.\\d+\\.\\d+\\+)|(\\s+\\d+\\.\\d+\\.\\d+\\-\\w+\\+))(\\d+)$/$1.$2.$ENV{GITHUB_RUN_NUMBER}/e' pubspec.yaml")
@@ -56,7 +61,7 @@ platform:ios do
         update_code_signing_settings(
              path: "Runner.xcodeproj",
              targets: "RunnerTests",
-             bundle_identifier: ENV["APP_BUNDLE_ID"],
+#              bundle_identifier: ENV["APP_BUNDLE_ID"],
              use_automatic_signing: false,
              team_id: ENV["APPLE_TEAM_ID"],
              code_sign_identity:  "Apple Development",
@@ -150,6 +155,7 @@ platform:ios do
             sh("pod install")
         end
 
+        sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
         sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
 
         update_code_signing_settings(
