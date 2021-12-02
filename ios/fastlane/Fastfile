@@ -61,9 +61,14 @@ platform:ios do
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-        Dir.chdir("../") do
-            sh("pod install")
-        end
+#         Dir.chdir("../") do
+#             sh("pod install")
+#         end
+        cocoapods(
+          clean_install: true,
+          podfile: "Podfile",
+          use_bundle_exec: false
+        )
 
         sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
         sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
