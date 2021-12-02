@@ -127,9 +127,8 @@ platform:ios do
         )
     end
 
-    # tag: master
-    desc "Deploy a release version to the App store"
-    lane:release do
+    desc "Build file .ipa for distribute"
+    lane:build_file_for_distribution do
         Dir.chdir("../") do
             sh("pod install")
         end
@@ -145,7 +144,7 @@ platform:ios do
           use_automatic_signing: false,
           team_id: ENV["APPLE_TEAM_ID"],
           code_sign_identity:  "Apple Distribution",
-         )
+        )
 
         build_app(
           workspace: "Runner.xcworkspace",
@@ -155,7 +154,11 @@ platform:ios do
           export_method: "app-store",
           export_team_id: ENV["APPLE_TEAM_ID"],
         )
+    end
 
+    # tag: master
+    desc "Deploy a release version to the App store"
+    lane:release do
         upload_to_app_store(
             username: ENV["APPLE_ID"],
             app_identifier: ENV["APP_BUNDLE_ID"],
