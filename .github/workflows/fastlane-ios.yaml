@@ -4,139 +4,102 @@ on:
   push:
 
 jobs:
-  build:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{ secrets.github_token }}
-      - name: Print new build number and run number
-        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
-#      - name: Output Run ID
-#        run: echo ${{ github.run_id }}
-#      - name: Output Run Number
-#        run: echo ${{ github.run_number }}
-      - name: Create file .env
-        run: |
-          cat << EOF >> .env
-          API_URL=${{ secrets.API_URL_DEV }}
-          FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
-          FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
-          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
-          APPLE_ID=${{ secrets.APPLE_ID }}
-          APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
-          APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
-          APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
-          APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
-          GRPC_HOST=${{ secrets.GRPC_HOST }}
-          GRPC_PORT=${{ secrets.GRPC_PORT }}
-          GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
-          FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
-          GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
-          GIT_URL=${{ secrets.GIT_URL }}
-          MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME=${{ secrets.MATCH_USERNAME }}
-          FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
-          APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}
-          APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
-          APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
-          P12_PASSWORD=${{ secrets.P12_PASSWORD }}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
-          EOF
-      - name: Create file GoogleService-Info.plist
-        run: |
-          cd ios; cat << EOF >> GoogleService-Info.plist
-          ${{ secrets.GOOGLE_SERVICE_IOS }}
-          EOF
-      - name: Create file app_store_connect_key_base64.txt
-        run: |
-          cd ios; cat << EOF >> app_store_connect_key_base64.txt
-          ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
-          EOF
-      - run: base64 -d ios/app_store_connect_key_base64.txt > ios/app_store_connect_key.p8
-#      - name: Create file p12_base64.txt
+#  build:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - name: Generate build number
+#        uses: einaregilsson/build-number@v3
+#        with:
+#          token: ${{ secrets.github_token }}
+#      - name: Print new build number and run number
+#        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
+##      - name: Output Run ID
+##        run: echo ${{ github.run_id }}
+##      - name: Output Run Number
+##        run: echo ${{ github.run_number }}
+#      - name: Create file .env
 #        run: |
-#          cd ios; cat << EOF >> p12_base64.txt
-#          ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-#            EOF
-#      - run: base64 -d ios/p12_base64.txt > ios/decode_p12.p12
-#      - name: Create file profile_base64.txt
-#        run: |
-#          cd ios; cat << EOF >> profile_base64.txt
-#          ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+#          cat << EOF >> .env
+#          API_URL=${{ secrets.API_URL_DEV }}
+#          FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
+#          FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
+#          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+#          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
+#          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
+#          APPLE_ID=${{ secrets.APPLE_ID }}
+#          APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
+#          APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
+#          APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
+#          APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
+#          GRPC_HOST=${{ secrets.GRPC_HOST }}
+#          GRPC_PORT=${{ secrets.GRPC_PORT }}
+#          GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
+#          FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
+#          GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
+#          GIT_URL=${{ secrets.GIT_URL }}
+#          MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}
+#          MATCH_USERNAME=${{ secrets.MATCH_USERNAME }}
+#          FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}
+#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
+#          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
+#          KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+#          APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}
+#          APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
+#          APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
+#          P12_PASSWORD=${{ secrets.P12_PASSWORD }}
+#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+#          FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
 #          EOF
-#      - run: base64 -d ios/profile_base64.txt > ios/decode_profile.mobileprovision
-      - name: Install dependencies
-        run: make project/install/package
-      - name: Generate l10n
-        run: make l10n/generate
-      - name: Generate mock file for test
-        run: make test/generate/mock-file
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: ls -la
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'setup'
-          subdirectory: 'ios'
-          verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'build_file_for_distribution'
-          subdirectory: 'ios'
-          verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-      - name: Upload ipa
-        uses: actions/upload-artifact@v2
-        with:
-          name: ipa-build
-          path: ios/Runner.ipa
+#      - name: Create file GoogleService-Info.plist
+#        run: |
+#          cd ios; cat << EOF >> GoogleService-Info.plist
+#          ${{ secrets.GOOGLE_SERVICE_IOS }}
+#          EOF
+#      - name: Create file app_store_connect_key_base64.txt
+#        run: |
+#          cd ios; cat << EOF >> app_store_connect_key_base64.txt
+#          ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
+#          EOF
+#      - run: base64 -d ios/app_store_connect_key_base64.txt > ios/app_store_connect_key.p8
+##      - name: Create file p12_base64.txt
+##        run: |
+##          cd ios; cat << EOF >> p12_base64.txt
+##          ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+##            EOF
+##      - run: base64 -d ios/p12_base64.txt > ios/decode_p12.p12
+##      - name: Create file profile_base64.txt
+##        run: |
+##          cd ios; cat << EOF >> profile_base64.txt
+##          ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+##          EOF
+##      - run: base64 -d ios/profile_base64.txt > ios/decode_profile.mobileprovision
+#      - name: Install dependencies
+#        run: make project/install/package
+#      - name: Generate l10n
+#        run: make l10n/generate
+#      - name: Generate mock file for test
+#        run: make test/generate/mock-file
+#      - name: Set up Cloud SDK
+#        uses: google-github-actions/setup-gcloud@master
+#        with:
+#          project_id: ${{ secrets.GCP_PROJECT_ID }}
+#          service_account_key: ${{ secrets.GCP_SA_KEY }}
+#      - run: ls -la
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
-#          lane: 'release'
+#          lane: 'setup'
 #          subdirectory: 'ios'
 #          verbose: true
 #        env:
@@ -152,7 +115,7 @@ jobs:
 #          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
-#          lane: 'build_file_for_app_distribution'
+#          lane: 'build_file_for_distribution'
 #          subdirectory: 'ios'
 #          verbose: true
 #        env:
@@ -166,38 +129,75 @@ jobs:
 #          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
 #          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
 #          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-#      - uses: maierj/fastlane-action@v2.0.1
+#      - name: Upload ipa
+#        uses: actions/upload-artifact@v2
 #        with:
-#          lane: 'app_distribution_group_developer'
-#          subdirectory: 'ios'
-#          verbose: true
-#        env:
-#          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-#          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-#          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-#          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-#          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-#          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-#      - uses: maierj/fastlane-action@v2.0.1
-#        with:
-#          lane: 'test_lab'
-#          subdirectory: 'ios'
-#          verbose: true
-#        env:
-#          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-#          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-#          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-#          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-#          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-#          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+#          name: ipa-build
+#          path: ios/Runner.ipa
+##      - uses: maierj/fastlane-action@v2.0.1
+##        with:
+##          lane: 'release'
+##          subdirectory: 'ios'
+##          verbose: true
+##        env:
+##          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+##          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+##          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+##          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+##          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+##          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+##          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+##          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+##          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+##          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+##      - uses: maierj/fastlane-action@v2.0.1
+##        with:
+##          lane: 'build_file_for_app_distribution'
+##          subdirectory: 'ios'
+##          verbose: true
+##        env:
+##          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+##          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+##          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+##          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+##          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+##          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+##          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+##          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+##          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+##          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+##      - uses: maierj/fastlane-action@v2.0.1
+##        with:
+##          lane: 'app_distribution_group_developer'
+##          subdirectory: 'ios'
+##          verbose: true
+##        env:
+##          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+##          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+##          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+##          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+##          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+##          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+##          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+##          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+##          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+##          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+##      - uses: maierj/fastlane-action@v2.0.1
+##        with:
+##          lane: 'test_lab'
+##          subdirectory: 'ios'
+##          verbose: true
+##        env:
+##          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+##          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+##          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+##          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+##          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+##          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+##          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+##          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+##          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+##          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
 
 # clean credential file
@@ -212,19 +212,19 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ipa-build
-      - name: Run MobSF Analysis
-        uses: fundacaocerti/mobsf-action@v1.6
-        env:
-          INPUT_FILE_NAME: ios/Runner.ipa
-          SCAN_TYPE: ipa
-          OUTPUT_FILE_NAME: mobsf-report
-      - name: Upload MobSF Analysis PDF Result
-        uses: actions/upload-artifact@v2
-        with:
-          name: mobsf-report.pdf
-          path: mobsf-report.pdf
-      - name: Upload MobSF Analysis JSON Result
-        uses: actions/upload-artifact@v2
-        with:
-          name: mobsf-report.json
-          path: mobsf-report.json
+#      - name: Run MobSF Analysis
+#        uses: fundacaocerti/mobsf-action@v1.6
+#        env:
+#          INPUT_FILE_NAME: ios/Runner.ipa
+#          SCAN_TYPE: ipa
+#          OUTPUT_FILE_NAME: mobsf-report
+#      - name: Upload MobSF Analysis PDF Result
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: mobsf-report.pdf
+#          path: mobsf-report.pdf
+#      - name: Upload MobSF Analysis JSON Result
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: mobsf-report.json
+#          path: mobsf-report.json
