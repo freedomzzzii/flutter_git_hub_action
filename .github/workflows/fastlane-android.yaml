@@ -1,7 +1,8 @@
 name: CI/CD fastlane for Android
 
 on:
-  pull_request:
+  push:
+#  pull_request:
 
 jobs:
   build:
@@ -83,13 +84,19 @@ jobs:
       - name: Increate version code
         run: perl -i -pe 's/^((version:\s+\d+\.\d+\.\d+\+)|(version:\s+\d+\.\d+\.\d+\-\w+\+))(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
 # android
-#       - name: Build file .apk
-#         run: flutter build apk  --release
-#       - name: Upload apk
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: apk-build
-#           path: build/app/outputs/apk/release
+      - name: Build file .apk
+       run: flutter build apk  --release
+      - name: Upload apk
+       uses: actions/upload-artifact@v2
+       with:
+         name: apk-build
+         path: build/app/outputs/apk/release
+      - name: Run MobSF Analysis
+        uses: fundacaocerti/mobsf-action@v1.6
+        env:
+          INPUT_FILE_NAME: build/app/outputs/apk/release/app-release.apk
+          SCAN_TYPE: apk
+          OUTPUT_FILE_NAME: mobsf-report
 # test lab
 #       - name: Set up Cloud SDK
 #         uses: google-github-actions/setup-gcloud@master
@@ -110,72 +117,4 @@ jobs:
 #         with:
 #           lane: 'beta'
 #           subdirectory: 'android'
-# ios
-# test lab
-      - name: Install the Apple certificate and provisioning profile
-        env:
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        run: |
-          # create variables
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'test_lab'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# build file
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'build_file_for_app_distribution'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# app distribute
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'app_distribution_group_developer'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-# play store
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'beta'
-          subdirectory: 'ios'
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
-#           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
