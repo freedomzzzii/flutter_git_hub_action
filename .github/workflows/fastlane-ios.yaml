@@ -204,6 +204,7 @@ jobs:
   mobSF:
     name: Run mobSF
     runs-on: ubuntu-latest
+    needs: [ build ]
     steps:
       - name: Download ipa
         uses: actions/download-artifact@v2
