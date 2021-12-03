@@ -46,6 +46,11 @@ platform:ios do
         sh("echo #{ENV['GITHUB_RUN_NUMBER']}")
         sh("cd ../../; ls -la;export GITHUB_RUN_NUMBER=#{ENV['GITHUB_RUN_NUMBER']}; perl -i -pe 's/^(version:)((\\s+\\d+\\.\\d+\\.\\d+\\+)|(\\s+\\d+\\.\\d+\\.\\d+\\-\\w+\\+))(\\d+)$/$1.$2.$ENV{GITHUB_RUN_NUMBER}/e' pubspec.yaml")
         sh("cd ../../; grep 'version:' pubspec.yaml")
+
+        increment_build_number(
+          build_number: ENV['GITHUB_RUN_NUMBER'],
+          xcodeproj: "Runner.xcodeproj"
+        )
     end
     # branch: all branch
     desc "Test ios in Firebase test lab"
