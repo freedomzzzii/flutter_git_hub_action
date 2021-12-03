@@ -91,12 +91,10 @@ jobs:
         with:
           name: apk-build
           path: build/app/outputs/apk/release
-      - name: Run MobSF Analysis
-        uses: fundacaocerti/mobsf-action@v1.6
-        env:
-          INPUT_FILE_NAME: build/app/outputs/apk/release/app-release.apk
-          SCAN_TYPE: apk
-          OUTPUT_FILE_NAME: mobsf-report
+      - name: mobsfscan
+        uses: MobSF/mobsfscan@main
+        with:
+          args: '. --json'
 # test lab
 #       - name: Set up Cloud SDK
 #         uses: google-github-actions/setup-gcloud@master
