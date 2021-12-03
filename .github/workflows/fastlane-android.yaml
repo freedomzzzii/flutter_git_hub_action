@@ -15,6 +15,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      ## testing ##
+      - name: Run MobSF Analysis
+        uses: ./mobsf-action
+        env:
+          INPUT_FILE_NAME: build/app/outputs/apk/release/app-release.apk
+          SCAN_TYPE: apk
+          OUTPUT_FILE_NAME: mobsf-report
+      ## testing ##
       - name: Setup flutter version stable
         uses: subosito/flutter-action@v1
         with:
