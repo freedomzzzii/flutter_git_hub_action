@@ -95,6 +95,10 @@ jobs:
         uses: MobSF/mobsfscan@main
         with:
           args: '. --json'
+      - name: mobsfscan
+        uses: MobSF/mobsfscan@main
+        with:
+          args: 'build/app/outputs/apk/release/app-release.apk --json'
 # test lab
 #       - name: Set up Cloud SDK
 #         uses: google-github-actions/setup-gcloud@master
