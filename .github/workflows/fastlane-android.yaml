@@ -105,23 +105,23 @@ jobs:
           SCAN_TYPE: apk
           OUTPUT_FILE_NAME: mobsf-report
 # test lab
-       - name: Set up Cloud SDK
-         uses: google-github-actions/setup-gcloud@master
-         with:
-           project_id: ${{ secrets.GCP_PROJECT_ID }}
-           service_account_key: ${{ secrets.GCP_SA_KEY }}
-       - uses: maierj/fastlane-action@v2.0.1
-         with:
-           lane: 'test_lab'
-           subdirectory: 'android'
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'test_lab'
+          subdirectory: 'android'
 # app distribute
-       - uses: maierj/fastlane-action@v2.0.1
-         with:
-           lane: 'app_distribution_group_developer'
-           subdirectory: 'android'
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_distribution_group_developer'
+          subdirectory: 'android'
 # play store
-       - uses: maierj/fastlane-action@v2.0.1
-         with:
-           lane: 'beta'
-           subdirectory: 'android'
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'beta'
+          subdirectory: 'android'
 
