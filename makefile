@@ -95,3 +95,6 @@ ios/zip/test-lab:
 
 web/build:
 	flutter build web
+
+mobsf/run:
+	bash ./tool/mobsf-automation.sh
