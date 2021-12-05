@@ -130,11 +130,11 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-      - name: Upload ipa
-        uses: actions/upload-artifact@v2
-        with:
-          name: ipa-build
-          path: ios/Runner.ipa
+#      - name: Upload ipa
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ipa-build
+#          path: ios/Runner.ipa
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'release'
