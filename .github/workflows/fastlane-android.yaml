@@ -201,6 +201,14 @@ jobs:
           path: ./lib/src/configs/l10n
           key: file-l10n
       - run: ls -la
+      - name: Setup java version 12.x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Setup flutter version stable
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
       - name: Build file .apk
         run: flutter build apk --release
 #      - name: Upload apk
