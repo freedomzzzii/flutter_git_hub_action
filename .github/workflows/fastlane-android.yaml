@@ -19,6 +19,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
+      - run: ls -la
       - name: Create file .env
         run: |
           cat << EOF >> .env
@@ -81,11 +82,38 @@ jobs:
         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
       - name: Increate version code
         run: perl -i -pe 's/^((version:\s+\d+\.\d+\.\d+\+)|(version:\s+\d+\.\d+\.\d+\-\w+\+))(\d+)$/$1.('$GITHUB_RUN_NUMBER')/e' pubspec.yaml
+      - run: ls -la
       - uses: actions/cache@v2
         id: file-env
         with:
           path: ./.env
           key: file-env
+      - uses: actions/cache@v2
+        id: file-env-cicd
+        with:
+          path: ./.env-cicd
+          key: file-env-cicd
+      - uses: actions/cache@v2
+        id: file-env-google-service-android
+        with:
+          path: ./android/google-services.json
+          key: file-env-google-service-android
+      - uses: actions/cache@v2
+        id: file-env-upload-keystore
+        with:
+          path: ./android/upload-keystore.jks
+          key: file-env-upload-keystore
+      - uses: actions/cache@v2
+        id: file-env-play-store
+        with:
+          path: ./play-store-credentials.json
+          key: file-env-play-store
+      - uses: actions/cache@v2
+        id: file-env-key-property
+        with:
+          path: ./android/key.properties
+          key: file-env-key-property
+
 
   build:
     needs: [ setup ]
@@ -97,6 +125,31 @@ jobs:
         with:
           path: ./.env
           key: file-env
+      - uses: actions/cache@v2
+        id: file-env-cicd
+        with:
+          path: ./.env-cicd
+          key: file-env-cicd
+      - uses: actions/cache@v2
+        id: file-env-google-service-android
+        with:
+          path: ./android/google-services.json
+          key: file-env-google-service-android
+      - uses: actions/cache@v2
+        id: file-env-upload-keystore
+        with:
+          path: ./android/upload-keystore.jks
+          key: file-env-upload-keystore
+      - uses: actions/cache@v2
+        id: file-env-play-store
+        with:
+          path: ./play-store-credentials.json
+          key: file-env-play-store
+      - uses: actions/cache@v2
+        id: file-env-key-property
+        with:
+          path: ./android/key.properties
+          key: file-env-key-property
       - run: ls -la
       - name: Build file .apk
         run: flutter build apk --release
