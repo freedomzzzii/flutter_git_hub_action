@@ -23,6 +23,16 @@ jobs:
         run: |
           cat << EOF >> .env
           API_URL=${{ secrets.API_URL_DEV }}
+          SSR_URL=${{ secrets.SSR_URL }}
+          GRPC_WEB_SCHEME=${{ secrets.GRPC_WEB_SCHEME }}
+          GRPC_WEB_DOMAIN=${{ secrets.GRPC_WEB_DOMAIN }}
+          GRPC_WEB_PORT=${{ secrets.GRPC_WEB_PORT }}
+          GRPC_MOBILE_DOMAIN=${{ secrets.GRPC_MOBILE_DOMAIN }}
+          GRPC_MOBILE_PORT=${{ secrets.GRPC_MOBILE_PORT }}
+          EOF
+      - name: Create file .env.ci-cd
+        run: |
+          cat << EOF >> .env
           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
           FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
@@ -31,22 +41,11 @@ jobs:
           APPLE_ID=${{ secrets.APPLE_ID }}
           APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
           APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
-          APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
-          APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
-          GRPC_HOST=${{ secrets.GRPC_HOST }}
-          GRPC_PORT=${{ secrets.GRPC_PORT }}
-          GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
           FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
           GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
-          GIT_URL=${{ secrets.GIT_URL }}
-          MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME=${{ secrets.MATCH_USERNAME }}
-          FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
           APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
           EOF
-#          KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}
-#          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
       - name: Create file google-services.json
         run: |
           cd android/app; cat << EOF >> google-services.json
@@ -106,23 +105,23 @@ jobs:
           SCAN_TYPE: apk
           OUTPUT_FILE_NAME: mobsf-report
 # test lab
-#       - name: Set up Cloud SDK
-#         uses: google-github-actions/setup-gcloud@master
-#         with:
-#           project_id: ${{ secrets.GCP_PROJECT_ID }}
-#           service_account_key: ${{ secrets.GCP_SA_KEY }}
-#       - uses: maierj/fastlane-action@v2.0.1
-#         with:
-#           lane: 'test_lab'
-#           subdirectory: 'android'
+       - name: Set up Cloud SDK
+         uses: google-github-actions/setup-gcloud@master
+         with:
+           project_id: ${{ secrets.GCP_PROJECT_ID }}
+           service_account_key: ${{ secrets.GCP_SA_KEY }}
+       - uses: maierj/fastlane-action@v2.0.1
+         with:
+           lane: 'test_lab'
+           subdirectory: 'android'
 # app distribute
-#       - uses: maierj/fastlane-action@v2.0.1
-#         with:
-#           lane: 'app_distribution_group_developer'
-#           subdirectory: 'android'
+       - uses: maierj/fastlane-action@v2.0.1
+         with:
+           lane: 'app_distribution_group_developer'
+           subdirectory: 'android'
 # play store
-#       - uses: maierj/fastlane-action@v2.0.1
-#         with:
-#           lane: 'beta'
-#           subdirectory: 'android'
+       - uses: maierj/fastlane-action@v2.0.1
+         with:
+           lane: 'beta'
+           subdirectory: 'android'
 

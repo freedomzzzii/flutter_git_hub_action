@@ -3,7 +3,7 @@ default_platform(:android)
 fastlane_require 'dotenv'
 
 before_all do
-  Dotenv.overload '../../.env'
+  Dotenv.overload '../../.env-cicd'
 end
 
 platform:android do
@@ -76,7 +76,6 @@ platform:android do
             aab:"../build/app/outputs/bundle/release/app-release.aab",
             release_status: 'draft',
             json_key: '../play-store-credentials.json',
-#             json_key_data: ENV["GOOGLE_SERVICES_AC_JSON_DATA"]
         )
     end
 
