@@ -30,7 +30,7 @@ jobs:
           GRPC_MOBILE_DOMAIN=${{ secrets.GRPC_MOBILE_DOMAIN }}
           GRPC_MOBILE_PORT=${{ secrets.GRPC_MOBILE_PORT }}
           EOF
-      - name: Create file .env.ci-cd
+      - name: Create file .env-cicd
         run: |
           cat << EOF >> .env
           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
