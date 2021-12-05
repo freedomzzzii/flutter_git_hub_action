@@ -32,7 +32,7 @@ jobs:
           EOF
       - name: Create file .env-cicd
         run: |
-          cat << EOF >> .env
+          cat << EOF >> .env-cicd
           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
           FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
