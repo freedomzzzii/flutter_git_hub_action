@@ -2,6 +2,7 @@
   "createTaskHomeBar": "สร้างงาน",
   "createBottomMenu": "สร้าง",
   "listBottomMenu": "รายการงาน",
+  "sseBottomMenu": "SSE",
   "updateBottomMenu": "แก้ไขงาน",
   "updateTaskAppBar": "แก้ไขงาน",
   "saveUpdateTaskBtn": "บันทึก",

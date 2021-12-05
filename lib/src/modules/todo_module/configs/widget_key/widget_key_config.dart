@@ -23,3 +23,6 @@ const String snackBarUpdateFailureWidgetKey =
     'snack_bar_update_failure_widget_key';
 const String imageUpdateWidgetKey = 'image_update_widget_key';
 const String saveUpdateButtonWidgetKey = 'save_update_widget_key';
+const String sseConnectButtonWidgetKey = 'sse_connect_button_widget_key';
+const String sseCloseConnectButtonWidgetKey =
+    'sse_close_connect_button_widget_key';

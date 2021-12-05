@@ -15,7 +15,9 @@ import '../../services/commons/request_query.dart';
 import '../widgets/bottom_menu_bar_widget.dart';
 
 class TaskGetScreenWidget extends StatelessWidget {
-  TaskGetScreenWidget({Key? key}) : super(key: key);
+  TaskGetScreenWidget({Key? key}) : super(key: key) {
+    _getListTask();
+  }
 
   final TaskBloc _bloc = Modular.get<TaskBloc>();
 
@@ -168,7 +170,6 @@ class TaskGetScreenWidget extends StatelessWidget {
               state.status == taskStatusState.success) ||
           (state is TaskCreateState &&
               state.status == taskStatusState.success)) {
-        _getListTask(context);
         return Center(
           key: const Key(loadDataTaskGetWidgetKey),
           child: Text(AppLocalizations.of(context).loadDataTaskGet),
@@ -263,24 +264,15 @@ class TaskGetScreenWidget extends StatelessWidget {
     }
   }
 
-  void _getListTask(BuildContext context) {
-    try {
-      _bloc.add(
-        const TaskGotEvent(
-          model: TaskGetRequestBlocModel(
-            sortBy: createdAtQueryValue,
-            orderBy: descQueryValue,
-          ),
+  void _getListTask() {
+    _bloc.add(
+      const TaskGotEvent(
+        model: TaskGetRequestBlocModel(
+          sortBy: createdAtQueryValue,
+          orderBy: descQueryValue,
         ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          key: const Key(snackBarFailureWidgetKey),
-          content: Text(AppLocalizations.of(context).failureSnackBar),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   @override
@@ -303,10 +295,10 @@ class TaskGetScreenWidget extends StatelessWidget {
                   Modular.to.pushNamed(updateTaskRoute);
                 } else if (state is TaskDeleteState &&
                     state.status == taskStatusState.success) {
-                  _getListTask(context);
+                  _getListTask();
                 } else if (state is TaskUpdateState &&
                     state.status == taskStatusState.success) {
-                  _getListTask(context);
+                  _getListTask();
                 }
               },
             );
