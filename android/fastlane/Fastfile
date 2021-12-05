@@ -25,8 +25,10 @@ platform:android do
     # branches: feature, develop, bugfix, hotfix, release
     desc "Deploy a beta version to the Firebase App Distribute for Developer testing"
     lane:app_distribution_group_developer do
+        sh("echo #{ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"]}")
+        sh("echo #{ENV["FASTLANE_FIREBASE_TOKEN"]}")
         firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
+            app: '1:523370163800:android:399e19c561c6d237a5e42d',
             groups: "developer",
             apk_path: "../build/app/outputs/apk/release/app-release.apk",
             firebase_cli_token: ENV["FASTLANE_FIREBASE_TOKEN"]
