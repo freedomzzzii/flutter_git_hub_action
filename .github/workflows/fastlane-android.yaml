@@ -111,7 +111,7 @@ jobs:
           subdirectory: 'android'
         env:
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
-          FASTLANE_FIREBASE_TOKEN: ${{ secrets.FASTLANE_FIREBASE_TOKEN }}
+          FASTLANE_FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 # play store
       - uses: maierj/fastlane-action@v2.0.1
         with:
