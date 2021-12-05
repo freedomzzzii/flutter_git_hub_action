@@ -30,7 +30,7 @@ platform:android do
         firebase_app_distribution(
             app: '1:523370163800:android:399e19c561c6d237a5e42d',
             groups: "developer",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk",
+            apk_path: "../../build/app/outputs/apk/release/app-release.apk",
         )
     end
 
