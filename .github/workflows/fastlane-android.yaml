@@ -91,8 +91,11 @@ jobs:
           name: apk-build
           path: build/app/outputs/apk/release
       - name: Run mobSF
-        run: make mobsf/run
-# test lab
+        env:
+          MOBSF_URL: ${{ secrets.MOBSF_URL }}
+          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/flutter-apk/app-release.apk'; make mobsf/run
+      # test lab
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
