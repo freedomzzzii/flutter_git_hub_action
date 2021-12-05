@@ -96,7 +96,7 @@ jobs:
       - uses: actions/cache@v2
         id: file-env-google-service-android
         with:
-          path: ./android/google-services.json
+          path: ./android/app/google-services.json
           key: file-env-google-service-android
       - uses: actions/cache@v2
         id: file-env-upload-keystore
@@ -168,7 +168,7 @@ jobs:
       - uses: actions/cache@v2
         id: file-env-google-service-android
         with:
-          path: ./android/google-services.json
+          path: ./android/app/google-services.json
           key: file-env-google-service-android
       - uses: actions/cache@v2
         id: file-env-upload-keystore
