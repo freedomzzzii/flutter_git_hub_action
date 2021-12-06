@@ -138,7 +138,7 @@ jobs:
           key: file-l10n
 
   build:
-    needs: [ setup, test_lab ]
+    needs: [ setup ]
     runs-on: ubuntu-latest
 
     steps:
