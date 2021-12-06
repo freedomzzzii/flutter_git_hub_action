@@ -362,6 +362,11 @@ jobs:
         with:
           path: ./integration_test/main_integration_test.mocks.dart
           key: file-mock-integration-test
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'test_lab'
