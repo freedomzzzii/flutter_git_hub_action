@@ -220,7 +220,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: apk-build
-          path: build/app/outputs/apk/release
+          path: build/app/outputs/apk/release/app-release.apk
 
   mobSF:
     needs: [ setup, build ]
@@ -231,7 +231,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: apk-build
-          path: build/app/outputs/apk/release
+          path: build/app/outputs/apk/release/app-release.apk
       - run: jq --version
       - run: ls -la build/app/outputs/apk/release
       - name: Run mobSF
