@@ -138,6 +138,22 @@ jobs:
         with:
           path: ./lib/src/configs/l10n
           key: file-l10n
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'build_file_for_app_distribution'
+          subdirectory: 'android'
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-build
+          path: build/app/outputs/apk/release
+      - run: jq --version
+      - name: Run mobSF
+        env:
+          MOBSF_URL: ${{ secrets.MOBSF_URL }}
+          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/apk/release/app-release.apk'; make mobsf/run
+
 
   build:
     needs: [ setup ]
@@ -220,12 +236,19 @@ jobs:
         with:
           name: apk-build
           path: build/app/outputs/apk/release
+      - run: jq --version
+      - name: Run mobSF
+        env:
+         MOBSF_URL: ${{ secrets.MOBSF_URL }}
+         MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/apk/release/app-release.apk'; make mobsf/run
 
   mobSF:
     needs: [ setup, build ]
     runs-on: ubuntu-latest
 
     steps:
+      - run:
       - name: Upload apk
         uses: actions/upload-artifact@v2
         with:
@@ -236,7 +259,7 @@ jobs:
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}
           MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/flutter-apk/app-release.apk'; make mobsf/run
+        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/apk/release/app-release.apk'; make mobsf/run
 
 
 
