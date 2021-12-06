@@ -351,6 +351,7 @@ jobs:
       - run: ls -la android/gradle/wrapper
       - run: ls -la android/.gradle
       - run: make project/repair/package
+      - run: make project/install/package
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'test_lab'
