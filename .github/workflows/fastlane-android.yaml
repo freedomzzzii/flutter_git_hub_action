@@ -139,7 +139,6 @@ jobs:
           path: ./lib/src/configs/l10n
           key: file-l10n
 
-
   build:
     needs: [ setup ]
     runs-on: ubuntu-latest
@@ -212,18 +211,34 @@ jobs:
           key: file-l10n
       - run: ls -la
       - run: ls -la android
-      - name: Build file .apk
-        run: flutter build apk --release
-#      - name: Upload apk
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: apk-build
-#          path: build/app/outputs/apk/release
-#      - name: Run mobSF
-#        env:
-#          MOBSF_URL: ${{ secrets.MOBSF_URL }}
-#          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-#        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/flutter-apk/app-release.apk'; make mobsf/run
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'build_file_for_app_distribution'
+          subdirectory: 'android'
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-build
+          path: build/app/outputs/apk/release
+
+  mobSF:
+    needs: [ setup, build ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Upload apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-build
+          path: build/app/outputs/apk/release
+      - name: Run mobSF
+        env:
+          MOBSF_URL: ${{ secrets.MOBSF_URL }}
+          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/flutter-apk/app-release.apk'; make mobsf/run
+
+
+
       # test lab
 #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@master
