@@ -231,6 +231,7 @@ jobs:
         with:
           name: apk-build
           path: build/app/outputs/apk/release
+      - run: jq --version
       - name: Run mobSF
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}

@@ -1,8 +1,8 @@
 name: CI/CD fastlane for iOS
 
 on:
-#  push:
-  pull_request:
+  push:
+#  pull_request:
 
 jobs:
   build:
@@ -130,27 +130,32 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+      - name: Run mobSF
+        env:
+          MOBSF_URL: ${{ secrets.MOBSF_URL }}
+          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='ios/Runner.ipa'; make mobsf/run
 #      - name: Upload ipa
 #        uses: actions/upload-artifact@v2
 #        with:
 #          name: ipa-build
 #          path: ios/Runner.ipa
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'release'
-          subdirectory: 'ios'
-          verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+#      - uses: maierj/fastlane-action@v2.0.1
+#        with:
+#          lane: 'release'
+#          subdirectory: 'ios'
+#          verbose: true
+#        env:
+#          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+#          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+#          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+#          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+#          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #          lane: 'build_file_for_app_distribution'
