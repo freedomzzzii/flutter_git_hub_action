@@ -327,7 +327,7 @@ jobs:
         with:
           path: ./android/local.properties
           key: file-local-property
-      - run: la -la android
+      - run: ls -la android
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'test_lab'
