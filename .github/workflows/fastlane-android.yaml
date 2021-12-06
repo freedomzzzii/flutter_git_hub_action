@@ -241,6 +241,11 @@ jobs:
         with:
           path: ./android/gradle/wrapper/gradle-wrapper.jar
           key: file-gradle-wrapper
+      - uses: actions/cache@v2
+        id: file-android
+        with:
+          path: ./android/
+          key: file-android
 
   test_lab:
     needs: [ setup, build ]
@@ -337,6 +342,11 @@ jobs:
         with:
           path: ./android/gradle/wrapper/gradle-wrapper.jar
           key: file-gradle-wrapper
+      - uses: actions/cache@v2
+        id: file-android
+        with:
+          path: ./android/
+          key: file-android
       - run: ls -la android
       - run: ls -la android/gradle/wrapper
       - run: ls -la android/.gradle
