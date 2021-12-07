@@ -495,6 +495,8 @@ jobs:
         with:
           lane: 'build_file_appbundle'
           subdirectory: 'android'
+        env:
+          BUILD_NUMBER: ${{ BUILD_NUMBER }}
       - uses: actions/cache@v2
         id: file-appbundle
         with:
