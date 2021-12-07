@@ -395,7 +395,7 @@ jobs:
           subdirectory: 'android'
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}
-          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }
+          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
 
   firebase_app_distribute:
     needs: [ setup, build_apk, test_lab, mobSF ]
@@ -418,8 +418,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   play_store:
-    #    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute ]
-    needs: [ setup ]
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute ]
     runs-on: ubuntu-latest
 
     steps:
