@@ -11,7 +11,8 @@ platform:ios do
     lane:setup do
         if is_ci
             # create keychain
-            sh('security create-keychain -p #{ENV['CERTIFICATE_PASSWORD']} ~/Library/Keychains/cicd.keychain-db')  #password certificate
+            sh('security create-keychain -p "#{ENV['CERTIFICATE_PASSWORD']}" ~/Library/Keychains/cicd.keychain-db')  #password certificate
+
             sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')  #password certificate
             sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
             # import certificate
