@@ -82,6 +82,7 @@ platform:android do
             release_status: 'draft',
             json_key: '../play-store-credentials.json',
             package_name: ENV["APP_BUNDLE_ID"],
+            version_code: ENV["BUILD_NUMBER"],
         )
     end
 
