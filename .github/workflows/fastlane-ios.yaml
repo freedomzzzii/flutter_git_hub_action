@@ -140,6 +140,17 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - run: pod install
+      - uses: actions/cache@v2
+        id: pods
+        with:
+          path: ./ios/Pods
+          key: pods
+      - uses: actions/cache@v2
+        id: pods-file
+        with:
+          path: ./ios/Podfile.lock
+          key: pods-file
       - uses: actions/cache@v2
         id: file-env
         with:
@@ -360,6 +371,16 @@ jobs:
         with:
           path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
           key: adHoc-comhugemanflutterstarterkit
+      - uses: actions/cache@v2
+        id: pods
+        with:
+          path: ./ios/Pods
+          key: pods
+      - uses: actions/cache@v2
+        id: pods-file
+        with:
+          path: ./ios/Podfile.lock
+          key: pods-file
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'setup'
