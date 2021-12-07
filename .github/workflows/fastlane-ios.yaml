@@ -1,8 +1,8 @@
 name: CI/CD fastlane for iOS
 
 on:
-#  push:
-  pull_request:
+  push:
+#  pull_request:
 
 jobs:
   build:
