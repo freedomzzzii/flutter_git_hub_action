@@ -24,7 +24,7 @@ platform:android do
 
     desc "Run mobSF (upload file and scan file)"
     lane:mobSF do
-        sh("export MOBSF_URL=#{ENV["MOBSF_URL"]}; export MOBSF_API_KEY=#{ENV["MOBSF_API_KEY"]}; export INPUT_FILE_NAME='build/app/outputs/apk/release/app-release.apk'; make mobsf/run")
+        sh("export MOBSF_URL=#{ENV["MOBSF_URL"]}; export MOBSF_API_KEY=#{ENV["MOBSF_API_KEY"]}; export INPUT_FILE_NAME='../../build/app/outputs/apk/release/app-release.apk'; bash ../../tool/mobsf-automation.sh")
     end
 
     # run this lane before deploy to play store
