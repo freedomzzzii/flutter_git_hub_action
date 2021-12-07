@@ -496,12 +496,6 @@ jobs:
         with:
           lane: 'build_file_appbundle'
           subdirectory: 'android'
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'beta'
-          subdirectory: 'android'
-        env:
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
       - uses: actions/cache@v2
         id: file-appbundle
         with:
@@ -512,6 +506,11 @@ jobs:
         with:
           path: ./build
           key: file-build
+      - uses: actions/cache@v2
+        id: file-android
+        with:
+          path: ./android
+          key: file-android
 
   play_store:
     #    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute, build_appbundle ]
@@ -539,6 +538,12 @@ jobs:
       - run: ls -la
       - run: ls -la build
       - run: ls -la build/app/outputs/bundle/release
+      - uses: actions/cache@v2
+        id: file-android
+        with:
+          path: ./android
+          key: file-android
+      - run: ls -la android
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'beta'
