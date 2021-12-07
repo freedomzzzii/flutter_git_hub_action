@@ -210,11 +210,6 @@ jobs:
         with:
           path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
           key: adHoc-comhugemanflutterstarterkit
-      - uses: actions/cache@v2
-        id: app-store-connect-key
-        with:
-          path: ./ios/app_store_connect_key.p8
-          key: app-store-connect-key
       - run: ls -la
 #      - name: Upload ipa
 #        uses: actions/upload-artifact@v2
