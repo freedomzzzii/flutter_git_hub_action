@@ -98,3 +98,6 @@ web/build:
 
 mobsf/run:
 	bash ./tool/mobsf-automation.sh
+
+increase-build-number/run:
+	bash ./tool/increase-build-number.sh
