@@ -3,7 +3,7 @@ default_platform(:ios)
 fastlane_require 'dotenv'
 
 before_all do
-  Dotenv.overload '../../.env'
+  Dotenv.overload '../../.env-cicd'
 end
 
 platform:ios do
