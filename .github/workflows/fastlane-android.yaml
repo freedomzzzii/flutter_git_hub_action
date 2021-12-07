@@ -513,6 +513,9 @@ jobs:
         with:
           lane: 'beta'
           subdirectory: 'android'
+        env:
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+
 
 
 # app distribute
