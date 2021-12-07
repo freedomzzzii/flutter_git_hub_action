@@ -22,6 +22,12 @@ platform:android do
         sh("flutter build apk --release")
     end
 
+    # run this lane before deploy to play store
+    desc "Build file .aab for deploy play store"
+    lane:build_file_appbundle do
+        sh("flutter build appbundle --release")
+    end
+
     # branches: feature, develop, bugfix, hotfix, release
     desc "Deploy a beta version to the Firebase App Distribute for Developer testing"
     lane:app_distribution_group_developer do
@@ -63,8 +69,6 @@ platform:android do
     # tag: master
     desc "Deploy a beta version to the Play store"
     lane:beta do
-        sh("flutter build appbundle --release")
-      
         validate_play_store_json_key(
           json_key: '../play-store-credentials.json'
         )

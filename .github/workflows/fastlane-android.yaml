@@ -142,118 +142,118 @@ jobs:
           path: ./integration_test/main_integration_test.mocks.dart
           key: file-mock-integration-test
 
-  build:
-    needs: [ setup ]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - name: Setup flutter version stable
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - uses: actions/cache@v2
-        id: file-env
-        with:
-          path: ./.env
-          key: file-env
-      - uses: actions/cache@v2
-        id: file-env-cicd
-        with:
-          path: ./.env-cicd
-          key: file-env-cicd
-      - uses: actions/cache@v2
-        id: file-env-google-service-android
-        with:
-          path: ./android/app/google-services.json
-          key: file-env-google-service-android
-      - uses: actions/cache@v2
-        id: file-env-upload-keystore
-        with:
-          path: ./android/upload-keystore.jks
-          key: file-env-upload-keystore
-      - uses: actions/cache@v2
-        id: file-env-play-store
-        with:
-          path: ./play-store-credentials.json
-          key: file-env-play-store
-      - uses: actions/cache@v2
-        id: file-env-key-property
-        with:
-          path: ./android/key.properties
-          key: file-env-key-property
-      - uses: actions/cache@v2
-        id: file-flutter-plugins
-        with:
-          path: ./.flutter-plugins
-          key: file-flutter-plugins
-      - uses: actions/cache@v2
-        id: file-flutter-plugins-dependency
-        with:
-          path: ./.flutter-plugins-dependencies
-          key: file-flutter-plugins-dependency
-      - uses: actions/cache@v2
-        id: file-flutter-packages
-        with:
-          path: ./.packages
-          key: file-flutter-packages
-      - uses: actions/cache@v2
-        id: file-dart-tool
-        with:
-          path: ./.dart_tool
-          key: file-dart-tool
-      - uses: actions/cache@v2
-        id: file-l10n
-        with:
-          path: ./lib/src/configs/l10n
-          key: file-l10n
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'build_file_for_app_distribution'
-          subdirectory: 'android'
-      - uses: actions/cache@v2
-        id: file-apk
-        with:
-          path: ./build/app/outputs/apk/release/app-release.apk
-          key: file-apk
-      - uses: actions/cache@v2
-        id: file-gradle
-        with:
-          path: ./android/.gradle
-          key: file-gradle
-      - uses: actions/cache@v2
-        id: file-gradlew
-        with:
-          path: ./android/gradlew
-          key: file-gradlew
-      - uses: actions/cache@v2
-        id: file-gradlew-bat
-        with:
-          path: ./android/gradlew.bat
-          key: file-gradlew-bat
-      - uses: actions/cache@v2
-        id: file-local-property
-        with:
-          path: ./android/local.properties
-          key: file-local-property
-      - uses: actions/cache@v2
-        id: file-gradle-wrapper
-        with:
-          path: ./android/gradle/wrapper/gradle-wrapper.jar
-          key: file-gradle-wrapper
-      - uses: actions/cache@v2
-        id: file-android
-        with:
-          path: ./android/
-          key: file-android
+#  build_apk:
+#    needs: [ setup ]
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup java version 12.x
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: '12.x'
+#      - name: Setup flutter version stable
+#        uses: subosito/flutter-action@v1
+#        with:
+#          channel: 'stable'
+#      - uses: actions/cache@v2
+#        id: file-env
+#        with:
+#          path: ./.env
+#          key: file-env
+#      - uses: actions/cache@v2
+#        id: file-env-cicd
+#        with:
+#          path: ./.env-cicd
+#          key: file-env-cicd
+#      - uses: actions/cache@v2
+#        id: file-env-google-service-android
+#        with:
+#          path: ./android/app/google-services.json
+#          key: file-env-google-service-android
+#      - uses: actions/cache@v2
+#        id: file-env-upload-keystore
+#        with:
+#          path: ./android/upload-keystore.jks
+#          key: file-env-upload-keystore
+#      - uses: actions/cache@v2
+#        id: file-env-play-store
+#        with:
+#          path: ./play-store-credentials.json
+#          key: file-env-play-store
+#      - uses: actions/cache@v2
+#        id: file-env-key-property
+#        with:
+#          path: ./android/key.properties
+#          key: file-env-key-property
+#      - uses: actions/cache@v2
+#        id: file-flutter-plugins
+#        with:
+#          path: ./.flutter-plugins
+#          key: file-flutter-plugins
+#      - uses: actions/cache@v2
+#        id: file-flutter-plugins-dependency
+#        with:
+#          path: ./.flutter-plugins-dependencies
+#          key: file-flutter-plugins-dependency
+#      - uses: actions/cache@v2
+#        id: file-flutter-packages
+#        with:
+#          path: ./.packages
+#          key: file-flutter-packages
+#      - uses: actions/cache@v2
+#        id: file-dart-tool
+#        with:
+#          path: ./.dart_tool
+#          key: file-dart-tool
+#      - uses: actions/cache@v2
+#        id: file-l10n
+#        with:
+#          path: ./lib/src/configs/l10n
+#          key: file-l10n
+#      - uses: maierj/fastlane-action@v2.0.1
+#        with:
+#          lane: 'build_file_for_app_distribution'
+#          subdirectory: 'android'
+#      - uses: actions/cache@v2
+#        id: file-apk
+#        with:
+#          path: ./build/app/outputs/apk/release/app-release.apk
+#          key: file-apk
+#      - uses: actions/cache@v2
+#        id: file-gradle
+#        with:
+#          path: ./android/.gradle
+#          key: file-gradle
+#      - uses: actions/cache@v2
+#        id: file-gradlew
+#        with:
+#          path: ./android/gradlew
+#          key: file-gradlew
+#      - uses: actions/cache@v2
+#        id: file-gradlew-bat
+#        with:
+#          path: ./android/gradlew.bat
+#          key: file-gradlew-bat
+#      - uses: actions/cache@v2
+#        id: file-local-property
+#        with:
+#          path: ./android/local.properties
+#          key: file-local-property
+#      - uses: actions/cache@v2
+#        id: file-gradle-wrapper
+#        with:
+#          path: ./android/gradle/wrapper/gradle-wrapper.jar
+#          key: file-gradle-wrapper
+#      - uses: actions/cache@v2
+#        id: file-android
+#        with:
+#          path: ./android/
+#          key: file-android
 
 #  test_lab:
-#    needs: [ setup, build ]
+#    needs: [ setup, build_apk ]
 #    runs-on: ubuntu-latest
 #
 #    steps:
@@ -373,7 +373,7 @@ jobs:
 #          subdirectory: 'android'
 #
 #  mobSF:
-#    needs: [ setup, build, test_lab ]
+#    needs: [ setup, build_apk, test_lab ]
 #    runs-on: ubuntu-latest
 #
 #    steps:
@@ -390,26 +390,124 @@ jobs:
 #          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
 #        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='build/app/outputs/apk/release/app-release.apk'; make mobsf/run
 
-  firebase_app_distribute:
-#    needs: [ setup, build, test_lab, mobSF ]
-    needs: [ setup, build ]
+#  firebase_app_distribute:
+#    needs: [ setup, build_apk, test_lab, mobSF ]
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - uses: actions/cache@v2
+#        id: file-apk
+#        with:
+#          path: ./build/app/outputs/apk/release/app-release.apk
+#          key: file-apk
+#      - uses: maierj/fastlane-action@v2.0.1
+#        with:
+#          lane: 'app_distribution_group_developer'
+#          subdirectory: 'android'
+#        env:
+#          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+#          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  build_appbundle:
+    #    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute ]
+    needs: [ setup, build_apk ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup java version 12.x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Setup flutter version stable
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - uses: actions/cache@v2
+        id: file-env
+        with:
+          path: ./.env
+          key: file-env
+      - uses: actions/cache@v2
+        id: file-env-cicd
+        with:
+          path: ./.env-cicd
+          key: file-env-cicd
+      - uses: actions/cache@v2
+        id: file-env-google-service-android
+        with:
+          path: ./android/app/google-services.json
+          key: file-env-google-service-android
+      - uses: actions/cache@v2
+        id: file-env-upload-keystore
+        with:
+          path: ./android/upload-keystore.jks
+          key: file-env-upload-keystore
+      - uses: actions/cache@v2
+        id: file-env-play-store
+        with:
+          path: ./play-store-credentials.json
+          key: file-env-play-store
+      - uses: actions/cache@v2
+        id: file-env-key-property
+        with:
+          path: ./android/key.properties
+          key: file-env-key-property
+      - uses: actions/cache@v2
+        id: file-flutter-plugins
+        with:
+          path: ./.flutter-plugins
+          key: file-flutter-plugins
+      - uses: actions/cache@v2
+        id: file-flutter-plugins-dependency
+        with:
+          path: ./.flutter-plugins-dependencies
+          key: file-flutter-plugins-dependency
+      - uses: actions/cache@v2
+        id: file-flutter-packages
+        with:
+          path: ./.packages
+          key: file-flutter-packages
+      - uses: actions/cache@v2
+        id: file-dart-tool
+        with:
+          path: ./.dart_tool
+          key: file-dart-tool
+      - uses: actions/cache@v2
+        id: file-l10n
+        with:
+          path: ./lib/src/configs/l10n
+          key: file-l10n
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'build_file_appbundle'
+          subdirectory: 'android'
+      - uses: actions/cache@v2
+        id: file-appbundle
+        with:
+          path: ./build/app/outputs/bundle/release/app-release.aab
+          key: file-appbundle
+
+  play_store:
+    #    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute, build_appbundle ]
+    needs: [ setup, build_appbundle ]
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
-        id: file-apk
+        id: file-appbundle
         with:
-          path: ./build/app/outputs/apk/release/app-release.apk
-          key: file-apk
+          path: ./build/app/outputs/bundle/release/app-release.aab
+          key: file-appbundle
       - uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: 'app_distribution_group_developer'
+          lane: 'build_file_appbundle'
           subdirectory: 'android'
-        env:
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
 
 # app distribute
