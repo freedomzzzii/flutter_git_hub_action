@@ -78,11 +78,12 @@ platform:android do
         # see more in http://docs.fastlane.tools/actions/upload_to_play_store/#upload_to_play_store
         upload_to_play_store(
             track: 'beta',
-            aab:"../build/app/outputs/bundle/release/app-release.aab",
+            aab_paths:"../build/app/outputs/bundle/release/app-release.aab",
             release_status: 'draft',
             json_key: '../play-store-credentials.json',
-#             package_name: ENV["APP_BUNDLE_ID"],
-#             version_code: ENV["BUILD_NUMBER"],
+            version_name: '0.1.1',
+            package_name: ENV["APP_BUNDLE_ID"],
+            version_code: ENV["BUILD_NUMBER"],
         )
     end
 
