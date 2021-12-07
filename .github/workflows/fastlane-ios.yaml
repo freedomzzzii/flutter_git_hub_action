@@ -33,6 +33,16 @@ jobs:
         run: |
           cat << EOF >> .env
           API_URL=${{ secrets.API_URL_DEV }}
+          SSR_URL=${{ secrets.SSR_URL }}
+          GRPC_WEB_SCHEME=${{ secrets.GRPC_WEB_SCHEME }}
+          GRPC_WEB_DOMAIN=${{ secrets.GRPC_WEB_DOMAIN }}
+          GRPC_WEB_PORT=${{ secrets.GRPC_WEB_PORT }}
+          GRPC_MOBILE_DOMAIN=${{ secrets.GRPC_MOBILE_DOMAIN }}
+          GRPC_MOBILE_PORT=${{ secrets.GRPC_MOBILE_PORT }}
+          EOF
+      - name: Create file .env-cicd
+        run: |
+          cat << EOF >> .env-cicd
           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
           FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
@@ -43,9 +53,6 @@ jobs:
           APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
           APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
           APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
-          GRPC_HOST=${{ secrets.GRPC_HOST }}
-          GRPC_PORT=${{ secrets.GRPC_PORT }}
-          GRPC_SCHEME=${{ secrets.GRPC_SCHEME }}
           FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
           GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
           GIT_URL=${{ secrets.GIT_URL }}
@@ -62,6 +69,15 @@ jobs:
           P12_PASSWORD=${{ secrets.P12_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
+          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
+          CERTIFICATE_PASSWORD=${{ secrets.CERTIFICATE_PASSWORD }}
+          DISTRIBUTE_PROFILE_NAME=${{ secrets.DISTRIBUTE_PROFILE_NAME }}
+          ADHOC_PROFILE_NAME=${{ secrets.ADHOC_PROFILE_NAME }}
+          DISTRIBUTION_P12_BASE64=${{ secrets.DISTRIBUTION_P12_BASE64 }}
+          DEVELOPMENT_P12_BASE64=${{ secrets.DEVELOPMENT_P12_BASE64 }}
+          DISTRIBUTE_PROFILE_BASE64=${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
+          ADHOC_PROFILE_BASE64=${{ secrets.ADHOC_PROFILE_BASE64 }}
+          EXPORT_OPTIONS_PLIST=${{ secrets.EXPORT_OPTIONS_PLIST }}
           EOF
       - name: Create file GoogleService-Info.plist
         run: |

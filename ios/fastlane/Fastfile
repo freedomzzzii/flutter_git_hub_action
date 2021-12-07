@@ -11,15 +11,14 @@ platform:ios do
     lane:setup do
         if is_ci
             # create keychain
-            sh('security create-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-            sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            sh('security create-keychain -p "$CERTIFICATE_PASSWORD" ~/Library/Keychains/cicd.keychain-db')  #password certificate
+            sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')  #password certificate
             sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
             # import certificate
-            sh('security import ../distribution.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
-            sh("security import ../distribution.cer ~/Library/Keychains/cicd.keychain-db")
-            sh('security import ../development.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
+            sh('security import ../distribution.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')  #passwod keychain
+            sh('security import ../development.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')  #passwod keychain
             # set allow codesign
-            sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db') #passwod keychain
             # copy provisioning profile
             sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
@@ -93,7 +92,7 @@ platform:ios do
        update_code_signing_settings(
          path: "Runner.xcodeproj",
          targets: "Runner",
-         profile_name: "Ad-Hoc com.hugeman.flutterstarterkit",
+         profile_name: "Ad-Hoc com.hugeman.flutterstarterkit", #change to provisioning adhoc name
          bundle_identifier: ENV["APP_BUNDLE_ID"],
          use_automatic_signing: false,
          team_id: ENV["APPLE_TEAM_ID"],
@@ -144,7 +143,7 @@ platform:ios do
         update_code_signing_settings(
           path: "Runner.xcodeproj",
           targets: "Runner",
-          profile_name: "Distribute com.hugeman.flutterstarterkit",
+          profile_name: "Distribute com.hugeman.flutterstarterkit", #change to env provisioning distribute
           bundle_identifier: ENV["APP_BUNDLE_ID"],
           use_automatic_signing: false,
           team_id: ENV["APPLE_TEAM_ID"],
