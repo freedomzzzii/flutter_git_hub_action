@@ -140,9 +140,17 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-      - run: ls -la ios
       - run: cd ios; pod install
-      - run: ls -la ios
+      - uses: actions/cache@v2
+        id: flutter-export-enviroment
+        with:
+          path: ./ios/Flutter/flutter_export_enviroment.sh
+          key: flutter-export-enviroment
+      - uses: actions/cache@v2
+        id: generated
+        with:
+          path: ./ios/Flutter/Generated.xcconfig
+          key: generated
       - uses: actions/cache@v2
         id: pods
         with:
@@ -383,6 +391,16 @@ jobs:
         with:
           path: ./ios/Podfile.lock
           key: pods-file
+      - uses: actions/cache@v2
+        id: flutter-export-enviroment
+        with:
+          path: ./ios/Flutter/flutter_export_enviroment.sh
+          key: flutter-export-enviroment
+      - uses: actions/cache@v2
+        id: generated
+        with:
+          path: ./ios/Flutter/Generated.xcconfig
+          key: generated
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'setup'
