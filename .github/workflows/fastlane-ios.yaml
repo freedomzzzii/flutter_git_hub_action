@@ -152,6 +152,11 @@ jobs:
           path: ./ios/Flutter/Generated.xcconfig
           key: generated
       - uses: actions/cache@v2
+        id: symlinks
+        with:
+          path: ./ios/.symlinks
+          key: symlinks
+      - uses: actions/cache@v2
         id: pods
         with:
           path: ./ios/Pods
@@ -401,6 +406,11 @@ jobs:
         with:
           path: ./ios/Flutter/Generated.xcconfig
           key: generated
+      - uses: actions/cache@v2
+        id: symlinks
+        with:
+          path: ./ios/.symlinks
+          key: symlinks
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'setup'
