@@ -106,28 +106,28 @@ jobs:
         run: |
           cd ios; cat << EOF >> distribute_p12_base64.txt
           ${{ secrets.DISTRIBUTION_P12_BASE64 }}
-            EOF
-      - run: base64 -d ios/distribute_p12_base64.txt > ios/distribute.p12
+          EOF
+      - run: base64 -d ios/distribute_p12_base64.txt > ios/distribution.p12
 
       - name: Create file development_p12_base64.txt
         run: |
           cd ios; cat << EOF >> development_p12_base64.txt
           ${{ secrets.DEVELOPMENT_P12_BASE64 }}
-            EOF
+          EOF
       - run: base64 -d ios/distribute_p12_base64.txt > ios/development.p12
 
       - name: Create file distribute_profile_base64.txt
         run: |
           cd ios; cat << EOF >> distribute_profile_base64.txt
           ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
-            EOF
+          EOF
       - run: base64 -d ios/distribute_profile_base64.txt > ios/Distribute_comhugemanflutterstarterkit.mobileprovision
 
       - name: Create file adhoc_profile_base64.txt
         run: |
           cd ios; cat << EOF >> adhoc_profile_base64.txt
           ${{ secrets.ADHOC_PROFILE_BASE64 }}
-            EOF
+          EOF
       - run: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
 
       - name: Install dependencies
