@@ -80,6 +80,7 @@ platform:android do
             aab:"../build/app/outputs/bundle/release/app-release.aab",
             release_status: 'draft',
             json_key: '../play-store-credentials.json',
+            package_name: ENV["APP_BUNDLE_ID"]
         )
     end
 
