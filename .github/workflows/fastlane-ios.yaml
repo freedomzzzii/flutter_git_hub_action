@@ -411,6 +411,7 @@ jobs:
         with:
           path: ./ios/.symlinks
           key: symlinks
+      - run: flutter pub get
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'setup'
