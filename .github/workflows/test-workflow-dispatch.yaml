@@ -1,4 +1,4 @@
-name: Manually triggered workflow
+name: Test Manually triggered workflow
 on:
   workflow_dispatch:
     inputs:
