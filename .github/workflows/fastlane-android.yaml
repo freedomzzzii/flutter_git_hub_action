@@ -385,6 +385,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install Open VPN
+        run: sudo apt-get install openvpn
+
+      - name: Connect VPN
+        uses: golfzaptw/action-connect-ovpn@master
+        id: connect_vpn
+        with:
+          PING_URL: '127.0.0.1'
+          FILE_OVPN: '.github/vpn/config.ovpn'
+        env:
+          CA_CRT: ${{ secrets.CA_CRT}}
+          USER_CRT: ${{ secrets.USER_CRT }}
+          USER_KEY: ${{ secrets.USER_KEY }}
+
+      - name: Check Connect VPN
+        run: echo ${{ steps.connect_vpn.outputs.STATUS }}
+
       - uses: actions/cache@v2
         id: file-apk
         with:
@@ -401,6 +419,10 @@ jobs:
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}
           MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+
+      - name: kill vpn
+        if: always()
+        run: sudo killall openvpn
 
 #  firebase_app_distribute:
 #    needs: [ setup, build_apk, test_lab, mobSF ]
