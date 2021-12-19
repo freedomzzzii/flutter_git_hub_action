@@ -14,8 +14,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      - run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: Install xmllint
-        run: sudo apt-get install -y libxml2-utils
+        run: brew install openvpn
       - name: Install Open VPN
         run: sudo apt-get install openvpn
       - name: Connect VPN
