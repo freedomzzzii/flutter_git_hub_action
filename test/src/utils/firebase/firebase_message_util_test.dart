@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_starter_kit/src/utils/firebase_message/firebase_message_util.dart';
+import 'package:flutter_starter_kit/src/utils/firebase/firebase_message_util.dart';
 import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -410,7 +410,7 @@ void main() {
     when(
       mockFlutterLocalNotificationsPlugin.initialize(
         const InitializationSettings(
-          android: AndroidInitializationSettings('app_icon'),
+          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         ),
       ),
     ).thenAnswer(

@@ -34,6 +34,17 @@ void main() {
     });
   });
 
+  group('TaskLoadingState Class', () {
+    test('Should have TaskLoadingState Class', () {
+      expect(TaskLoadingState, TaskLoadingState);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(expectTaskLoadingState.status, isA<taskStatusState>());
+      expect(expectTaskLoadingState.status, taskStatusState.loading);
+    });
+  });
+
   group('TaskCreateState Class', () {
     test('Should have TaskCreateState Class', () {
       expect(TaskCreateState, TaskCreateState);

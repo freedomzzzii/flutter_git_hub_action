@@ -3,6 +3,7 @@
   "appBarTaskGet": "Task",
   "createBottomMenu": "Create",
   "listBottomMenu": "List",
+  "sseBottomMenu": "SSE",
   "updateBottomMenu": "Update",
   "updateTaskAppBar": "Update Task",
   "saveUpdateTaskBtn": "Save",

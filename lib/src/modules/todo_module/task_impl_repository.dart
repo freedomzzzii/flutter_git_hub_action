@@ -1,11 +1,18 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:universal_html/html.dart';
+
+import '../../commons/constants/api_constant.dart';
+import '../../commons/constants/env_constant.dart';
 import '../../utils/error_code/error_code_util.dart';
 import 'commons/errors/repository_error.dart';
 import 'domains/datasources/datasource.dart';
+import 'domains/datasources/stream_datasource.dart';
 import 'domains/entities/task_create_entity.dart';
 import 'domains/entities/task_delete_entity.dart';
 import 'domains/entities/task_get_entity.dart';
 import 'domains/entities/task_update_entity.dart';
 import 'domains/repositories/task_repository.dart';
+import 'domains/repositories/task_sse_repository.dart';
 import 'services/models/task_create_datasource_model.dart';
 import 'services/models/task_delete_datasource_model.dart';
 import 'services/models/task_get_datasource_model.dart';
@@ -133,5 +140,26 @@ class TaskImplRepository implements TaskRepository {
         code: appErrorCodes.unknownError,
       );
     }
+  }
+}
+
+class TaskImplSseRepository implements TaskSseRepository {
+  TaskImplSseRepository({required SseDatasourceStream dataSource})
+      : _dataSource = dataSource;
+
+  final SseDatasourceStream _dataSource;
+
+  SseDatasourceStream get dataSource => _dataSource;
+
+  @override
+  EventSource get() {
+    return _dataSource.connect(
+      url: '${dotenv.env[ssrUrlEnv]}$taskResourceApi',
+    );
+  }
+
+  @override
+  void closeConnection({required EventSource eventSource}) {
+    return _dataSource.closeConnection(eventSource: eventSource);
   }
 }

@@ -3,7 +3,7 @@ default_platform(:android)
 fastlane_require 'dotenv'
 
 before_all do
-  Dotenv.overload '../../.env'
+  Dotenv.overload '../../.env-cicd'
 end
 
 platform:android do
@@ -18,18 +18,29 @@ platform:android do
 
     # run this lane before deploy to firebase app distribute
     desc "Build file .apk for deploy firebase app distribute"
-    lane:build_file_for_app_distribution do
+    lane:build_file_apk do
         sh("flutter build apk --release")
+    end
+
+    desc "Run mobSF (upload file and scan file)"
+    lane:mobSF do
+        sh("export MOBSF_URL=#{ENV["MOBSF_URL"]}; export MOBSF_API_KEY=#{ENV["MOBSF_API_KEY"]}; export INPUT_FILE_NAME='../../build/app/outputs/apk/release/app-release.apk'; bash ../../tool/mobsf-automation.sh")
+    end
+
+    # run this lane before deploy to play store
+    desc "Build file .aab for deploy play store"
+    lane:build_file_appbundle do
+        sh("flutter build appbundle --release")
     end
 
     # branches: feature, develop, bugfix, hotfix, release
     desc "Deploy a beta version to the Firebase App Distribute for Developer testing"
     lane:app_distribution_group_developer do
+
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "developer",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk",
-            firebase_cli_token: ENV["FASTLANE_FIREBASE_TOKEN"]
+            apk_path: "../build/app/outputs/apk/release/app-release.apk"
         )
     end
 
@@ -63,20 +74,19 @@ platform:android do
     # tag: master
     desc "Deploy a beta version to the Play store"
     lane:beta do
-        sh("flutter build appbundle --release")
-      
         validate_play_store_json_key(
-          json_key: '../play-store-credentials.json'
+            json_key: '../play-store-credentials.json'
         )
 
         # Release status (used when uploading new apks/aabs)
         # see more in http://docs.fastlane.tools/actions/upload_to_play_store/#upload_to_play_store
         upload_to_play_store(
             track: 'beta',
-            aab:"../build/app/outputs/bundle/release/app-release.aab",
+            aab_paths:"../build/app/outputs/bundle/release/app-release.aab",
             release_status: 'draft',
             json_key: '../play-store-credentials.json',
-#             json_key_data: ENV["GOOGLE_SERVICES_AC_JSON_DATA"]
+            package_name: ENV["APP_BUNDLE_ID"],
+            version_code: ENV["BUILD_NUMBER"],
         )
     end
 

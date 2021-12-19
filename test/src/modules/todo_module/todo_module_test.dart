@@ -4,11 +4,13 @@ import 'package:flutter_starter_kit/src/configs/routes/route_config.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_create_screen.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_get_screen.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_get_sse_screen.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/presentations/screens/task_update_screen.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/todo_module.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../utils/image_picker/image_picker_util_test.mocks.dart';
+import 'applications/bloc/task_sse_bloc/task_sse_bloc_test.mocks.dart';
 
 void main() {
   final TodoModule expectTodoModule = TodoModule();
@@ -59,6 +61,8 @@ void main() {
             TaskCreateScreenWidget(imagePickerUtil: MockImagePickerUtil()),
         (BuildContext context, ModularArguments arg) =>
             TaskUpdateScreenWidget(imagePickerUtil: MockImagePickerUtil()),
+        (BuildContext context, ModularArguments arg) =>
+            TaskGetSseScreen(bloc: MockTaskSseBloc()),
       ];
 
       for (final ModularRoute<dynamic> value in expectTodoModule.routes) {
@@ -79,7 +83,7 @@ void main() {
         );
       }
 
-      expect(expectTodoModule.routes.length, 3);
+      expect(expectTodoModule.routes.length, 4);
     });
   });
 }
