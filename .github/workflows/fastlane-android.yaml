@@ -385,10 +385,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
       - name: Install Open VPN
         run: sudo apt-get install openvpn
-
       - name: Connect VPN
         uses: golfzaptw/action-connect-ovpn@master
         id: connect_vpn
@@ -399,19 +397,19 @@ jobs:
           CA_CRT: ${{ secrets.CA_CRT}}
           USER_CRT: ${{ secrets.USER_CRT }}
           USER_KEY: ${{ secrets.USER_KEY }}
-
       - name: Check Connect VPN
         run: echo ${{ steps.connect_vpn.outputs.STATUS }}
-
       - uses: actions/cache@v2
         id: file-apk
         with:
           path: ./build/app/outputs/apk/release/app-release.apk
           key: file-apk
       - name: Post API with private domain
+        env:
+          MOBSF_URL: ${{ secrets.MOBSF_URL }}
         run: |
           sudo sh -c "echo nameserver 172.31.0.2 > /etc/resolv.conf"
-          curl -vvv https://mobsf.hugeman.co/api/v1/scan
+          curl -vvv $MOBSF_URL/api/v1/scan
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'mobSF'
@@ -419,7 +417,6 @@ jobs:
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}
           MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-
       - name: kill vpn
         if: always()
         run: sudo killall openvpn
