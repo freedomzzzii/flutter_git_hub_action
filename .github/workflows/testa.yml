@@ -1,4 +1,4 @@
-name: Test Manually triggered workflow
+name: Manually triggered workflow test
 on:
   workflow_dispatch:
     inputs:
@@ -18,5 +18,3 @@ jobs:
       - run: |
           echo "Hello ${{ github.event.inputs.name }}!"
           echo "- in ${{ github.event.inputs.home }}!"
-
-
