@@ -11,15 +11,14 @@ platform:ios do
     lane:setup do
         if is_ci
             # create keychain
-            sh('security create-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-            sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            sh("security create-keychain -p #{ENV['CERTIFICATE_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+            sh("security unlock-keychain -p #{ENV['CERTIFICATE_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
             sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
             # import certificate
-            sh('security import ../distribution.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
-            sh("security import ../distribution.cer ~/Library/Keychains/cicd.keychain-db")
-            sh('security import ../development.p12 -P "hugeman123" -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db')
+            sh("security import ../distribution.p12 -P #{ENV['KEYCHAIN_PASSWORD']} -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db")
+            sh("security import ../development.p12 -P #{ENV['KEYCHAIN_PASSWORD']} -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db")
             # set allow codesign
-            sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+            sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
             # copy provisioning profile
             sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
             sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
@@ -59,8 +58,8 @@ platform:ios do
             sh("pod install")
         end
 
-        sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-        sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+        sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
         # build file
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
         sh("flutter build ios integration_test/main_integration_test.dart --release")
@@ -80,25 +79,28 @@ platform:ios do
 
     desc "Run mobSF (upload file and scan file)"
     lane:mobSF do
-        sh("export MOBSF_URL=#{ENV["MOBSF_URL"]}; export MOBSF_API_KEY=#{ENV["MOBSF_API_KEY"]}; export INPUT_FILE_NAME='../build/todo.ipa'; bash ../../tool/mobsf-automation.sh")
+        sh("export MOBSF_URL=#{ENV["MOBSF_URL"]}; export MOBSF_API_KEY=#{ENV["MOBSF_API_KEY"]}; export INPUT_FILE_NAME='../Runner.ipa'; bash ../../tool/mobsf-automation.sh")
     end
 
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-        cocoapods(
-          clean_install: true,
-          podfile: "Podfile",
-          use_bundle_exec: false
-        )
+#         cocoapods(
+#           clean_install: true,
+#           podfile: "Podfile",
+#           use_bundle_exec: false
+#         )
+        Dir.chdir("../") do
+            sh("pod install")
+        end
 
-        sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-        sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+        sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
 
        update_code_signing_settings(
          path: "Runner.xcodeproj",
          targets: "Runner",
-         profile_name: "Ad-Hoc com.hugeman.flutterstarterkit",
+         profile_name: ENV["ADHOC_PROFILE_NAME"],
          bundle_identifier: ENV["APP_BUNDLE_ID"],
          use_automatic_signing: false,
          team_id: ENV["APPLE_TEAM_ID"],
@@ -143,13 +145,13 @@ platform:ios do
             sh("pod install")
         end
 
-        sh('security unlock-keychain -p "hugeman123" ~/Library/Keychains/cicd.keychain-db')
-        sh('security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "hugeman123" ~/Library/Keychains/cicd.keychain-db')
+        sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
 
         update_code_signing_settings(
           path: "Runner.xcodeproj",
           targets: "Runner",
-          profile_name: "Distribute com.hugeman.flutterstarterkit",
+          profile_name: ENV["DISTRIBUTE_PROFILE_NAME"],
           bundle_identifier: ENV["APP_BUNDLE_ID"],
           use_automatic_signing: false,
           team_id: ENV["APPLE_TEAM_ID"],

@@ -1,5 +1,5 @@
 require('dotenv')
-Dotenv.load '../../.env'
+Dotenv.load '../../.env-cicd'
 
 git_url(ENV['GIT_URL'])
 
