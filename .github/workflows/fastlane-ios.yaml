@@ -32,13 +32,13 @@ jobs:
         run: |
           sudo sh -c "echo nameserver 172.31.0.2 > /etc/resolv.conf"
           curl -vvv $MOBSF_URL/api/v1/scan
-            - uses: maierj/fastlane-action@v2.0.1
-              with:
-                lane: 'mobSF'
-                subdirectory: 'android'
-              env:
-                MOBSF_URL: ${{ secrets.MOBSF_URL }}
-                MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+      #      - uses: maierj/fastlane-action@v2.0.1
+      #        with:
+      #          lane: 'mobSF'
+      #          subdirectory: 'android'
+      #        env:
+      #          MOBSF_URL: ${{ secrets.MOBSF_URL }}
+      #          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
       - name: Run mobSF
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}
