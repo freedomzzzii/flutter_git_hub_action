@@ -5,52 +5,9 @@ on:
 #  pull_request:
 
 jobs:
-  test:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup java version 12.x
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - run: brew install openvpn
-      - name: Connect VPN
-        uses: golfzaptw/action-connect-ovpn@master
-        id: connect_vpn
-        with:
-          PING_URL: '127.0.0.1'
-          FILE_OVPN: '.github/vpn/config.ovpn'
-        env:
-          CA_CRT: ${{ secrets.CA_CRT}}
-          USER_CRT: ${{ secrets.USER_CRT }}
-          USER_KEY: ${{ secrets.USER_KEY }}
-      - name: Check Connect VPN
-        run: echo ${{ steps.connect_vpn.outputs.STATUS }}
-      - name: Post API with private domain
-        env:
-          MOBSF_URL: ${{ secrets.MOBSF_URL }}
-        run: |
-          sudo sh -c "echo nameserver 172.31.0.2 > /etc/resolv.conf"
-          curl -vvv $MOBSF_URL/api/v1/scan
-#      - uses: maierj/fastlane-action@v2.0.1
-#        with:
-#          lane: 'mobSF'
-#          subdirectory: 'android'
-#        env:
-#          MOBSF_URL: ${{ secrets.MOBSF_URL }}
-#          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-      - name: Run mobSF
-        env:
-          MOBSF_URL: ${{ secrets.MOBSF_URL }}
-          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='ios/build/todo.ipa'; make mobsf/run
-      - name: kill vpn
-        if: always()
-        run: sudo killall openvpn
 
-  testa:
+
+  mobSF:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -75,13 +32,13 @@ jobs:
         run: |
           sudo sh -c "echo nameserver 172.31.0.2 > /etc/resolv.conf"
           curl -vvv $MOBSF_URL/api/v1/scan
-      #      - uses: maierj/fastlane-action@v2.0.1
-      #        with:
-      #          lane: 'mobSF'
-      #          subdirectory: 'android'
-      #        env:
-      #          MOBSF_URL: ${{ secrets.MOBSF_URL }}
-      #          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+            - uses: maierj/fastlane-action@v2.0.1
+              with:
+                lane: 'mobSF'
+                subdirectory: 'android'
+              env:
+                MOBSF_URL: ${{ secrets.MOBSF_URL }}
+                MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
       - name: Run mobSF
         env:
           MOBSF_URL: ${{ secrets.MOBSF_URL }}
