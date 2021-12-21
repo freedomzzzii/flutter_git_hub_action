@@ -141,9 +141,14 @@ platform:ios do
 
     desc "Build file .ipa for distribute"
     lane:build_file_for_distribution do
-        Dir.chdir("../") do
-            sh("pod install")
-        end
+        cocoapods(
+          clean_install: true,
+          podfile: "Podfile",
+          use_bundle_exec: false
+        )
+#         Dir.chdir("../") do
+#             sh("pod install")
+#         end
 
         sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
         sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
