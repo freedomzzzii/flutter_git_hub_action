@@ -218,8 +218,32 @@ jobs:
           path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
           key: adHoc-comhugemanflutterstarterkit
       - run: ls -la
-      - name: Install dependencies
-        run: make project/install/package
+#      - name: Install dependencies
+#        run: make project/install/package
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'setup'
+          subdirectory: 'ios'
+          verbose: true
+        env:
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
+          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
+          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
+          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
+          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
+          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
+          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
 #      - uses: maierj/fastlane-action@v2.0.1
 #        with:
 #          lane: 'test_lab'
