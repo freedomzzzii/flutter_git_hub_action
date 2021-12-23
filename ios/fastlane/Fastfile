@@ -77,22 +77,17 @@ platform:ios do
         sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --device=model=iphone8,version=13.6,locale=en,orientation=portrait --xcode-version=12.5 ")
     end
 
-    desc "Run mobSF (upload file and scan file)"
-    lane:mobSF do
-        sh("export MOBSF_URL=#{ENV["MOBSF_URL"]}; export MOBSF_API_KEY=#{ENV["MOBSF_API_KEY"]}; export INPUT_FILE_NAME='../Runner.ipa'; bash ../../tool/mobsf-automation.sh")
-    end
-
     # run this lane before deploy to firebase app distribute
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
-        cocoapods(
-          clean_install: true,
-          podfile: "Podfile",
-          use_bundle_exec: false
-        )
-#         Dir.chdir("../") do
-#             sh("pod install")
-#         end
+#         cocoapods(
+#           clean_install: true,
+#           podfile: "Podfile",
+#           use_bundle_exec: false
+#         )
+        Dir.chdir("../") do
+            sh("pod install")
+        end
 
         sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
         sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
@@ -141,11 +136,6 @@ platform:ios do
 
     desc "Build file .ipa for distribute"
     lane:build_file_for_distribution do
-#         cocoapods(
-#           clean_install: true,
-#           podfile: "Podfile",
-#           use_bundle_exec: false
-#         )
         Dir.chdir("../") do
             sh("pod install")
         end
@@ -176,19 +166,12 @@ platform:ios do
     # tag: master
     desc "Deploy a release version to the App store"
     lane:release do
-        app_store_connect_api_key(
-            key_id: ENV["APP_STORE_CONNECT_AUTH_KEY_ID"],
-            issuer_id: ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"],
-            key_filepath: "app_store_connect_key.p8",
-        )
-
         upload_to_app_store(
             username: ENV["APPLE_ID"],
             app_identifier: ENV["APP_BUNDLE_ID"],
             team_id: ENV["APPLE_TEAM_ID"],
             force: true,
-            ipa: "Runner.ipa",
-            precheck_include_in_app_purchases: false,
+            ipa: "Runner.ipa"
         )
     end
 end
