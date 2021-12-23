@@ -188,6 +188,7 @@ platform:ios do
             team_id: ENV["APPLE_TEAM_ID"],
             force: true,
             ipa: "Runner.ipa",
+            precheck_include_in_app_purchases: false,
         )
     end
 end
