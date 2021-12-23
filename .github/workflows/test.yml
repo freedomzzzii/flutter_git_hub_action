@@ -21,6 +21,10 @@ jobs:
       - run: echo "Deploying on branch $GITHUB_REF"
       - run: echo "__ ${{ github.ref_name }}"
       - run: echo "__ ${{ github.ref }}"
+      - run: echo "__ ${{ github.base_ref }}"
+      - run: echo "__ ${{ github.head_ref }}"
+      - run: echo "__ ${{ github.ref_protected }}"
+
 
   feature:
     if: ${{ github.ref == 'refs/heads/feature/*' }}
