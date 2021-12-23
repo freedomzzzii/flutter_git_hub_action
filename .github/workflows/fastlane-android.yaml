@@ -2,7 +2,30 @@ name: CI/CD fastlane for Android
 
 on:
 #  push:
-  pull_request:
+#  pull_request:
+  workflow_dispatch:
+    inputs:
+      apiUrl:
+        description: 'API URL'
+        required: true
+      ssrUrl:
+        description: 'Server send event URL'
+        required: true
+      grpcWebScheme:
+        description: 'GRPC web scheme'
+        required: true
+      grpcWebDomain:
+        description: 'GRPC web domain name'
+        required: true
+      grpcWebPort:
+        description: 'GRPC web running port number'
+        required: true
+      grpcMobileDomain:
+        description: 'GRPC mobile domain name'
+        required: true
+      grpcMobilePort:
+        description: 'GRPC mobile running port number'
+        required: true
 
 jobs:
   setup:
