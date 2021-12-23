@@ -86,12 +86,6 @@ jobs:
           cd ios; cat << EOF >> app_store_connect_key.p8
           ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
           EOF
-#      - name: Create file app_store_connect_key_base64.txt
-#        run: |
-#          cd ios; cat << EOF >> app_store_connect_key_base64.txt
-#          ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_P8 }}
-#          EOF
-#      - run: base64 -d ios/app_store_connect_key_base64.txt > ios/app_store_connect_key.p8
       - name: Create file distribute_p12_base64.txt
         run: |
           cd ios; cat << EOF >> distribute_p12_base64.txt
@@ -219,9 +213,6 @@ jobs:
 #        with:
 #          path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
 #          key: adHoc-comhugemanflutterstarterkit
-      - run: ls -la
-#      - name: Install dependencies
-#        run: make project/install/package
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'setup'

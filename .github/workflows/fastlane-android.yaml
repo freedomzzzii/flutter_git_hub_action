@@ -1,8 +1,8 @@
 name: CI/CD fastlane for Android
 
 on:
-#  push:
-  pull_request:
+  push:
+#  pull_request:
 
 jobs:
   setup:
