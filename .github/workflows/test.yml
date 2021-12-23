@@ -18,6 +18,7 @@ jobs:
       - run: |
           echo "Hello ${{ github.event.inputs.name }}!"
           echo "- in ${{ github.event.inputs.home }}!"
+      - run: echo "Deploying on branch $GITHUB_REF"
 
   feature:
     if: ${{ github.ref == 'refs/heads/feature/*' }}
