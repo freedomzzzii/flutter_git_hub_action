@@ -39,8 +39,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - run: |
-          echo "Hello ${{ github.event.inputs.name }}!"
-          echo "- in ${{ github.event.inputs.home }}!"
+          echo "Hello ${{ github.event.inputs.apiUrl }}!"
+          echo "Hello ${{ github.event.inputs.ssrUrl }}!"
+          echo "Hello ${{ github.event.inputs.grpcWebScheme }}!"
+          echo "Hello ${{ github.event.inputs.grpcWebDomain }}!"
+          echo "Hello ${{ github.event.inputs.grpcWebPort }}!"
+          echo "Hello ${{ github.event.inputs.grpcMobileDomain }}!"
+          echo "Hello ${{ github.event.inputs.grpcMobilePort }}!"
       - name: Create file .env
         run: |
           cat << EOF >> .env
