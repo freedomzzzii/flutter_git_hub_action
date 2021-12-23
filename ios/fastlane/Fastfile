@@ -181,7 +181,9 @@ platform:ios do
             app_identifier: ENV["APP_BUNDLE_ID"],
             team_id: ENV["APPLE_TEAM_ID"],
             force: true,
-            ipa: "Runner.ipa"
+            ipa: "Runner.ipa",
+            api_key_path: "../app_store_connect_key.p8",
+            api_key: ENV["APP_STORE_CONNECT_AUTH_KEY_P8"],
         )
     end
 end
