@@ -275,11 +275,6 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-      - uses: actions/cache@v2
-        id: file-ipa-distribute
-        with:
-          path: ./ios/Runner.ipa
-          key: file-ipa-distribute
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'build_file_for_app_distribution'
@@ -338,6 +333,11 @@ jobs:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           APP_STORE_CONNECT_AUTH_KEY_ID: ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID }}
           APP_STORE_CONNECT_AUTH_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
+      - uses: actions/cache@v2
+        id: file-ipa-distribute
+        with:
+          path: ./ios/Runner.ipa
+          key: file-ipa-distribute
 
 
 
