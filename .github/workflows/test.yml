@@ -10,11 +10,29 @@ on:
         description: 'location'
         required: false
         default: 'The Octoverse'
+      apiUrl:
+        description: 'API URL'
+        required: true
 
 jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - run: |
           echo "Hello ${{ github.event.inputs.name }}!"
           echo "- in ${{ github.event.inputs.home }}!"
+      - name: Create file .env
+        run: |
+          cat << EOF >> .env
+          API_URL=${{ github.event.inputs.apiUrl }}
+          SSR_URL=${{ github.event.inputs.ssrUrl }}
+          GRPC_WEB_SCHEME=${{ github.event.inputs.grpcWebScheme }}
+          GRPC_WEB_DOMAIN=${{ github.event.inputs.grpcWebDomain }}
+          GRPC_WEB_PORT=${{ github.event.inputs.grpcWebPort }}
+          GRPC_MOBILE_DOMAIN=${{ github.event.inputs.grpcMobileDomain }}
+          GRPC_MOBILE_PORT=${{ github.event.inputs.grpcMobilePort }}
+          EOF
+      - run: ls -la
+      - run: cd ios; ls -la
