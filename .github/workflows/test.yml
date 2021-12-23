@@ -24,6 +24,13 @@ jobs:
       - run: echo "__ ${{ github.base_ref }}"
       - run: echo "__ ${{ github.head_ref }}"
       - run: echo "__ ${{ github.ref_protected }}"
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_distribution_group_developer'
+          subdirectory: 'android'
+        env:
+          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
 
   feature:
