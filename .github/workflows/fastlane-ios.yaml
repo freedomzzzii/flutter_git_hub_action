@@ -324,7 +324,7 @@ jobs:
           EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
       - uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: 'app_distribution_group_developer'
+          lane: 'app_distribution_group_developer' # can run specific group for test with input
           subdirectory: 'ios'
           verbose: true
         env:

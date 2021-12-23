@@ -459,7 +459,7 @@ jobs:
           key: file-apk
       - uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: 'app_distribution_group_developer'
+          lane: 'app_distribution_group_developer' # can run specific group for test with input
           subdirectory: 'android'
         env:
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
