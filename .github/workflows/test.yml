@@ -1,57 +1,23 @@
-name: Manually triggered workflow
+name: Manually triggered workflow test
 on:
   workflow_dispatch:
     inputs:
-      apiUrl:
-        description: 'API URL'
+      name:
+        description: 'Person to greet'
         required: true
-      ssrUrl:
-        description: 'Server send event URL'
-        required: true
-      grpcWebScheme:
-        description: 'GRPC web scheme'
-        required: true
-      grpcWebDomain:
-        description: 'GRPC web domain name'
-        required: true
-      grpcWebPort:
-        description: 'GRPC web running port number'
-        required: true
-      grpcMobileDomain:
-        description: 'GRPC mobile domain name'
-        required: true
-      grpcMobilePort:
-        description: 'GRPC mobile running port number'
-        required: true
+        default: 'Mona the Octocat'
+      home:
+        description: 'location'
+        required: false
+        default: 'The Octoverse'
 
 jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - run: |
-          echo "Hello ${{ github.event.inputs.apiUrl }}!"
-          echo "Hello ${{ github.event.inputs.ssrUrl }}!"
-          echo "Hello ${{ github.event.inputs.grpcWebScheme }}!"
-          echo "Hello ${{ github.event.inputs.grpcWebDomain }}!"
-          echo "Hello ${{ github.event.inputs.grpcWebPort }}!"
-          echo "Hello ${{ github.event.inputs.grpcMobileDomain }}!"
-          echo "Hello ${{ github.event.inputs.grpcMobilePort }}!"
-      - name: Create file .env
-        run: |
-          cat << EOF >> .env
-          API_URL=${{ github.event.inputs.apiUrl }}
-          SSR_URL=${{ github.event.inputs.ssrUrl }}
-          GRPC_WEB_SCHEME=${{ github.event.inputs.grpcWebScheme }}
-          GRPC_WEB_DOMAIN=${{ github.event.inputs.grpcWebDomain }}
-          GRPC_WEB_PORT=${{ github.event.inputs.grpcWebPort }}
-          GRPC_MOBILE_DOMAIN=${{ github.event.inputs.grpcMobileDomain }}
-          GRPC_MOBILE_PORT=${{ github.event.inputs.grpcMobilePort }}
-          EOF
-      - run: ls -la
-      - run: cd ios; ls -la
-      - run: echo "Deploying on branch $GITHUB_REF"
+          echo "Hello ${{ github.event.inputs.name }}!"
+          echo "- in ${{ github.event.inputs.home }}!"
 
   feature:
     if: ${{ github.ref == 'refs/heads/feature/*' }}
