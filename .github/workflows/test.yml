@@ -51,6 +51,7 @@ jobs:
           EOF
       - run: ls -la
       - run: cd ios; ls -la
+      - run: echo "Deploying on branch $GITHUB_REF"
 
   feature:
     if: ${{ github.ref == 'refs/heads/feature/*' }}
