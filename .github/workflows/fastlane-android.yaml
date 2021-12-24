@@ -449,8 +449,7 @@ jobs:
         if: always()
         run: sudo killall openvpn
 
-  firebase_app_distribute_developer_qa:
-    if: ${{ github.event.inputs.branch == 'feature' || github.event.inputs.branch == 'develop' || github.event.inputs.branch == 'bugfix' || github.event.inputs.branch == 'hotfix' }}
+  firebase_app_distribute:
     needs: [ setup, build_apk, test_lab, mobSF ]
 
     runs-on: ubuntu-latest
@@ -462,49 +461,27 @@ jobs:
         with:
           path: ./build/app/outputs/apk/release/app-release.apk
           key: file-apk
-      - uses: maierj/fastlane-action@v2.0.1
+      - name: Push file to firebase app distribute (group developer, qa)
+        if: ${{ github.event.inputs.branch == 'feature' || github.event.inputs.branch == 'develop' || github.event.inputs.branch == 'bugfix' || github.event.inputs.branch == 'hotfix' }}
+        uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'app_distribution_group_developer_qa' # can run specific group for test with input
           subdirectory: 'android'
         env:
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
-  firebase_app_distribute_developer_qa_user:
-    if: ${{ github.event.inputs.branch == 'release' }}
-    needs: [ setup, build_apk, test_lab, mobSF ]
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        id: file-apk
-        with:
-          path: ./build/app/outputs/apk/release/app-release.apk
-          key: file-apk
-      - uses: maierj/fastlane-action@v2.0.1
+      - name: Push file to firebase app distribute (group developer, qa, user)
+        if: ${{ github.event.inputs.branch == 'release' }}
+        uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'app_distribution_group_developer_qa_user' # can run specific group for test with input
           subdirectory: 'android'
         env:
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
-  firebase_app_distribute_qa:
-    if: ${{ github.event.inputs.branch == 'main' }}
-    needs: [ setup, build_apk, test_lab, mobSF ]
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        id: file-apk
-        with:
-          path: ./build/app/outputs/apk/release/app-release.apk
-          key: file-apk
-      - uses: maierj/fastlane-action@v2.0.1
+      - name: Push file to firebase app distribute (group qa)
+        if: ${{ github.event.inputs.branch == 'main' }}
+        uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'app_distribution_group_qa' # can run specific group for test with input
           subdirectory: 'android'
@@ -513,7 +490,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   play_store:
-    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute_developer_qa, firebase_app_distribute_developer_qa_user, firebase_app_distribute_qa ]
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute ]
     runs-on: ubuntu-latest
 
     steps:
@@ -601,7 +578,7 @@ jobs:
 
   notify_slack_success:
     runs-on: ubuntu-latest
-    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute_developer_qa, firebase_app_distribute_developer_qa_user, firebase_app_distribute_qa, play_store ]
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute, play_store ]
     if: success()
     steps:
       - name: Notify test result
@@ -613,7 +590,7 @@ jobs:
 
   notify_slack_failure:
     runs-on: ubuntu-latest
-    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute_developer_qa, firebase_app_distribute_developer_qa_user, firebase_app_distribute_qa, play_store ]
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute, play_store ]
     if: failure()
     steps:
       - name: Notify test result
