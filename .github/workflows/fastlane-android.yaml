@@ -513,7 +513,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   play_store:
-    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute ]
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute_developer_qa, firebase_app_distribute_developer_qa_user, firebase_app_distribute_qa ]
     runs-on: ubuntu-latest
 
     steps:
