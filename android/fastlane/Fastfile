@@ -38,7 +38,7 @@ platform:android do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "developer, qa",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk"
+            apk_path: "../build/app/outputs/apk/release/app-release.apk",
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
       )
     end
@@ -48,7 +48,7 @@ platform:android do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "developer, qa, user",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk"
+            apk_path: "../build/app/outputs/apk/release/app-release.apk",
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
       )
     end
@@ -58,7 +58,7 @@ platform:android do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "qa",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk"
+            apk_path: "../build/app/outputs/apk/release/app-release.apk",
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
       )
     end
