@@ -36,7 +36,7 @@ platform:android do
     desc "Deploy app for testing (group developer, qa) to the Firebase App Distribute"
     lane:app_distribution_group_developer_qa do
         firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "developer, qa",
             ipa_path: 'build/todo.ipa',
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
@@ -46,7 +46,7 @@ platform:android do
     desc "Deploy app for testing (group developer, qa) to the Firebase App Distribute"
     lane:app_distribution_group_developer_qa_user do
         firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "developer, qa, user",
             ipa_path: 'build/todo.ipa',
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
@@ -56,7 +56,7 @@ platform:android do
     desc "Deploy app for testing (group developer, qa, user) to the Firebase App Distribute"
     lane:app_distribution_group_qa do
         firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
             groups: "qa",
             ipa_path: 'build/todo.ipa',
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
