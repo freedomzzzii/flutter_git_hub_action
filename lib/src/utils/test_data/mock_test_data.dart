@@ -1,9 +1,6 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_starter_kit/src/helpers/check_os/check_os_helper.dart';
-import 'package:universal_html/html.dart';
 
 import '../../modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import '../../modules/todo_module/applications/bloc/task_sse_bloc/task_sse_bloc.dart';
 import '../../modules/todo_module/applications/models/error_bloc_model.dart';
 import '../../modules/todo_module/applications/models/exception_bloc_model.dart';
 import '../../modules/todo_module/applications/models/task_bloc_models/task_create_bloc_model.dart';
@@ -30,7 +27,7 @@ import '../image_picker/image_picker_util.dart';
 final Faker faker = Faker();
 
 final TaskGetResponseEntity expectTaskGetResponseEntity = TaskGetResponseEntity(
-  id: faker.internet.ipv6Address(),
+  id: faker.guid.toString(),
   title: faker.person.name(),
   imageUrl: '''
 iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=''',
@@ -364,72 +361,3 @@ final LocalNotificationUtilError expectLocalNotificationUtilError =
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
-
-final EventSource expectEventSource =
-    EventSource(expectTaskGetResponseEntity.title);
-
-final TaskSseConnectGetTaskState expectTaskSseConnectGetTaskState =
-    TaskSseConnectGetTaskState(
-  status: taskSseStatusState.success,
-  eventSource: expectEventSource,
-  error: exceptErrorBlocModel,
-  exception: expectExceptionBlocModel,
-);
-
-final TaskSseGetTaskState expectTaskSseGetTaskStateError = TaskSseGetTaskState(
-  status: taskSseStatusState.failure,
-  eventSource: expectEventSource,
-  error: exceptErrorBlocModel,
-  exception: expectExceptionBlocModel,
-  data: expectTaskGetResponseBlocModelList,
-);
-
-final TaskSseGetTaskState expectTaskSseGetTaskState = TaskSseGetTaskState(
-  status: taskSseStatusState.success,
-  data: expectTaskGetResponseBlocModelList,
-);
-
-const TaskSseGetTaskState expectTaskSseGetTaskStateEmpty = TaskSseGetTaskState(
-  status: taskSseStatusState.success,
-);
-
-final ErrorBlocModel expectErrorBlocModel = ErrorBlocModel(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final ExceptionBlocModel expectExceptionBlocModel = ExceptionBlocModel(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final TaskSseCloseConnectState expectTaskSseCloseConnectStateError =
-    TaskSseCloseConnectState(
-  exception: expectExceptionBlocModel,
-      error: expectErrorBlocModel,
-  status: taskSseStatusState.failure,
-);
-
-const TaskSseCloseConnectState expectTaskSseCloseConnectState =
-    TaskSseCloseConnectState(
-  status: taskSseStatusState.success,
-);
-
-final TaskSseConnectGetTaskState expectTaskSseConnectGetTaskStateError =
-    TaskSseConnectGetTaskState(
-  error: expectErrorBlocModel,
-  exception: expectExceptionBlocModel,
-  status: taskSseStatusState.failure,
-);
-
-final dynamic expectSseResponse = '''
-{"data":[{"id":"${expectTaskGetResponseEntity.id}","title":"${expectTaskGetResponseEntity.title}","isDone":${expectTaskGetResponseEntity.isDone},"imageUrl":"${expectTaskGetResponseEntity.imageUrl}","createdAt":"${expectTaskGetResponseEntity.createdAt}"}]}''';
-
-final TaskSseInitialState expectTaskSseInitialState = TaskSseInitialState();
-
-final GetOsError expectGetOsError = GetOsError(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final TaskLoadingState expectTaskLoadingState = TaskLoadingState();

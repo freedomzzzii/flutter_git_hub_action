@@ -28,7 +28,6 @@ dependencies:
   dio_firebase_performance: ^0.3.0
   firebase_messaging: ^10.0.8
   flutter_local_notifications: ^9.0.0
-  universal_html: ^2.0.8
 
 dev_dependencies:
   flutter_driver:

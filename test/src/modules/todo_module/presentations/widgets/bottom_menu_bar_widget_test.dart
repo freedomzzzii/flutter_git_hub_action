@@ -56,10 +56,6 @@ void main() {
         find.text(AppLocalizations.of(testContext).updateBottomMenu),
         findsOneWidget,
       );
-      expect(
-        find.text(AppLocalizations.of(testContext).sseBottomMenu),
-        findsOneWidget,
-      );
     });
 
     testWidgets('Should navigate to screen (list, create, update)',

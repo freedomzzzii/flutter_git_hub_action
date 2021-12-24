@@ -26,6 +26,9 @@ on:
       grpcMobilePort:
         description: 'GRPC mobile running port number'
         required: true
+      branch:
+        description: 'Branch trigger workflow'
+        required: true
 
 jobs:
   setup:

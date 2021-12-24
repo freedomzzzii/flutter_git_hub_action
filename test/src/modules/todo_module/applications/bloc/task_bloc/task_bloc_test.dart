@@ -184,7 +184,6 @@ Should map TaskCreatedEvent to state - Failure case (throw error from usecase)''
           bloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)),
       expect: () {
         return <TaskState>[
-          expectTaskLoadingState,
           expectTaskGetStateSuccess,
         ];
       },
@@ -206,7 +205,6 @@ Should map TaskGotEvent to state - Failure case (throw error from usecase)''',
           bloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)),
       expect: () {
         return <TaskState>[
-          expectTaskLoadingState,
           expectTaskGetStateError,
         ];
       },

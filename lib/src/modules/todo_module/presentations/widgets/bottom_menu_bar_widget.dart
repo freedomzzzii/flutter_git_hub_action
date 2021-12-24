@@ -23,9 +23,6 @@ class BottomMenuBarWidget extends StatelessWidget {
         case 2:
           Modular.to.pushNamed(updateTaskRoute);
           break;
-        case 3:
-          Modular.to.pushNamed(getTaskSseRoute);
-          break;
         default:
           Modular.to.pushNamed(notFoundRoute);
           break;
@@ -51,13 +48,8 @@ class BottomMenuBarWidget extends StatelessWidget {
           label: AppLocalizations.of(context).updateBottomMenu,
           icon: const Icon(Icons.update),
         ),
-        BottomNavigationBarItem(
-          label: AppLocalizations.of(context).sseBottomMenu,
-          icon: const Icon(Icons.list),
-        ),
       ],
       selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
       currentIndex: _currentTabIndex,
       onTap: (int newTabIndex) => _navigateToScreen(newTabIndex),
     );

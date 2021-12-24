@@ -18,15 +18,6 @@ class TaskInitialState extends TaskState {
   List<Object> get props => <Object>[_status];
 }
 
-class TaskLoadingState extends TaskState {
-  final taskStatusState _status = taskStatusState.loading;
-
-  taskStatusState get status => _status;
-
-  @override
-  List<Object> get props => <Object>[_status];
-}
-
 class TaskCreateState extends TaskState {
   const TaskCreateState({
     ErrorBlocModel? error,

@@ -72,8 +72,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required TaskGotEvent event,
   }) async* {
     try {
-      yield TaskLoadingState();
-
       final List<TaskGetResponseEntity>? responseUseCase = await _usecase.get(
         query: TaskGetRequestEntity(
           sortBy: event.model.sortBy,
