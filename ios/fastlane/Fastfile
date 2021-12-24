@@ -21,8 +21,6 @@ platform:ios do
             sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
             # copy provisioning profile
             sh('mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles')
-            sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
-            sh('cp ../AdHoc_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
         else
             create_keychain(
                 name: "cicd.keychain-db",
@@ -30,6 +28,7 @@ platform:ios do
                 timeout: 0,
                 password: ENV["KEYCHAIN_PASSWORD"],
             )
+
             import_certificate(
                 certificate_path: "distribution.cer",
                 keychain_name: "cicd.keychain-db",
@@ -41,6 +40,9 @@ platform:ios do
                 keychain_password: ENV["KEYCHAIN_PASSWORD"]
             )
         end
+
+        sh('cp ../Distribute_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
+        sh('cp ../AdHoc_comhugemanflutterstarterkit.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles')
 
         sh("echo #{ENV['BUILD_NUMBER']}")
         sh("cd ../../; ls -la;export BUILD_NUMBER=#{ENV['BUILD_NUMBER']}; perl -i -pe 's/^(version:)((\\s+\\d+\\.\\d+\\.\\d+\\+)|(\\s+\\d+\\.\\d+\\.\\d+\\-\\w+\\+))(\\d+)$/$1.$2.$ENV{BUILD_NUMBER}/e' pubspec.yaml")
@@ -59,7 +61,9 @@ platform:ios do
         end
 
         sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
-        sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        if is_ci
+            sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        end
         # build file
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
         sh("flutter build ios integration_test/main_integration_test.dart --release")
@@ -95,48 +99,54 @@ platform:ios do
 #         end
 
         sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
-        sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        if is_ci
+            sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        end
 
        update_code_signing_settings(
-         path: "Runner.xcodeproj",
-         targets: "Runner",
-         profile_name: ENV["ADHOC_PROFILE_NAME"],
-         bundle_identifier: ENV["APP_BUNDLE_ID"],
-         use_automatic_signing: false,
-         team_id: ENV["APPLE_TEAM_ID"],
-         code_sign_identity:  "Apple Distribution",
+            path: "Runner.xcodeproj",
+            targets: "Runner",
+            profile_name: ENV["ADHOC_PROFILE_NAME"],
+            bundle_identifier: ENV["APP_BUNDLE_ID"],
+            use_automatic_signing: false,
+            team_id: ENV["APPLE_TEAM_ID"],
+            code_sign_identity:  "Apple Distribution",
         )
 
         sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath ../build/Release.xcarchive")
         sh("xcodebuild -exportArchive -archivePath ../build/Release.xcarchive -exportOptionsPlist ../exportOptions.plist -exportPath ../build/")
+
+        sh('export file=$(find ../build/ -name "*.ipa"); cp $file ../build/Runner.ipa')
     end
 
-    # branches: feature, develop, bugfix, hotfix, release
-    desc "Deploy a release version to the Firebase App Distribute for Developer testing"
-    lane:app_distribution_group_developer do
+    desc "Deploy app for testing (group developer, qa) to the Firebase App Distribute"
+    lane:app_distribution_group_developer_qa do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "developer",
-            ipa_path: 'build/todo.ipa'
+            groups: "developer, qa",
+            ipa_path: 'build/Runner.ipa',
+            release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
+        )
+    end
+
+    desc "Deploy app for testing (group developer, qa) to the Firebase App Distribute"
+    lane:app_distribution_group_developer_qa_user do
+        firebase_app_distribution(
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
+            groups: "developer, qa, user",
+            ipa_path: 'build/Runner.ipa',
+            release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
       )
     end
 
-    # branches: feature, develop, bugfix, hotfix, release, master(pre-prod)[tag]
-    desc "Deploy a release version to the Firebase App Distribute for QA testing"
+    desc "Deploy app for testing (group developer, qa, user) to the Firebase App Distribute"
     lane:app_distribution_group_qa do
         firebase_app_distribution(
             app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
             groups: "qa",
+            ipa_path: 'build/Runner.ipa',
+            release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
       )
-    end
-
-     # branch: release
-    desc "Deploy a release version to the Firebase App Distribute for User testing"
-    lane:app_distribution_group_user do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
-            groups: "user",
-        )
     end
 
     desc "Build file .ipa for distribute"
@@ -151,7 +161,9 @@ platform:ios do
         end
 
         sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
-        sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        if is_ci
+            sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        end
 
         update_code_signing_settings(
           path: "Runner.xcodeproj",

@@ -522,7 +522,7 @@ jobs:
 #        env:
 #          MOBSF_URL: ${{ secrets.MOBSF_URL }}
 #          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-#        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='ios/Runner.ipa'; make mobsf/run
+  #        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='ios/a.ipa'; make mobsf/run
 
 
 
