@@ -490,6 +490,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   play_store:
+    if: ${{ github.event.inputs.branch == 'main' }}
     needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute ]
     runs-on: ubuntu-latest
 
