@@ -1,4 +1,4 @@
-name: Manually triggered workflow
+name: Manually triggered workflow test
 on:
   workflow_dispatch:
     inputs:
@@ -18,3 +18,32 @@ jobs:
       - run: |
           echo "Hello ${{ github.event.inputs.name }}!"
           echo "- in ${{ github.event.inputs.home }}!"
+      - run: echo "Deploying on branch $GITHUB_REF"
+      - run: echo "__ ${{ github.ref_name }}"
+      - run: echo "__ ${{ github.ref }}"
+      - run: echo "__ ${{ github.base_ref }}"
+      - run: echo "__ ${{ github.head_ref }}"
+      - run: echo "__ ${{ github.ref_protected }}"
+
+  notify_slack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify test result
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#90be6d'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: Job is success
+
+
+  feature:
+    if: ${{ github.ref == 'refs/heads/feature/*' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying on branch $GITHUB_REF"
+
+  main:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying on branch $GITHUB_REF"
