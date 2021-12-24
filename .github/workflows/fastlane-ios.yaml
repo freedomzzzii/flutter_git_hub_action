@@ -1,7 +1,7 @@
 name: CI/CD fastlane for iOS
 
 on:
-#  push:
+  push:
 #  pull_request:
   workflow_dispatch:
     inputs:
