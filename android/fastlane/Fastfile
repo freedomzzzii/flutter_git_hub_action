@@ -33,42 +33,34 @@ platform:android do
         sh("flutter build appbundle --release")
     end
 
-    # branches: feature, develop, bugfix, hotfix, release
-    desc "Deploy a beta version to the Firebase App Distribute for Developer testing"
-    lane:app_distribution_group_developer do
-
+    desc "Deploy app for testing (group developer, qa) to the Firebase App Distribute"
+    lane:app_distribution_group_developer_qa do
         firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
-            groups: "developer",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk"
-        )
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
+            groups: "developer, qa",
+            ipa_path: 'build/todo.ipa',
+            release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
+      )
     end
 
-    # branches: feature, develop, bugfix, hotfix, release, master(pre-prod)[tag]
-    desc "Deploy a beta version to the Firebase App Distribute for QA testing"
+    desc "Deploy app for testing (group developer, qa) to the Firebase App Distribute"
+    lane:app_distribution_group_developer_qa_user do
+        firebase_app_distribution(
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
+            groups: "developer, qa, user",
+            ipa_path: 'build/todo.ipa',
+            release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
+      )
+    end
+
+    desc "Deploy app for testing (group developer, qa, user) to the Firebase App Distribute"
     lane:app_distribution_group_qa do
         firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
+            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS"],
             groups: "qa",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk"
-       )
-
-        slack(
-            message: "Deploy a beta version to the Firebase App Distribute for QA testing is success",
-            channel: ENV["FASTLANE_SLACK_CHANNEL"],
-            slack_url: ENV["FASTLANE_SLACK_WEB_HOOK"],
-            default_payloads: ["lane", "test_result", "git_branch", "git_author"]
-        )
-    end
-
-    # branch: release
-    desc "Deploy a beta version to the Firebase App Distribute for User testing"
-    lane:app_distribution_group_user do
-        firebase_app_distribution(
-            app: ENV["FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID"],
-            groups: "user",
-            apk_path: "../build/app/outputs/apk/release/app-release.apk"
-        )
+            ipa_path: 'build/todo.ipa',
+            release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
+      )
     end
 
     # tag: master

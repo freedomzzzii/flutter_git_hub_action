@@ -26,6 +26,9 @@ on:
       grpcMobilePort:
         description: 'GRPC mobile running port number'
         required: true
+      branch:
+        description: 'Branch trigger workflow'
+        required: true
 
 jobs:
   setup:
@@ -74,6 +77,7 @@ jobs:
           GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
           SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
           BUILD_NUMBER=$BUILD_NUMBER
+          BRANCH_NAME=${{ github.event.inputs.branch }}
           EOF
       - name: Create file google-services.json
         run: |
@@ -445,10 +449,11 @@ jobs:
         if: always()
         run: sudo killall openvpn
 
-  firebase_app_distribute:
+  firebase_app_distribute_developer_qa:
+    if: ${{ github.event.inputs.branch == 'feature' || github.event.inputs.branch == 'develop' || github.event.inputs.branch == 'bugfix' || github.event.inputs.branch == 'hotfix' }}
     needs: [ setup, build_apk, test_lab, mobSF ]
-    runs-on: ubuntu-latest
 
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -459,7 +464,49 @@ jobs:
           key: file-apk
       - uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: 'app_distribution_group_developer' # can run specific group for test with input
+          lane: 'app_distribution_group_developer_qa' # can run specific group for test with input
+          subdirectory: 'android'
+        env:
+          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  firebase_app_distribute_developer_qa_user:
+    if: ${{ github.event.inputs.branch == 'release' }}
+    needs: [ setup, build_apk, test_lab, mobSF ]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: file-apk
+        with:
+          path: ./build/app/outputs/apk/release/app-release.apk
+          key: file-apk
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_distribution_group_developer_qa_user' # can run specific group for test with input
+          subdirectory: 'android'
+        env:
+          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+  firebase_app_distribute_qa:
+    if: ${{ github.event.inputs.branch == 'main' }}
+    needs: [ setup, build_apk, test_lab, mobSF ]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: file-apk
+        with:
+          path: ./build/app/outputs/apk/release/app-release.apk
+          key: file-apk
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_distribution_group_qa' # can run specific group for test with input
           subdirectory: 'android'
         env:
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID: ${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
