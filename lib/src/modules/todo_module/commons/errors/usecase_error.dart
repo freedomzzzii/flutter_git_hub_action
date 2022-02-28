@@ -101,3 +101,81 @@ class TaskDeleteUseCaseError implements AppError {
   @override
   String toString() => '$errorContext code: $_code, message: $_message';
 }
+
+class TaskStreamGetUseCaseError implements AppError {
+  TaskStreamGetUseCaseError({
+    required String message,
+    appErrorCodes code = appErrorCodes.unknownError,
+  })  : _message = message,
+        _code = code;
+
+  final String _message;
+  final appErrorCodes _code;
+
+  static const String errorContext = 'Error in stream get use case:';
+
+  @override
+  String get message => _message;
+
+  @override
+  appErrorCodes get code => _code;
+
+  @override
+  StackTrace? get stackTrace =>
+      throw '$errorContext code: $_code, message: $_message';
+
+  @override
+  String toString() => '$errorContext code: $_code, message: $_message';
+}
+
+class TaskSendDataUseCaseError implements AppError {
+  TaskSendDataUseCaseError({
+    required String message,
+    appErrorCodes code = appErrorCodes.unknownError,
+  })  : _message = message,
+        _code = code;
+
+  final String _message;
+  final appErrorCodes _code;
+
+  static const String errorContext = 'Error in task send data use case:';
+
+  @override
+  String get message => _message;
+
+  @override
+  appErrorCodes get code => _code;
+
+  @override
+  StackTrace? get stackTrace =>
+      throw '$errorContext code: $_code, message: $_message';
+
+  @override
+  String toString() => '$errorContext code: $_code, message: $_message';
+}
+
+class TaskDisconnectUseCaseError implements AppError {
+  TaskDisconnectUseCaseError({
+    required String message,
+    appErrorCodes code = appErrorCodes.unknownError,
+  })  : _message = message,
+        _code = code;
+
+  final String _message;
+  final appErrorCodes _code;
+
+  static const String errorContext = 'Error in task disconnect use case:';
+
+  @override
+  String get message => _message;
+
+  @override
+  appErrorCodes get code => _code;
+
+  @override
+  StackTrace? get stackTrace =>
+      throw '$errorContext code: $_code, message: $_message';
+
+  @override
+  String toString() => '$errorContext code: $_code, message: $_message';
+}

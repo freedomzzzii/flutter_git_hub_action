@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_starter_kit/src/commons/constants/env_constant.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/services/models/task_get_datasource_model.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../../../commons/errors/app_error.dart';
 import '../../../../../commons/exceptions/app_exception.dart';
@@ -40,7 +45,45 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield* _mapTaskSelectedToUpdateEventToState(event: event);
     } else if (event is TaskDeletedEvent) {
       yield* _mapTaskDeletedEventToState(event: event);
+    } else if (event is TaskStreamSubscriptionEvent) {
+      yield* _mapTaskStreamSubscriptionEventToState(event: event);
+    } else if (event is TaskStreamGotEvent) {
+      yield* _mapGetStreamEventToState(event: event);
+    } else if (event is TaskRefreshStreamGetEvent) {
+      yield* _mapTaskRefreshStreamGetEventToState(event: event);
+    } else if (event is TaskDisconnectStreamGetEvent) {
+      yield* _mapTaskDisconnectStreamGetEventToState(event: event);
     }
+  }
+
+  void _subscribe(WebSocketChannel channel) {
+    channel.stream.listen((dynamic data) {
+      _convertData(data);
+    });
+  }
+
+  List<dynamic>? _convertData(dynamic data) {
+    final dynamic body = json.decode(data as String);
+    final List<TaskGetResponseDataSourceModel>? result =
+    (body['data'] as List<dynamic>?)?.map((dynamic data) {
+      return TaskGetResponseDataSourceModel.fromJson(
+        data as Map<String, dynamic>,
+      );
+    }).toList();
+
+    final List<TaskGetResponseBlocModel> taskGetResponseBlocModel =
+    result == null
+        ? <TaskGetResponseBlocModel>[]
+        : result.map((TaskGetResponseDataSourceModel task) {
+      return TaskGetResponseBlocModel(
+        id: task.id,
+        title: task.title,
+        isDone: task.isDone,
+        imageUrl: task.imageUrl,
+        createdAt: task.createdAt,
+      );
+    }).toList();
+    add(TaskStreamGotEvent(model: taskGetResponseBlocModel));
   }
 
   Stream<TaskState> _mapTaskCreatedEventToState({
@@ -72,6 +115,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required TaskGotEvent event,
   }) async* {
     try {
+      yield TaskLoadingState();
+
       final List<TaskGetResponseEntity>? responseUseCase = await _usecase.get(
         query: TaskGetRequestEntity(
           sortBy: event.model.sortBy,
@@ -188,6 +233,94 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         exception: e is AppException
             ? ExceptionBlocModel(message: e.message, code: e.code)
             : null,
+      );
+    }
+  }
+
+  Stream<TaskState> _mapTaskStreamSubscriptionEventToState({
+    required TaskStreamSubscriptionEvent event,
+  }) async* {
+    try {
+      final WebSocketChannel channel =
+      _usecase.streamGet(url: '${dotenv.env[webSocketUrlEnv]}');
+      _subscribe(channel);
+      yield TaskStreamSubscriptionState(
+        status: taskStatusState.success,
+        channel: channel,
+      );
+    } catch (e) {
+      yield TaskStreamSubscriptionState(
+        error: e is AppError
+            ? ErrorBlocModel(message: e.message, code: e.code)
+            : null,
+        exception: e is AppException
+            ? ExceptionBlocModel(message: e.message, code: e.code)
+            : null,
+        status: taskStatusState.failure,
+      );
+    }
+  }
+
+  Stream<TaskState> _mapGetStreamEventToState({
+    required TaskStreamGotEvent event,
+  }) async* {
+    yield TaskStreamGetState(
+      status: taskStatusState.success,
+      data: event.model,
+      channel: state.channel,
+    );
+  }
+
+  Stream<TaskState> _mapTaskRefreshStreamGetEventToState({
+    required TaskRefreshStreamGetEvent event,
+  }) async* {
+    try {
+      if (state.channel != null) {
+        _usecase.sendData(channel: state.channel!, data: 'data');
+        yield const TaskRefreshStreamGetState(
+          status: taskStatusState.success,
+        );
+      } else {
+        yield const TaskRefreshStreamGetState(
+          status: taskStatusState.failure,
+        );
+      }
+    } catch (e) {
+      yield TaskRefreshStreamGetState(
+        error: e is AppError
+            ? ErrorBlocModel(message: e.message, code: e.code)
+            : null,
+        exception: e is AppException
+            ? ExceptionBlocModel(message: e.message, code: e.code)
+            : null,
+        status: taskStatusState.failure,
+      );
+    }
+  }
+
+  Stream<TaskState> _mapTaskDisconnectStreamGetEventToState({
+    required TaskDisconnectStreamGetEvent event,
+  }) async* {
+    try {
+      if (state.channel != null) {
+        await _usecase.disconnect(channel: state.channel!);
+        yield const TaskDisconnectStreamGetState(
+          status: taskStatusState.success,
+        );
+      } else {
+        yield const TaskDisconnectStreamGetState(
+          status: taskStatusState.failure,
+        );
+      }
+    } catch (e) {
+      yield TaskDisconnectStreamGetState(
+        error: e is AppError
+            ? ErrorBlocModel(message: e.message, code: e.code)
+            : null,
+        exception: e is AppException
+            ? ExceptionBlocModel(message: e.message, code: e.code)
+            : null,
+        status: taskStatusState.failure,
       );
     }
   }

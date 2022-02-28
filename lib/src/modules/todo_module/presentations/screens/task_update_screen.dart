@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -14,8 +13,8 @@ import '../../applications/models/task_bloc_models/task_update_bloc_model.dart';
 import '../../configs/widget_key/widget_key_config.dart';
 import '../widgets/bottom_menu_bar_widget.dart';
 
-class TaskUpdateScreenWidget extends StatelessWidget {
-  TaskUpdateScreenWidget({required ImagePickerUtil imagePickerUtil, Key? key})
+class TaskUpdateScreen extends StatelessWidget {
+  TaskUpdateScreen({required ImagePickerUtil imagePickerUtil, Key? key})
       : _imagePickerUtil = imagePickerUtil,
         super(key: key);
 

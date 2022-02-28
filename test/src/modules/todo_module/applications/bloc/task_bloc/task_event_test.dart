@@ -23,7 +23,7 @@ void main() {
 
     test('Should have mandatory properties', () {
       final TaskGotEvent expectTaskGotEvent =
-      TaskGotEvent(model: expectTaskGetRequestBlocModel);
+          TaskGotEvent(model: expectTaskGetRequestBlocModel);
 
       expect(expectTaskGotEvent.model, expectTaskGetRequestBlocModel);
     });
@@ -58,7 +58,7 @@ void main() {
 
     test('Should have mandatory properties', () {
       final TaskSelectedToUpdatedEvent expectTaskSelectedToUpdateEvent =
-      TaskSelectedToUpdatedEvent(model: expectTaskUpdateBlocModel);
+          TaskSelectedToUpdatedEvent(model: expectTaskUpdateBlocModel);
 
       expect(expectTaskSelectedToUpdateEvent.model, expectTaskUpdateBlocModel);
     });
@@ -78,6 +78,40 @@ void main() {
         expectTaskDeletedEvent.queryParams,
         expectTaskDeleteQueryParamsRequestBlocModel,
       );
+    });
+  });
+
+  group('TaskStreamSubscriptionEvent Class', () {
+    test('Should have TaskStreamSubscriptionEvent Class', () {
+      expect(TaskStreamSubscriptionEvent, TaskStreamSubscriptionEvent);
+    });
+  });
+
+  group('TaskStreamGotEvent Class', () {
+    test('Should have TaskStreamGotEvent Class', () {
+      expect(TaskStreamGotEvent, TaskStreamGotEvent);
+    });
+
+    test('Should have mandatory properties', () {
+      final TaskStreamGotEvent expectTaskStreamGotEvent =
+          TaskStreamGotEvent(model: expectTaskGetResponseBlocModelList);
+
+      expect(
+        expectTaskStreamGotEvent.model,
+        expectTaskGetResponseBlocModelList,
+      );
+    });
+  });
+
+  group('TaskRefreshStreamGetEvent Class', () {
+    test('Should have TaskRefreshStreamGetEvent Class', () {
+      expect(TaskRefreshStreamGetEvent, TaskRefreshStreamGetEvent);
+    });
+  });
+
+  group('TaskDisconnectStreamGetEvent Class', () {
+    test('Should have TaskDisconnectStreamGetEvent Class', () {
+      expect(TaskDisconnectStreamGetEvent, TaskDisconnectStreamGetEvent);
     });
   });
 }

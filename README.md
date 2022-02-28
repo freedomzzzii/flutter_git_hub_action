@@ -10,7 +10,7 @@ rapid Flutter development
   - Firebase
     - Make sure you have firebase app and create group `developer`, `qa` and `user` in firebase app distribute
     - Android add file `google-services.json` in `/android/app/`
-    - iOS add file `GoogleService-Info.plist` into project see more
+    - iOS add file `GoogleService-Info.plist` into `/ios/` see more
       in https://firebase.flutter.dev/docs/installation/ios
     - Web update firebase config in file `/web/firebase-config-service.js`
   - Update value environment variable in ile `.env`, `.env-cicd`

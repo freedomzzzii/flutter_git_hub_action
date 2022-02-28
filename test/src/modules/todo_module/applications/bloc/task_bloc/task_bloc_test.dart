@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/error_bloc_model.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/applications/models/exception_bloc_model.dart';
@@ -9,20 +12,60 @@ import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/tas
 import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_delete_entity.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_get_entity.dart';
 import 'package:flutter_starter_kit/src/modules/todo_module/domains/entities/task_update_entity.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/task_impl_usecase.dart';
 import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../../services/datasources/api_datasource_test.mocks.dart';
 import '../../../task_impl_usecase_test.mocks.dart';
+
+class FakeWebSocketChannel extends Fake implements WebSocketChannel {
+  @override
+  Stream<dynamic> get stream => FakeStreamView(MockWebSocketImpl());
+}
+
+class FakeStreamView extends Fake implements StreamView<dynamic> {
+  FakeStreamView(MockWebSocketImpl stream) : _stream = stream;
+  final MockWebSocketImpl _stream;
+  @override
+  StreamSubscription<dynamic> listen(
+    void Function(dynamic value)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return _stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
+}
+
+class FakeTaskImplUsecase extends Fake implements TaskImplUseCase {
+  @override
+  Future<dynamic> disconnect({required WebSocketChannel channel}) async {
+    return null;
+  }
+}
 
 @GenerateMocks(<Type>[TaskBloc])
 void main() {
   final MockTaskImplUseCase mockTaskImplUseCase = MockTaskImplUseCase();
+  final FakeWebSocketChannel mockWebSocketChannel = FakeWebSocketChannel();
   late TaskBloc expectTaskBloc;
 
   setUp(() {
+    dotenv.testLoad();
     expectTaskBloc = TaskBloc(usecase: mockTaskImplUseCase);
+  });
+
+  tearDown(() {
+    expectTaskBloc.close();
   });
 
   group('TaskBloc Class', () {
@@ -184,6 +227,7 @@ Should map TaskCreatedEvent to state - Failure case (throw error from usecase)''
           bloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)),
       expect: () {
         return <TaskState>[
+          expectTaskLoadingState,
           expectTaskGetStateSuccess,
         ];
       },
@@ -205,6 +249,7 @@ Should map TaskGotEvent to state - Failure case (throw error from usecase)''',
           bloc.add(TaskGotEvent(model: expectTaskGetRequestBlocModel)),
       expect: () {
         return <TaskState>[
+          expectTaskLoadingState,
           expectTaskGetStateError,
         ];
       },
@@ -489,6 +534,141 @@ Should map TaskDeletedEvent to state - Failure case (throw error id is empty fro
             ),
             status: taskStatusState.failure,
           ),
+        ];
+      },
+    );
+  });
+
+  group('Should map TaskStreamSubscriptionEvent to state', () {
+    blocTest<TaskBloc, TaskState>(
+      '''
+Should map TaskStreamSubscriptionEvent to state - Failure case (throw error from usecase)''',
+      build: () {
+        when(
+          mockTaskImplUseCase.streamGet(
+            url: argThat(isA<String>(), named: 'url'),
+          ),
+        ).thenThrow(expectTaskStreamGetUseCaseError);
+
+        return expectTaskBloc;
+      },
+      act: (TaskBloc bloc) async => bloc.add(TaskStreamSubscriptionEvent()),
+      expect: () {
+        return <TaskState>[
+          TaskStreamSubscriptionState(
+            error: ErrorBlocModel(
+              message: expectTaskStreamGetUseCaseError.message,
+              code: expectTaskStreamGetUseCaseError.code,
+            ),
+            status: taskStatusState.failure,
+          ),
+        ];
+      },
+    );
+  });
+
+  group('Should map TaskStreamGotEvent to state', () {
+    blocTest<TaskBloc, TaskState>(
+      'Should map TaskStreamGotEvent to state - Success case',
+      build: () {
+        return expectTaskBloc;
+      },
+      act: (TaskBloc bloc) async => bloc
+          .add(TaskStreamGotEvent(model: expectTaskGetResponseBlocModelList)),
+      expect: () {
+        return <TaskState>[
+          TaskStreamGetState(
+            data: expectTaskGetResponseBlocModelList,
+            status: taskStatusState.success,
+          )
+        ];
+      },
+    );
+  });
+
+  group('Should map TaskRefreshStreamGetEvent to state', () {
+    // TaskStreamSubscriptionState expectTaskStreamSubscriptionState =
+    //     TaskStreamSubscriptionState(
+    //   channel: mockWebSocketChannel,
+    // );
+    blocTest<TaskBloc, TaskState>(
+      'Should map TaskRefreshStreamGetEvent to state - Success case',
+      seed: () {
+        return TaskStreamSubscriptionState(
+          channel: mockWebSocketChannel,
+        );
+      },
+      build: () {
+        when(
+          mockTaskImplUseCase.sendData(
+            channel: mockWebSocketChannel,
+            data: 'data',
+          ),
+        );
+        return expectTaskBloc;
+      },
+      act: (TaskBloc bloc) async => bloc.add(TaskRefreshStreamGetEvent()),
+      expect: () {
+        return <TaskState>[
+          const TaskRefreshStreamGetState(
+            status: taskStatusState.success,
+          )
+        ];
+      },
+    );
+
+    blocTest<TaskBloc, TaskState>(
+      '''Should map TaskRefreshStreamGetEvent to state - Failure case (throw error)''',
+      build: () {
+        return expectTaskBloc;
+      },
+      act: (TaskBloc bloc) async => bloc.add(TaskRefreshStreamGetEvent()),
+      expect: () {
+        return <TaskState>[
+          const TaskRefreshStreamGetState(
+            status: taskStatusState.failure,
+          ),
+        ];
+      },
+    );
+  });
+
+  group('Should map TaskDisconnectStreamGetEvent to state', () {
+    final FakeTaskImplUsecase usecase = FakeTaskImplUsecase();
+    setUp(() {
+      expectTaskBloc = TaskBloc(usecase: usecase);
+    });
+    blocTest<TaskBloc, TaskState>(
+      'Should map TaskDisconnectStreamGetEvent to state - Success case',
+      seed: () {
+        return TaskStreamSubscriptionState(
+          channel: mockWebSocketChannel,
+        );
+      },
+      build: () {
+        return expectTaskBloc;
+      },
+      act: (TaskBloc bloc) async => bloc.add(TaskDisconnectStreamGetEvent()),
+      expect: () {
+        return <TaskState>[
+          const TaskDisconnectStreamGetState(
+            status: taskStatusState.success,
+          )
+        ];
+      },
+    );
+
+    blocTest<TaskBloc, TaskState>(
+      '''Should map TaskDisconnectStreamGetEvent to state - Failure case (throw error)''',
+      build: () {
+        return expectTaskBloc;
+      },
+      act: (TaskBloc bloc) async => bloc.add(TaskDisconnectStreamGetEvent()),
+      expect: () {
+        return <TaskState>[
+          const TaskDisconnectStreamGetState(
+            status: taskStatusState.failure,
+          )
         ];
       },
     );

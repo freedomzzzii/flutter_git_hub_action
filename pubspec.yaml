@@ -1,7 +1,7 @@
 name: flutter_starter_kit
 description: A new Flutter project.
 publish_to: 'none'
-version: 0.1.1-beta+1
+version: 1.2.1-beta+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
+    sdk: flutter
+  flutter_web_plugins:
     sdk: flutter
 
   cupertino_icons: ^1.0.3
@@ -28,6 +30,9 @@ dependencies:
   dio_firebase_performance: ^0.3.0
   firebase_messaging: ^10.0.8
   flutter_local_notifications: ^9.0.0
+  grpc: ^3.0.2
+  universal_html: ^2.0.8
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_driver:

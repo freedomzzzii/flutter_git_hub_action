@@ -1,34 +1,37 @@
 name: CI/CD fastlane for Android
 
 on:
-  #  push:
-  #  pull_request:
-  workflow_dispatch:
-    inputs:
-      apiUrl:
-        description: 'API URL'
-        required: true
-      ssrUrl:
-        description: 'Server send event URL'
-        required: true
-      grpcWebScheme:
-        description: 'GRPC web scheme'
-        required: true
-      grpcWebDomain:
-        description: 'GRPC web domain name'
-        required: true
-      grpcWebPort:
-        description: 'GRPC web running port number'
-        required: true
-      grpcMobileDomain:
-        description: 'GRPC mobile domain name'
-        required: true
-      grpcMobilePort:
-        description: 'GRPC mobile running port number'
-        required: true
-      branch:
-        description: 'Branch trigger workflow'
-        required: true
+#  push:
+#  pull_request:
+   workflow_dispatch:
+     inputs:
+       apiUrl:
+         description: 'API URL'
+         required: true
+       ssrUrl:
+         description: 'Server send event URL'
+         required: true
+       grpcWebScheme:
+         description: 'GRPC web scheme'
+         required: true
+       grpcWebDomain:
+         description: 'GRPC web domain name'
+         required: true
+       grpcWebPort:
+         description: 'GRPC web running port number'
+         required: true
+       grpcMobileDomain:
+         description: 'GRPC mobile domain name'
+         required: true
+       grpcMobilePort:
+         description: 'GRPC mobile running port number'
+         required: true
+       websocketUrl:
+         description: 'Websocket URL'
+         required: true
+       branch:
+         description: 'Branch trigger workflow'
+         required: true
 
 jobs:
   setup:
@@ -48,34 +51,28 @@ jobs:
       - name: Generate build number
         uses: einaregilsson/build-number@v3
         with:
-          token: ${{secrets.github_token}}
-      - name: Print new build number
-        run: echo "Build number is $BUILD_NUMBER"
+          token: ${{ secrets.github_token }}
+      - name: Print new build number and run number
+        run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
       - name: Create file .env
         run: |
           cat << EOF >> .env
-          API_URL=${{ secrets.API_URL_DEV }}
-          SSR_URL=${{ secrets.SSR_URL }}
-          GRPC_WEB_SCHEME=${{ secrets.GRPC_WEB_SCHEME }}
-          GRPC_WEB_DOMAIN=${{ secrets.GRPC_WEB_DOMAIN }}
-          GRPC_WEB_PORT=${{ secrets.GRPC_WEB_PORT }}
-          GRPC_MOBILE_DOMAIN=${{ secrets.GRPC_MOBILE_DOMAIN }}
-          GRPC_MOBILE_PORT=${{ secrets.GRPC_MOBILE_PORT }}
+          API_URL=${{ github.event.inputs.apiUrl }}
+          SSR_URL=${{ github.event.inputs.ssrUrl }}
+          GRPC_WEB_SCHEME=${{ github.event.inputs.grpcWebScheme }}
+          GRPC_WEB_DOMAIN=${{ github.event.inputs.grpcWebDomain }}
+          GRPC_WEB_PORT=${{ github.event.inputs.grpcWebPort }}
+          GRPC_MOBILE_DOMAIN=${{ github.event.inputs.grpcMobileDomain }}
+          GRPC_MOBILE_PORT=${{ github.event.inputs.grpcMobilePort }}
+          WEB_SOCKET_URL=${{ github.event.inputs.websocketUrl }}
           EOF
       - name: Create file .env-cicd
         run: |
           cat << EOF >> .env-cicd
           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
-          FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
           APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
-          APPLE_ID=${{ secrets.APPLE_ID }}
-          APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
-          APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
           FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
-          GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
           BUILD_NUMBER=$BUILD_NUMBER
           BRANCH_NAME=${{ github.event.inputs.branch }}
           EOF
@@ -101,13 +98,14 @@ jobs:
           cd android; cat << EOF >> key.properties
           ${{ secrets.KEY_PROPERTIES_ANDROID }}
           EOF
+      # - run: flutter clean
       - name: Install dependencies
         run: make project/install/package
       - name: Generate l10n
         run: make l10n/generate
       - name: Generate mock file for test
         run: make test/generate/mock-file
-      - name: Print new build number and run number
+              - name: Print new build number and run number
         run: echo "Build number is $BUILD_NUMBER, $GITHUB_RUN_NUMBER"
       - uses: actions/cache@v2
         id: file-env

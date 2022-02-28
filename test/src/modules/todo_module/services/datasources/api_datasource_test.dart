@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -15,10 +16,14 @@ import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:web_socket_channel/src/copy/web_socket_impl.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'api_datasource_test.mocks.dart';
 
-@GenerateMocks(<Type>[Dio, ApiDataSource])
+@GenerateMocks(
+  <Type>[Dio, ApiDataSource, WebSocketChannel, StreamView, WebSocketImpl],
+)
 void main() {
   final MockDio mockDio = MockDio();
   final ApiDataSource expectApiDataSource = ApiDataSource(http: mockDio);

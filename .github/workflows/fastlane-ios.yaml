@@ -26,6 +26,9 @@ on:
       grpcMobilePort:
         description: 'GRPC mobile running port number'
         required: true
+      websocketUrl:
+        description: 'Websocket URL'
+        required: true
       branch:
         description: 'Branch trigger workflow'
         required: true
@@ -53,20 +56,19 @@ jobs:
       - name: Create file .env
         run: |
           cat << EOF >> .env
-          API_URL=${{ secrets.API_URL_DEV }}
-          SSR_URL=${{ secrets.SSR_URL }}
-          GRPC_WEB_SCHEME=${{ secrets.GRPC_WEB_SCHEME }}
-          GRPC_WEB_DOMAIN=${{ secrets.GRPC_WEB_DOMAIN }}
-          GRPC_WEB_PORT=${{ secrets.GRPC_WEB_PORT }}
-          GRPC_MOBILE_DOMAIN=${{ secrets.GRPC_MOBILE_DOMAIN }}
-          GRPC_MOBILE_PORT=${{ secrets.GRPC_MOBILE_PORT }}
+          API_URL=${{ github.event.inputs.apiUrl }}
+          SSR_URL=${{ github.event.inputs.ssrUrl }}
+          GRPC_WEB_SCHEME=${{ github.event.inputs.grpcWebScheme }}
+          GRPC_WEB_DOMAIN=${{ github.event.inputs.grpcWebDomain }}
+          GRPC_WEB_PORT=${{ github.event.inputs.grpcWebPort }}
+          GRPC_MOBILE_DOMAIN=${{ github.event.inputs.grpcMobileDomain }}
+          GRPC_MOBILE_PORT=${{ github.event.inputs.grpcMobilePort }}
+          WEB_SOCKET_URL=${{ github.event.inputs.websocketUrl }}
           EOF
       - name: Create file .env-cicd
         run: |
           cat << EOF >> .env-cicd
           FASTLANE_SLACK_WEB_HOOK=${{ secrets.FASTLANE_SLACK_WEB_HOOK }}
-          FASTLANE_SLACK_CHANNEL=${{ secrets.FASTLANE_SLACK_CHANNEL }}
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_ANDROID }}
           FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=${{ secrets.FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS }}
           APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
           APPLE_ID=${{ secrets.APPLE_ID }}
@@ -74,31 +76,17 @@ jobs:
           APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
           APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
           APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
-          FASTLANE_FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
-          GOOGLE_SERVICES_AC_JSON_DATA=${{ secrets.PLAY_STORE_CREDENTIALS }}
+          FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
           GIT_URL=${{ secrets.GIT_URL }}
-          MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME=${{ secrets.MATCH_USERNAME }}
-          FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER=${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          APP_BUNDLE_ID=${{ secrets.APP_BUNDLE_ID }}
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
-          APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}
           APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
           APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
           P12_PASSWORD=${{ secrets.P12_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
-          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           CERTIFICATE_PASSWORD=${{ secrets.CERTIFICATE_PASSWORD }}
           DISTRIBUTE_PROFILE_NAME=${{ secrets.DISTRIBUTE_PROFILE_NAME }}
           ADHOC_PROFILE_NAME=${{ secrets.ADHOC_PROFILE_NAME }}
-          DISTRIBUTION_P12_BASE64=${{ secrets.DISTRIBUTION_P12_BASE64 }}
-          DEVELOPMENT_P12_BASE64=${{ secrets.DEVELOPMENT_P12_BASE64 }}
-          DISTRIBUTE_PROFILE_BASE64=${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
-          ADHOC_PROFILE_BASE64=${{ secrets.ADHOC_PROFILE_BASE64 }}
-          EXPORT_OPTIONS_PLIST=${{ secrets.EXPORT_OPTIONS_PLIST }}
           APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID }}
           APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
           BUILD_NUMBER=$BUILD_NUMBER
@@ -245,25 +233,6 @@ jobs:
           lane: 'setup'
           subdirectory: 'ios'
           verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
-          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
-          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
-          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
-          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
-          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
-          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
 #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@master
 #        with:
@@ -290,80 +259,29 @@ jobs:
           lane: 'build_file_for_distribution'
           subdirectory: 'ios'
           verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'build_file_for_app_distribution'
           subdirectory: 'ios'
           verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
-          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
-          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
-          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
-          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
-          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
-          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'app_distribution_group_developer' # can run specific group for test with input
           subdirectory: 'ios'
           verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+      - run: cd ios; ls -la
+#      - run: cd ios/build; ls -la
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'release'
           subdirectory: 'ios'
           verbose: true
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-          APP_STORE_CONNECT_AUTH_KEY_ID: ${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID }}
-          APP_STORE_CONNECT_AUTH_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
+      - run: cd ios; ls -la
       - uses: actions/cache@v2
-        id: file-ipa-distribute
+        id: file-ipa-for-distribute
         with:
           path: ./ios/Runner.ipa
-          key: file-ipa-distribute
+          key: file-ipa-for-distribute
 
 
 
@@ -538,10 +456,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
-        id: file-ipa-distribute
+        id: file-ipa-for-distribute
         with:
           path: ./ios/Runner.ipa
-          key: file-ipa-distribute
+          key: file-ipa-for-distribute
       - run: cd ios; ls -la
       - name: Install Open VPN
         run: sudo apt-get install openvpn

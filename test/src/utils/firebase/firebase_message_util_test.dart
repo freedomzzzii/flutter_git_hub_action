@@ -481,11 +481,7 @@ void main() {
             .resolvePlatformSpecificImplementation<
                 AndroidFlutterLocalNotificationsPlugin>()
             ?.createNotificationChannel(expectChannel),
-      ).thenThrow(
-        (_) => Future<LocalNotificationUtilError>.value(
-          expectLocalNotificationUtilError,
-        ),
-      );
+      ).thenThrow(expectLocalNotificationUtilError);
 
       expect(
         () async =>

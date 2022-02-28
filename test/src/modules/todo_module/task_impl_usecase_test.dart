@@ -11,8 +11,19 @@ import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:universal_html/html.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../modules/todo_module/services/datasources/api_datasource_test.mocks.dart';
+import 'task_impl_repository_test.dart';
 import 'task_impl_repository_test.mocks.dart';
+
+class FakeTaskImplSseUseCase extends Fake implements TaskImplSseUseCase {
+  @override
+  EventSource get() {
+    return expectEventSource;
+  }
+}
 
 @GenerateMocks(<Type>[TaskImplUseCase])
 void main() {
@@ -485,6 +496,212 @@ Should have update method - Failure case (title imageUrl isDone is null)''',
           ),
         ),
       ).called(1);
+    });
+  });
+
+  group('TaskImplSseUseCase', () {
+    final FakeTaskImplSseRepository expectFakeTaskImplSseRepository =
+    FakeTaskImplSseRepository();
+    final TaskImplSseUseCase expectTaskImplSseUseCase = TaskImplSseUseCase(
+      repository: expectFakeTaskImplSseRepository,
+    );
+
+    group('TaskImplSseUseCase Class', () {
+      test('Should have TaskImplSseUseCase Class', () {
+        expect(TaskImplSseUseCase, TaskImplSseUseCase);
+      });
+
+      test('Should have mandatory properties', () async {
+        expect(expectTaskImplSseUseCase.repository,
+          expectFakeTaskImplSseRepository,);
+      });
+    });
+
+    group('Get method', () {
+      test('Should have get method - Success case', () {
+        expect(expectTaskImplSseUseCase.get(), expectEventSource);
+      });
+    });
+  });
+
+  group('SendData method', () {
+    test('Should have sendData method - Success case', () async {
+      when(
+        mockTaskImpRepository.sendData(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+          data: argThat(isA<dynamic>(), named: 'data'),
+        ),
+      ).thenAnswer(
+        (_) => Future<void>.value(),
+      );
+
+      expectTaskImplUseCase.sendData(
+        channel: MockWebSocketChannel(),
+        data: 'expectData',
+      );
+
+      verify(
+        mockTaskImpRepository.sendData(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+          data: argThat(isA<dynamic>(), named: 'data'),
+        ),
+      ).called(1);
+    });
+
+    test(
+        '''Should have sendData method - Failure case (throw error from repository)''',
+        () async {
+      when(
+        mockTaskImpRepository.sendData(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+          data: argThat(isA<dynamic>(), named: 'data'),
+        ),
+      ).thenThrow(expectRepositoryError);
+
+      expect(
+        () async => expectTaskImplUseCase.sendData(
+          channel: MockWebSocketChannel(),
+          data: 'expectData',
+        ),
+        throwsA(isA<TaskSendDataUseCaseError>()),
+      );
+
+      expect(
+        () async => expectTaskImplUseCase.sendData(
+          channel: MockWebSocketChannel(),
+          data: 'expectData',
+        ),
+        throwsA(
+          predicate(
+            (Error e) =>
+                e is TaskSendDataUseCaseError &&
+                e.toString().contains(expectRepositoryError.toString()),
+          ),
+        ),
+      );
+
+      verify(
+        mockTaskImpRepository.sendData(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+          data: argThat(isA<dynamic>(), named: 'data'),
+        ),
+      ).called(2);
+    });
+  });
+
+  group('Disconnect method', () {
+    test('Should have disconnect method - Success case', () async {
+      when(
+        mockTaskImpRepository.disconnect(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+        ),
+      ).thenAnswer(
+        (_) => Future<void>.value(),
+      );
+
+      expectTaskImplUseCase.disconnect(
+        channel: MockWebSocketChannel(),
+      );
+
+      verify(
+        mockTaskImpRepository.disconnect(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+        ),
+      ).called(1);
+    });
+
+    test(
+        '''Should have disconnect method - Failure case (throw error from repository)''',
+        () async {
+      when(
+        mockTaskImpRepository.disconnect(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+        ),
+      ).thenThrow(expectRepositoryError);
+
+      expect(
+        () async => expectTaskImplUseCase.disconnect(
+          channel: MockWebSocketChannel(),
+        ),
+        throwsA(isA<TaskDisconnectUseCaseError>()),
+      );
+
+      expect(
+        () async => expectTaskImplUseCase.disconnect(
+          channel: MockWebSocketChannel(),
+        ),
+        throwsA(
+          predicate(
+            (Error e) =>
+                e is TaskDisconnectUseCaseError &&
+                e.toString().contains(expectRepositoryError.toString()),
+          ),
+        ),
+      );
+
+      verify(
+        mockTaskImpRepository.disconnect(
+          channel: argThat(isA<WebSocketChannel>(), named: 'channel'),
+        ),
+      ).called(2);
+    });
+  });
+
+  group('StreamGet method', () {
+    test('Should have streamGet method - Success case', () async {
+      when(
+        mockTaskImpRepository.listenToGet(
+          url: argThat(isA<String>(), named: 'url'),
+        ),
+      ).thenReturn(MockWebSocketChannel());
+
+      final WebSocketChannel expectValue = expectTaskImplUseCase.streamGet(
+        url: 'expectUrl',
+      );
+
+      verify(
+        mockTaskImpRepository.listenToGet(
+          url: argThat(isA<String>(), named: 'url'),
+        ),
+      ).called(1);
+
+      expect(expectValue, isA<MockWebSocketChannel>());
+    });
+
+    test(
+        ''''Should have streamGet method - Failure case (throw error from repository)''',
+        () async {
+      when(
+        mockTaskImpRepository.listenToGet(
+          url: argThat(isA<String>(), named: 'url'),
+        ),
+      ).thenThrow(expectRepositoryError);
+
+      expect(
+        () async => expectTaskImplUseCase.streamGet(
+          url: 'expectUrl',
+        ),
+        throwsA(isA<TaskStreamGetUseCaseError>()),
+      );
+
+      expect(
+        () async => expectTaskImplUseCase.streamGet(
+          url: 'expectUrl',
+        ),
+        throwsA(
+          predicate(
+            (Error e) =>
+                e is TaskStreamGetUseCaseError &&
+                e.toString().contains(expectRepositoryError.toString()),
+          ),
+        ),
+      );
+
+      verify(
+        mockTaskImpRepository.listenToGet(
+          url: argThat(isA<String>(), named: 'url'),
+        ),
+      ).called(2);
     });
   });
 }

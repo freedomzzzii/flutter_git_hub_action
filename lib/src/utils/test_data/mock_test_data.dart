@@ -1,6 +1,11 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_starter_kit/src/helpers/check_os/check_os_helper.dart';
+import 'package:flutter_starter_kit/src/utils/firebase/firebase_message_util.dart';
+import 'package:universal_html/html.dart';
 
+import '../../helpers/check_os/check_os_helper.dart';
 import '../../modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
+import '../../modules/todo_module/applications/bloc/task_sse_bloc/task_sse_bloc.dart';
 import '../../modules/todo_module/applications/models/error_bloc_model.dart';
 import '../../modules/todo_module/applications/models/exception_bloc_model.dart';
 import '../../modules/todo_module/applications/models/task_bloc_models/task_create_bloc_model.dart';
@@ -11,6 +16,7 @@ import '../../modules/todo_module/commons/errors/datasource_error.dart';
 import '../../modules/todo_module/commons/errors/repository_error.dart';
 import '../../modules/todo_module/commons/errors/usecase_error.dart';
 import '../../modules/todo_module/commons/exceptions/usecase_exception.dart';
+import '../../modules/todo_module/configs/grpc/task.pbgrpc.dart';
 import '../../modules/todo_module/configs/usecasae_messages/usecase_message_config.dart';
 import '../../modules/todo_module/domains/entities/task_create_entity.dart';
 import '../../modules/todo_module/domains/entities/task_delete_entity.dart';
@@ -18,10 +24,11 @@ import '../../modules/todo_module/domains/entities/task_get_entity.dart';
 import '../../modules/todo_module/domains/entities/task_update_entity.dart';
 import '../../modules/todo_module/services/commons/request_query.dart';
 import '../../modules/todo_module/services/models/task_create_datasource_model.dart';
+import '../../modules/todo_module/services/models/task_delete_datasource_model.dart';
 import '../../modules/todo_module/services/models/task_get_datasource_model.dart';
 import '../../modules/todo_module/services/models/task_update_datasource_model.dart';
 import '../error_code/error_code_util.dart';
-import '../firebase/firebase_message_util.dart';
+import '../grpc/grpc_util.dart';
 import '../image_picker/image_picker_util.dart';
 
 final Faker faker = Faker();
@@ -57,7 +64,7 @@ final DataSourceError expectDataSourceError = DataSourceError(
   code: appErrorCodes.missingRequiredFields,
 );
 
-final ImagePickerUtilError expectImagePickerError = ImagePickerUtilError(
+final ImagePickerUtilError expectImagePickerUtilError = ImagePickerUtilError(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
@@ -360,4 +367,148 @@ final LocalNotificationUtilError expectLocalNotificationUtilError =
     LocalNotificationUtilError(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
+);
+
+final GrpcClientUtilError expectGrpcClientUtilError = GrpcClientUtilError(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final GrpcResponseSuccessWithMetaDataModel expectGetTasksResponse =
+    GrpcResponseSuccessWithMetaDataModel(
+  data: <TaskFetchResponseGrpcModel>[
+    TaskFetchResponseGrpcModel(
+      id: expectTaskGetResponseEntity.id,
+      title: expectTaskGetResponseEntity.title,
+      imageUrl: expectTaskGetResponseEntity.imageUrl,
+      isDone: expectTaskGetResponseEntity.isDone,
+      createdAt: expectTaskGetResponseEntity.createdAt.toString(),
+    )
+  ],
+);
+
+final TaskDeleteQueryParamsRequestDataSourceModel
+    expectTaskDeleteQueryParamsRequestDataSourceModel =
+    TaskDeleteQueryParamsRequestDataSourceModel(
+  id: expectTaskGetResponseEntity.id,
+);
+
+final GetOsError expectGetOsError = GetOsError(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final EventSource expectEventSource =
+    EventSource(expectTaskGetResponseEntity.title);
+
+final TaskSseConnectGetTaskState expectTaskSseConnectGetTaskState =
+    TaskSseConnectGetTaskState(
+  status: taskSseStatusState.success,
+  eventSource: expectEventSource,
+  error: exceptErrorBlocModel,
+  exception: expectExceptionBlocModel,
+);
+
+final TaskSseGetTaskState expectTaskSseGetTaskStateError = TaskSseGetTaskState(
+  status: taskSseStatusState.failure,
+  eventSource: expectEventSource,
+  error: exceptErrorBlocModel,
+  exception: expectExceptionBlocModel,
+  data: expectTaskGetResponseBlocModelList,
+);
+
+final TaskSseGetTaskState expectTaskSseGetTaskState = TaskSseGetTaskState(
+  status: taskSseStatusState.success,
+  data: expectTaskGetResponseBlocModelList,
+);
+
+const TaskSseGetTaskState expectTaskSseGetTaskStateEmpty = TaskSseGetTaskState(
+  status: taskSseStatusState.success,
+);
+
+final ErrorBlocModel expectErrorBlocModel = ErrorBlocModel(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final ExceptionBlocModel expectExceptionBlocModel = ExceptionBlocModel(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final TaskSseCloseConnectState expectTaskSseCloseConnectStateError =
+    TaskSseCloseConnectState(
+  exception: expectExceptionBlocModel,
+      error: expectErrorBlocModel,
+  status: taskSseStatusState.failure,
+);
+
+const TaskSseCloseConnectState expectTaskSseCloseConnectState =
+    TaskSseCloseConnectState(
+  status: taskSseStatusState.success,
+);
+
+final TaskSseConnectGetTaskState expectTaskSseConnectGetTaskStateError =
+    TaskSseConnectGetTaskState(
+  error: expectErrorBlocModel,
+  exception: expectExceptionBlocModel,
+  status: taskSseStatusState.failure,
+);
+
+final dynamic expectSseResponse = '''
+{"data":[{"id":"${expectTaskGetResponseEntity.id}","title":"${expectTaskGetResponseEntity.title}","isDone":${expectTaskGetResponseEntity.isDone},"imageUrl":"${expectTaskGetResponseEntity.imageUrl}","createdAt":"${expectTaskGetResponseEntity.createdAt}"}]}''';
+
+final TaskSseInitialState expectTaskSseInitialState = TaskSseInitialState();
+
+final TaskLoadingState expectTaskLoadingState = TaskLoadingState();
+
+final TaskStreamGetUseCaseError expectTaskStreamGetUseCaseError =
+    TaskStreamGetUseCaseError(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final TaskSendDataUseCaseError expectTaskSendDataUseCaseError =
+    TaskSendDataUseCaseError(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final TaskDisconnectUseCaseError expectTaskDisconnectUseCaseError =
+    TaskDisconnectUseCaseError(
+  message: expectDataSourceError.message,
+  code: expectDataSourceError.code,
+);
+
+final TaskStreamGetState expectTaskStreamGetStateSuccess = TaskStreamGetState(
+  status: taskStatusState.success,
+  data: expectTaskGetResponseBlocModelList,
+);
+
+final TaskStreamSubscriptionState expectTaskStreamSubscriptionState =
+    TaskStreamSubscriptionState(
+  exception: exceptExceptionBlocModel,
+  error: exceptErrorBlocModel,
+  status: taskStatusState.failure,
+);
+
+final TaskStreamGetState expectTaskStreamGetState = TaskStreamGetState(
+  exception: exceptExceptionBlocModel,
+  data: expectTaskGetResponseBlocModelList,
+  error: exceptErrorBlocModel,
+  status: taskStatusState.failure,
+);
+
+final TaskRefreshStreamGetState expectTaskRefreshStreamGetState =
+TaskRefreshStreamGetState(
+  exception: exceptExceptionBlocModel,
+  error: exceptErrorBlocModel,
+  status: taskStatusState.failure,
+);
+
+final TaskDisconnectStreamGetState expectTaskDisconnectStreamGetState =
+TaskDisconnectStreamGetState(
+  exception: exceptExceptionBlocModel,
+  error: exceptErrorBlocModel,
+  status: taskStatusState.failure,
 );

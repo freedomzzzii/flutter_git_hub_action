@@ -10,8 +10,8 @@ import '../../applications/models/task_bloc_models/task_create_bloc_model.dart';
 import '../../configs/widget_key/widget_key_config.dart';
 import '../widgets/bottom_menu_bar_widget.dart';
 
-class TaskCreateScreenWidget extends StatelessWidget {
-  TaskCreateScreenWidget({required ImagePickerUtil imagePickerUtil, Key? key})
+class TaskCreateScreen extends StatelessWidget {
+  TaskCreateScreen({required ImagePickerUtil imagePickerUtil, Key? key})
       : _imagePickerUtil = imagePickerUtil,
         super(key: key);
 

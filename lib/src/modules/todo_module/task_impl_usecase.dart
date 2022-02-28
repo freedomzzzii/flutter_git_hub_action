@@ -1,3 +1,7 @@
+import 'package:universal_html/html.dart';
+
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 import '../../utils/error_code/error_code_util.dart';
 import 'commons/errors/usecase_error.dart';
 import 'commons/exceptions/usecase_exception.dart';
@@ -7,6 +11,8 @@ import 'domains/entities/task_delete_entity.dart';
 import 'domains/entities/task_get_entity.dart';
 import 'domains/entities/task_update_entity.dart';
 import 'domains/repositories/task_repository.dart';
+import 'domains/repositories/task_sse_repository.dart';
+import 'domains/usecases/task_sse_usecase.dart';
 import 'domains/usecases/task_usecase.dart';
 
 class TaskImplUseCase implements TaskUseCase {
@@ -93,10 +99,69 @@ class TaskImplUseCase implements TaskUseCase {
           code: appErrorCodes.missingRequiredFields,
         );
       }
-
       await _repository.delete(queryParams: queryParams);
     } catch (e) {
       throw TaskDeleteUseCaseError(message: e.toString());
+    }
+  }
+
+  @override
+  WebSocketChannel streamGet({required String url}) {
+    try {
+      return _repository.listenToGet(url: url);
+    } catch (e) {
+      throw TaskStreamGetUseCaseError(message: e.toString());
+    }
+  }
+
+  @override
+  void sendData({required WebSocketChannel channel, required dynamic data}) {
+    try {
+      return _repository.sendData(channel: channel, data: data);
+    } catch (e) {
+      throw TaskSendDataUseCaseError(message: e.toString());
+    }
+  }
+
+  @override
+  Future<dynamic> disconnect({required WebSocketChannel channel}) async {
+    try {
+      return await _repository.disconnect(channel: channel);
+    } catch (e) {
+      throw TaskDisconnectUseCaseError(message: e.toString());
+    }
+  }
+}
+
+class TaskImplSseUseCase implements TaskSseUseCase {
+  TaskImplSseUseCase({required TaskSseRepository repository})
+      : _repository = repository;
+
+  final TaskSseRepository _repository;
+
+  TaskSseRepository get repository => _repository;
+
+  @override
+  EventSource get() {
+    try {
+      return _repository.get();
+    } catch (e) {
+      throw TaskGetUseCaseError(
+        message: e.toString(),
+        code: appErrorCodes.unknownError,
+      );
+    }
+  }
+
+  @override
+  void closeConnection({required EventSource eventSource}) {
+    try {
+      return _repository.closeConnection(eventSource: eventSource);
+    } catch (e) {
+      throw TaskGetUseCaseError(
+        message: e.toString(),
+        code: appErrorCodes.unknownError,
+      );
     }
   }
 }

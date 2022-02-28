@@ -11,12 +11,12 @@ platform:ios do
     lane:setup do
         if is_ci
             # create keychain
-            sh("security create-keychain -p #{ENV['CERTIFICATE_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
-            sh("security unlock-keychain -p #{ENV['CERTIFICATE_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+            sh("security create-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+            sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
             sh('security list-keychains -d user -s ~/Library/Keychains/cicd.keychain-db $(security list-keychains -d user | sed s/\"//g)')
             # import certificate
-            sh("security import ../distribution.p12 -P #{ENV['KEYCHAIN_PASSWORD']} -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db")
-            sh("security import ../development.p12 -P #{ENV['KEYCHAIN_PASSWORD']} -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db")
+            sh("security import ../distribution.p12 -P #{ENV['CERTIFICATE_PASSWORD']} -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db")
+            sh("security import ../development.p12 -P #{ENV['CERTIFICATE_PASSWORD']} -A -t cert -f pkcs12 -k ~/Library/Keychains/cicd.keychain-db")
             # set allow codesign
             sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
             # copy provisioning profile
@@ -68,11 +68,11 @@ platform:ios do
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
         sh("flutter build ios integration_test/main_integration_test.dart --release")
         update_code_signing_settings(
-             path: "Runner.xcodeproj",
-             targets: "RunnerTests",
-             use_automatic_signing: false,
-             team_id: ENV["APPLE_TEAM_ID"],
-             code_sign_identity:  "Apple Development",
+            path: "Runner.xcodeproj",
+            targets: "RunnerTests",
+            use_automatic_signing: false,
+            team_id: ENV["APPLE_TEAM_ID"],
+            code_sign_identity:  "Apple Development",
         )
         sh("xcodebuild -workspace ../Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
         # zip file
@@ -90,9 +90,9 @@ platform:ios do
     desc "Build file for deploy firebase app distribute"
     lane:build_file_for_app_distribution do
         cocoapods(
-          clean_install: true,
-          podfile: "Podfile",
-          use_bundle_exec: false
+            clean_install: true,
+            podfile: "Podfile",
+            use_bundle_exec: false
         )
 #         Dir.chdir("../") do
 #             sh("pod install")
@@ -103,7 +103,7 @@ platform:ios do
             sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
         end
 
-       update_code_signing_settings(
+        update_code_signing_settings(
             path: "Runner.xcodeproj",
             targets: "Runner",
             profile_name: ENV["ADHOC_PROFILE_NAME"],
@@ -136,7 +136,7 @@ platform:ios do
             groups: "developer, qa, user",
             ipa_path: 'build/Runner.ipa',
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
-      )
+        )
     end
 
     desc "Deploy app for testing (group developer, qa, user) to the Firebase App Distribute"
@@ -146,7 +146,7 @@ platform:ios do
             groups: "qa",
             ipa_path: 'build/Runner.ipa',
             release_notes: "For testing on branch #{ENV["BRANCH_NAME"]}"
-      )
+        )
     end
 
     desc "Build file .ipa for distribute"
@@ -166,32 +166,34 @@ platform:ios do
         end
 
         update_code_signing_settings(
-          path: "Runner.xcodeproj",
-          targets: "Runner",
-          profile_name: ENV["DISTRIBUTE_PROFILE_NAME"],
-          bundle_identifier: ENV["APP_BUNDLE_ID"],
-          use_automatic_signing: false,
-          team_id: ENV["APPLE_TEAM_ID"],
-          code_sign_identity:  "Apple Distribution",
+            path: "Runner.xcodeproj",
+            targets: "Runner",
+            profile_name: ENV["DISTRIBUTE_PROFILE_NAME"],
+            bundle_identifier: ENV["APP_BUNDLE_ID"],
+            use_automatic_signing: false,
+            team_id: ENV["APPLE_TEAM_ID"],
+            code_sign_identity:  "Apple Distribution",
         )
 
         build_app(
-          workspace: "Runner.xcworkspace",
-          scheme: "Runner",
-          configuration: "Release",
-          clean: true,
-          export_method: "app-store",
-          export_team_id: ENV["APPLE_TEAM_ID"],
+            workspace: "Runner.xcworkspace",
+            scheme: "Runner",
+            configuration: "Release",
+            clean: true,
+            export_method: "app-store",
+            export_team_id: ENV["APPLE_TEAM_ID"],
         )
     end
 
     # tag: master
     desc "Deploy a release version to the App store"
     lane:release do
-        app_store_connect_api_key(
+        api_key = app_store_connect_api_key(
             key_id: ENV["APP_STORE_CONNECT_AUTH_KEY_ID"],
             issuer_id: ENV["APP_STORE_CONNECT_AUTH_ISSUER_ID"],
             key_filepath: "app_store_connect_key.p8",
+            duration: 1200,
+            in_house: false
         )
 
         upload_to_app_store(
@@ -201,6 +203,7 @@ platform:ios do
             force: true,
             ipa: "Runner.ipa",
             precheck_include_in_app_purchases: false,
+            api_key: api_key,
         )
     end
 end

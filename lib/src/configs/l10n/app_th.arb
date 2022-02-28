@@ -2,7 +2,9 @@
   "createTaskHomeBar": "สร้างงาน",
   "createBottomMenu": "สร้าง",
   "listBottomMenu": "รายการงาน",
+  "sseBottomMenu": "SSE",
   "updateBottomMenu": "แก้ไขงาน",
+  "grpcBottomMenu": "gRPC",
   "updateTaskAppBar": "แก้ไขงาน",
   "saveUpdateTaskBtn": "บันทึก",
   "noUpdateImage": "ไม่มีรูปภาพ",
@@ -19,5 +21,6 @@
   "textFieldPlaceHolder": "กรอกข้อมูล",
   "selectImage": "เลือกรูป",
   "successSnackBar": "สำเร็จ",
-  "failureSnackBar": "ผิดพลาด"
+  "failureSnackBar": "ผิดพลาด",
+  "webSocketMenu": "เว็บซ็อคเกต"
 }

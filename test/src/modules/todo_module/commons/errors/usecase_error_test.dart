@@ -58,4 +58,50 @@ void main() {
       expect(expectTaskDeleteUseCaseError.code, expectDataSourceError.code);
     });
   });
+
+  group('TaskStreamGetUseCaseError Class', () {
+    test('Should have TaskStreamGetUseCaseError Class', () {
+      expect(TaskStreamGetUseCaseError, TaskStreamGetUseCaseError);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(
+        expectTaskStreamGetUseCaseError.message,
+        expectDataSourceError.message,
+      );
+      expect(
+        expectTaskStreamGetUseCaseError.code, expectDataSourceError.code,);
+    });
+  });
+
+  group('TaskSendDataUseCaseError Class', () {
+    test('Should have TaskSendDataUseCaseError Class', () {
+      expect(
+        TaskSendDataUseCaseError, TaskSendDataUseCaseError,);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(
+        expectTaskSendDataUseCaseError.message,
+        expectDataSourceError.message,
+      );
+      expect(expectTaskSendDataUseCaseError.code,
+        expectDataSourceError.code,);
+    });
+  });
+
+  group('TaskDisconnectUseCaseError Class', () {
+    test('Should have TaskDisconnectUseCaseError Class', () {
+      expect(TaskDisconnectUseCaseError, TaskDisconnectUseCaseError);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(
+        expectTaskDisconnectUseCaseError.message,
+        expectDataSourceError.message,
+      );
+      expect(expectTaskDisconnectUseCaseError.code,
+        expectDataSourceError.code,);
+    });
+  });
 }

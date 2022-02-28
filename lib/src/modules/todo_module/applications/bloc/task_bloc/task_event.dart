@@ -73,3 +73,31 @@ class TaskDeletedEvent extends TaskEvent {
 
   TaskDeleteQueryParamsRequestBlocModel get queryParams => _queryParams;
 }
+
+class TaskStreamSubscriptionEvent extends TaskEvent {
+  @override
+  List<Object?> get props => throw <Object?>[];
+}
+
+class TaskStreamGotEvent extends TaskEvent {
+  const TaskStreamGotEvent({
+    required List<TaskGetResponseBlocModel> model,
+  }) : _model = model;
+
+  final List<TaskGetResponseBlocModel> _model;
+
+  @override
+  List<Object?> get props => <Object?>[_model];
+
+  List<TaskGetResponseBlocModel> get model => _model;
+}
+
+class TaskRefreshStreamGetEvent extends TaskEvent {
+  @override
+  List<Object?> get props => throw <Object?>[];
+}
+
+class TaskDisconnectStreamGetEvent extends TaskEvent {
+  @override
+  List<Object?> get props => throw <Object?>[];
+}

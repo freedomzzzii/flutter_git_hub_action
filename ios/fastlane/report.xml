@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000275">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: pod install" time="2.466976">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: security unlock-keychain -p  ~/Library/Keychains/cicd.keychain-db" time="0.206062">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: is_ci" time="0.000256">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: update_code_signing_settings" time="0.038843">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: build_app" time="137.871155">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

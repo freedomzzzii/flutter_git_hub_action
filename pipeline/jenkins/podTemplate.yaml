@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    foo: bar
+spec:
+  containers:
+  - name: fastlane
+    image: 582208681230.dkr.ecr.ap-southeast-1.amazonaws.com/java:fastlane
+    alwaysPullImage: true
+    command:
+    - cat
+    tty: true
+  - name: java
+    image: 582208681230.dkr.ecr.ap-southeast-1.amazonaws.com/java:8-flutter-stab 
+    alwaysPullImage: true
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: shm
+      mountPath: /dev/shm
+  - name: golang
+    image: 582208681230.dkr.ecr.ap-southeast-1.amazonaws.com/golang:1.17.2-snyk
+    alwaysPullImage: true
+    command:
+    - cat
+    tty: true
+  - name: dind-awscli
+    image: 582208681230.dkr.ecr.ap-southeast-1.amazonaws.com/dind:awscli-snyk
+    alwaysPullImage: true
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: dockersock
+      mountPath: /var/run/docker.sock
+  volumes:
+   - name: dockersock
+     hostPath:
+       path: /var/run/docker.sock
+   # Posix Shared Memory across containers
+   - name: shm
+     emptyDir:
+       sizeLimit: "512Mi"
+       medium: "Memory"

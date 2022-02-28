@@ -1,23 +1,10 @@
-import '../../services/models/task_create_datasource_model.dart';
-import '../../services/models/task_delete_datasource_model.dart';
-import '../../services/models/task_get_datasource_model.dart';
-import '../../services/models/task_update_datasource_model.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/services/datasources/api_datasource.dart';
 
 abstract class DataSource {
-  Future<TaskCreateResponseDataSourceModel> create({
-    required TaskCreateRequestDataSourceModel task,
-  });
+  factory DataSource({required Dio dio}) => getDataSource(dio: dio);
+}
 
-  Future<List<TaskGetResponseDataSourceModel>?> get({
-    required TaskGetRequestDataSourceModel query,
-  });
-
-  Future<TaskUpdateResponseDataSourceModel> update({
-    required TaskUpdateQueryParamsRequestDataSourceModel queryParams,
-    required TaskUpdateRequestDataSourceModel task,
-  });
-
-  Future<void> delete({
-    required TaskDeleteQueryParamsRequestDataSourceModel queryParams,
-  });
+DataSource getDataSource({required Dio dio}) {
+  return ApiDataSource(http: dio);
 }

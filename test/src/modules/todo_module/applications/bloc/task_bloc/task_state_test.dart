@@ -34,6 +34,17 @@ void main() {
     });
   });
 
+  group('TaskLoadingState Class', () {
+    test('Should have TaskLoadingState Class', () {
+      expect(TaskLoadingState, TaskLoadingState);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(expectTaskLoadingState.status, isA<taskStatusState>());
+      expect(expectTaskLoadingState.status, taskStatusState.loading);
+    });
+  });
+
   group('TaskCreateState Class', () {
     test('Should have TaskCreateState Class', () {
       expect(TaskCreateState, TaskCreateState);
@@ -81,6 +92,70 @@ void main() {
       expect(expectTaskDeleteState.status, expectTaskGetState.status);
       expect(expectTaskDeleteState.error, exceptErrorBlocModel);
       expect(expectTaskDeleteState.exception, exceptExceptionBlocModel);
+    });
+  });
+
+  group('TaskStreamSubscriptionState Class', () {
+    test('Should have TaskStreamSubscriptionState Class', () {
+      expect(TaskStreamSubscriptionState, TaskStreamSubscriptionState);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(
+        expectTaskStreamSubscriptionState.status,
+        taskStatusState.failure,
+      );
+      expect(expectTaskStreamSubscriptionState.error, exceptErrorBlocModel);
+      expect(
+        expectTaskStreamSubscriptionState.exception,
+        exceptExceptionBlocModel,
+      );
+    });
+  });
+
+  group('TaskStreamGetState Class', () {
+    test('Should have TaskStreamGetState Class', () {
+      expect(TaskStreamGetState, TaskStreamGetState);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(expectTaskStreamGetState.status, taskStatusState.failure);
+      expect(expectTaskStreamGetState.data, expectTaskGetResponseBlocModelList);
+      expect(expectTaskStreamGetState.error, exceptErrorBlocModel);
+      expect(expectTaskStreamGetState.exception, exceptExceptionBlocModel);
+    });
+  });
+
+  group('TaskRefreshStreamGetState Class', () {
+    test('Should have TaskRefreshStreamGetState Class', () {
+      expect(TaskRefreshStreamGetState, TaskRefreshStreamGetState);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(expectTaskRefreshStreamGetState.status, taskStatusState.failure);
+      expect(expectTaskRefreshStreamGetState.error, exceptErrorBlocModel);
+      expect(
+        expectTaskRefreshStreamGetState.exception,
+        exceptExceptionBlocModel,
+      );
+    });
+  });
+
+  group('TaskDisconnectStreamGetState Class', () {
+    test('Should have TaskDisconnectStreamGetState Class', () {
+      expect(TaskDisconnectStreamGetState, TaskDisconnectStreamGetState);
+    });
+
+    test('Should have mandatory properties', () {
+      expect(
+        expectTaskDisconnectStreamGetState.status,
+        taskStatusState.failure,
+      );
+      expect(expectTaskDisconnectStreamGetState.error, exceptErrorBlocModel);
+      expect(
+        expectTaskDisconnectStreamGetState.exception,
+        exceptExceptionBlocModel,
+      );
     });
   });
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 import 'src/configs/env/env_config.dart';
 import 'src/configs/l10n/app_localizations.dart';
 import 'src/configs/routes/route_config.dart';
@@ -12,6 +13,8 @@ import 'src/modules/app_screen.dart';
 
 Future<void> main() async {
   try {
+    configureApp();
+
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
 

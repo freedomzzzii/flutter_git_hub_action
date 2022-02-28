@@ -1,11 +1,21 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/services/datasources/api_datasource.dart';
+import 'package:flutter_starter_kit/src/modules/todo_module/services/datasources/grpc_datasource.dart';
+import 'package:universal_html/html.dart';
+import 'package:web_socket_channel/src/channel.dart';
+
+import '../../commons/constants/api_constant.dart';
+import '../../commons/constants/env_constant.dart';
 import '../../utils/error_code/error_code_util.dart';
 import 'commons/errors/repository_error.dart';
 import 'domains/datasources/datasource.dart';
+import 'domains/datasources/stream_datasource.dart';
 import 'domains/entities/task_create_entity.dart';
 import 'domains/entities/task_delete_entity.dart';
 import 'domains/entities/task_get_entity.dart';
 import 'domains/entities/task_update_entity.dart';
 import 'domains/repositories/task_repository.dart';
+import 'domains/repositories/task_sse_repository.dart';
 import 'services/models/task_create_datasource_model.dart';
 import 'services/models/task_delete_datasource_model.dart';
 import 'services/models/task_get_datasource_model.dart';
@@ -25,7 +35,7 @@ class TaskImplRepository implements TaskRepository {
   }) async {
     try {
       final TaskCreateResponseDataSourceModel response =
-          await _dataSource.create(
+          await (_dataSource as ApiDataSource).create(
         task: TaskCreateRequestDataSourceModel(
           title: task.title,
           imageUrl: task.imageUrl,
@@ -53,7 +63,12 @@ class TaskImplRepository implements TaskRepository {
   }) async {
     try {
       final List<TaskGetResponseDataSourceModel>? response =
-          await _dataSource.get(
+          await ((_dataSource is ApiDataSource)
+                  ? _dataSource as ApiDataSource
+                  : _dataSource is GprcDataSource
+                      ? _dataSource as GprcDataSource
+                      : _dataSource as ApiDataSource)
+              .get(
         query: TaskGetRequestDataSourceModel(
           sortBy: query.sortBy,
           orderBy: query.orderBy,
@@ -87,7 +102,7 @@ class TaskImplRepository implements TaskRepository {
       final TaskDeleteQueryParamsRequestDataSourceModel queryParam =
           TaskDeleteQueryParamsRequestDataSourceModel(id: queryParams.id);
 
-      await _dataSource.delete(
+      await (_dataSource as ApiDataSource).delete(
         queryParams: queryParam,
       );
     } catch (e) {
@@ -115,7 +130,7 @@ class TaskImplRepository implements TaskRepository {
           TaskUpdateQueryParamsRequestDataSourceModel(id: queryParams.id);
 
       final TaskUpdateResponseDataSourceModel response =
-          await _dataSource.update(
+          await (_dataSource as ApiDataSource).update(
         task: body,
         queryParams: queryParam,
       );
@@ -133,5 +148,62 @@ class TaskImplRepository implements TaskRepository {
         code: appErrorCodes.unknownError,
       );
     }
+  }
+
+  @override
+  WebSocketChannel listenToGet({required String url}) {
+    try {
+      return (_dataSource as ApiDataSource).initConnection(url: url);
+    } catch (e) {
+      throw RepositoryError(
+        message: e.toString(),
+        code: appErrorCodes.unknownError,
+      );
+    }
+  }
+
+  @override
+  void sendData({required WebSocketChannel channel, required dynamic data}) {
+    try {
+      return (_dataSource as ApiDataSource).send(channel: channel, data: data);
+    } catch (e) {
+      throw RepositoryError(
+        message: e.toString(),
+        code: appErrorCodes.unknownError,
+      );
+    }
+  }
+
+  @override
+  Future<dynamic> disconnect({required WebSocketChannel channel}) async {
+    try {
+      return await (_dataSource as ApiDataSource).close(channel: channel);
+    } catch (e) {
+      throw RepositoryError(
+        message: e.toString(),
+        code: appErrorCodes.unknownError,
+      );
+    }
+  }
+}
+
+class TaskImplSseRepository implements TaskSseRepository {
+  TaskImplSseRepository({required SseDatasourceStream dataSource})
+      : _dataSource = dataSource;
+
+  final SseDatasourceStream _dataSource;
+
+  SseDatasourceStream get dataSource => _dataSource;
+
+  @override
+  EventSource get() {
+    return _dataSource.connect(
+      url: '${dotenv.env[ssrUrlEnv]}$taskResourceApi',
+    );
+  }
+
+  @override
+  void closeConnection({required EventSource eventSource}) {
+    return _dataSource.closeConnection(eventSource: eventSource);
   }
 }
