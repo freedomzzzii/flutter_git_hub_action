@@ -266,7 +266,7 @@ jobs:
           verbose: true
       - uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: 'app_distribution_group_developer' # can run specific group for test with input
+          lane: 'app_distribution_group_developer_qa' # can run specific group for test with input
           subdirectory: 'ios'
           verbose: true
       - run: cd ios; ls -la
