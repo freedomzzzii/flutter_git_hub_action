@@ -598,3 +598,27 @@ jobs:
           SLACK_COLOR: '#f94144'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: Job is failure
+
+  notify_slack_success:
+    runs-on: ubuntu-latest
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute, play_store ]
+    if: success()
+    steps:
+      - name: Notify test result
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#90be6d'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: Job is success
+
+  notify_slack_failure:
+    runs-on: ubuntu-latest
+    needs: [ setup, build_apk, test_lab, mobSF, firebase_app_distribute, play_store ]
+    if: failure()
+    steps:
+      - name: Notify test result
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#f94144'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: Job is failure
