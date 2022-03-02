@@ -74,15 +74,9 @@ jobs:
           APPLE_ID=${{ secrets.APPLE_ID }}
           APPLE_ITC_TEAM_ID=${{ secrets.APPLE_ITC_TEAM_ID }}
           APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}
-          APPLE_PROVISIONING_PROFILE_DISTRIBUTE=${{ secrets.APPLE_PROVISIONING_PROFILE_DISTRIBUTE }}
-          APPLE_PROVISIONING_PROFILE_ADHOC=${{ secrets.APPLE_PROVISIONING_PROFILE_ADHOC }}
-          FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}
           GIT_URL=${{ secrets.GIT_URL }}
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
-          APP_STORE_CONNECT_AUTH_KEY_ID=${{ secrets.APP_STORE_CONNECT_AUTH_KEY_ID}}
-          APP_STORE_CONNECT_AUTH_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_AUTH_ISSUER_ID }}
-          P12_PASSWORD=${{ secrets.P12_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           CERTIFICATE_PASSWORD=${{ secrets.CERTIFICATE_PASSWORD }}
           DISTRIBUTE_PROFILE_NAME=${{ secrets.DISTRIBUTE_PROFILE_NAME }}
@@ -133,101 +127,101 @@ jobs:
         run: make l10n/generate
       - name: Generate mock file for test
         run: make test/generate/mock-file
-#      - uses: actions/cache@v2
-#        id: flutter-export-enviroment
-#        with:
-#          path: ./ios/Flutter/flutter_export_enviroment.sh
-#          key: flutter-export-enviroment
-#      - uses: actions/cache@v2
-#        id: generated
-#        with:
-#          path: ./ios/Flutter/Generated.xcconfig
-#          key: generated
-#      - uses: actions/cache@v2
-#        id: symlinks
-#        with:
-#          path: ./ios/.symlinks
-#          key: symlinks
-#      - uses: actions/cache@v2
-#        id: pods
-#        with:
-#          path: ./ios/Pods
-#          key: pods
-#      - uses: actions/cache@v2
-#        id: pods-file
-#        with:
-#          path: ./ios/Podfile.lock
-#          key: pods-file
-#      - uses: actions/cache@v2
-#        id: file-env
-#        with:
-#          path: ./.env
-#          key: file-env
-#      - uses: actions/cache@v2
-#        id: file-env-cicd
-#        with:
-#          path: ./.env-cicd
-#          key: file-env-cicd
-#      - uses: actions/cache@v2
-#        id: file-flutter-plugins
-#        with:
-#          path: ./.flutter-plugins
-#          key: file-flutter-plugins
-#      - uses: actions/cache@v2
-#        id: file-flutter-plugins-dependency
-#        with:
-#          path: ./.flutter-plugins-dependencies
-#          key: file-flutter-plugins-dependency
-#      - uses: actions/cache@v2
-#        id: file-flutter-packages
-#        with:
-#          path: ./.packages
-#          key: file-flutter-packages
-#      - uses: actions/cache@v2
-#        id: file-dart-tool
-#        with:
-#          path: ./.dart_tool
-#          key: file-dart-tool
-#      - uses: actions/cache@v2
-#        id: file-l10n
-#        with:
-#          path: ./lib/src/configs/l10n
-#          key: file-l10n
-#      - uses: actions/cache@v2
-#        id: file-mock-integration-test
-#        with:
-#          path: ./integration_test/main_integration_test.mocks.dart
-#          key: file-mock-integration-test
-#      - uses: actions/cache@v2
-#        id: googleService-info-plist
-#        with:
-#          path: ./ios/GoogleService-Info.plist
-#          key: googleService-info-plist
-#      - uses: actions/cache@v2
-#        id: app-store-connect-key
-#        with:
-#          path: ./ios/app_store_connect_key.p8
-#          key: app-store-connect-key
-#      - uses: actions/cache@v2
-#        id: distribution
-#        with:
-#          path: ./ios/distribution.p12
-#          key: distribution
-#      - uses: actions/cache@v2
-#        id: development
-#        with:
-#          path: ./ios/development.p12
-#          key: development
-#      - uses: actions/cache@v2
-#        id: distribute-comhugemanflutterstarterkit
-#        with:
-#          path: ./ios/Distribute_comhugemanflutterstarterkit.mobileprovision
-#          key: distribute-comhugemanflutterstarterkit
-#      - uses: actions/cache@v2
-#        id: adHoc-comhugemanflutterstarterkit
-#        with:
-#          path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
-#          key: adHoc-comhugemanflutterstarterkit
+      - uses: actions/cache@v2
+        id: flutter-export-enviroment
+        with:
+          path: ./ios/Flutter/flutter_export_enviroment.sh
+          key: flutter-export-enviroment
+      - uses: actions/cache@v2
+        id: generated
+        with:
+          path: ./ios/Flutter/Generated.xcconfig
+          key: generated
+      - uses: actions/cache@v2
+        id: symlinks
+        with:
+          path: ./ios/.symlinks
+          key: symlinks
+      - uses: actions/cache@v2
+        id: pods
+        with:
+          path: ./ios/Pods
+          key: pods
+      - uses: actions/cache@v2
+        id: pods-file
+        with:
+          path: ./ios/Podfile.lock
+          key: pods-file
+      - uses: actions/cache@v2
+        id: file-env
+        with:
+          path: ./.env
+          key: file-env
+      - uses: actions/cache@v2
+        id: file-env-cicd
+        with:
+          path: ./.env-cicd
+          key: file-env-cicd
+      - uses: actions/cache@v2
+        id: file-flutter-plugins
+        with:
+          path: ./.flutter-plugins
+          key: file-flutter-plugins
+      - uses: actions/cache@v2
+        id: file-flutter-plugins-dependency
+        with:
+          path: ./.flutter-plugins-dependencies
+          key: file-flutter-plugins-dependency
+      - uses: actions/cache@v2
+        id: file-flutter-packages
+        with:
+          path: ./.packages
+          key: file-flutter-packages
+      - uses: actions/cache@v2
+        id: file-dart-tool
+        with:
+          path: ./.dart_tool
+          key: file-dart-tool
+      - uses: actions/cache@v2
+        id: file-l10n
+        with:
+          path: ./lib/src/configs/l10n
+          key: file-l10n
+      - uses: actions/cache@v2
+        id: file-mock-integration-test
+        with:
+          path: ./integration_test/main_integration_test.mocks.dart
+          key: file-mock-integration-test
+      - uses: actions/cache@v2
+        id: googleService-info-plist
+        with:
+          path: ./ios/GoogleService-Info.plist
+          key: googleService-info-plist
+      - uses: actions/cache@v2
+        id: app-store-connect-key
+        with:
+          path: ./ios/app_store_connect_key.p8
+          key: app-store-connect-key
+      - uses: actions/cache@v2
+        id: distribution
+        with:
+          path: ./ios/distribution.p12
+          key: distribution
+      - uses: actions/cache@v2
+        id: development
+        with:
+          path: ./ios/development.p12
+          key: development
+      - uses: actions/cache@v2
+        id: distribute-comhugemanflutterstarterkit
+        with:
+          path: ./ios/Distribute_comhugemanflutterstarterkit.mobileprovision
+          key: distribute-comhugemanflutterstarterkit
+      - uses: actions/cache@v2
+        id: adHoc-comhugemanflutterstarterkit
+        with:
+          path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
+          key: adHoc-comhugemanflutterstarterkit
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'setup'
@@ -254,196 +248,196 @@ jobs:
 #          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
 #          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
 #          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'build_file_for_distribution'
+#           subdirectory: 'ios'
+#           verbose: true
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'build_file_for_app_distribution'
+#           subdirectory: 'ios'
+#           verbose: true
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'app_distribution_group_developer_qa' # can run specific group for test with input
+#           subdirectory: 'ios'
+#           verbose: true
+#       - run: cd ios; ls -la
+# #      - run: cd ios/build; ls -la
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'release'
+#           subdirectory: 'ios'
+#           verbose: true
+#       - run: cd ios; ls -la
+#       - uses: actions/cache@v2
+#         id: file-ipa-for-distribute
+#         with:
+#           path: ./ios/Runner.ipa
+#           key: file-ipa-for-distribute
+
+
+
+
+  build_ipa:
+    needs: [ setup ]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup java version 12.x
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - name: Setup flutter version stable
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - uses: actions/cache@v2
+        id: file-env
+        with:
+          path: ./.env
+          key: file-env
+      - uses: actions/cache@v2
+        id: file-env-cicd
+        with:
+          path: ./.env-cicd
+          key: file-env-cicd
+      - uses: actions/cache@v2
+        id: file-flutter-plugins
+        with:
+          path: ./.flutter-plugins
+          key: file-flutter-plugins
+      - uses: actions/cache@v2
+        id: file-flutter-plugins-dependency
+        with:
+          path: ./.flutter-plugins-dependencies
+          key: file-flutter-plugins-dependency
+      - uses: actions/cache@v2
+        id: file-flutter-packages
+        with:
+          path: ./.packages
+          key: file-flutter-packages
+      - uses: actions/cache@v2
+        id: file-dart-tool
+        with:
+          path: ./.dart_tool
+          key: file-dart-tool
+      - uses: actions/cache@v2
+        id: file-l10n
+        with:
+          path: ./lib/src/configs/l10n
+          key: file-l10n
+      - uses: actions/cache@v2
+        id: googleService-info-plist
+        with:
+          path: ./ios/GoogleService-Info.plist
+          key: googleService-info-plist
+      - uses: actions/cache@v2
+        id: app-store-connect-key
+        with:
+          path: ./ios/app_store_connect_key.p8
+          key: app-store-connect-key
+      - uses: actions/cache@v2
+        id: distribution
+        with:
+          path: ./ios/distribution.p12
+          key: distribution
+      - uses: actions/cache@v2
+        id: development
+        with:
+          path: ./ios/development.p12
+          key: development
+      - uses: actions/cache@v2
+        id: distribute-comhugemanflutterstarterkit
+        with:
+          path: ./ios/Distribute_comhugemanflutterstarterkit.mobileprovision
+          key: distribute-comhugemanflutterstarterkit
+      - uses: actions/cache@v2
+        id: adHoc-comhugemanflutterstarterkit
+        with:
+          path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
+          key: adHoc-comhugemanflutterstarterkit
+      - uses: actions/cache@v2
+        id: pods
+        with:
+          path: ./ios/Pods
+          key: pods
+      - uses: actions/cache@v2
+        id: pods-file
+        with:
+          path: ./ios/Podfile.lock
+          key: pods-file
+      - uses: actions/cache@v2
+        id: flutter-export-enviroment
+        with:
+          path: ./ios/Flutter/flutter_export_enviroment.sh
+          key: flutter-export-enviroment
+      - uses: actions/cache@v2
+        id: generated
+        with:
+          path: ./ios/Flutter/Generated.xcconfig
+          key: generated
+      - uses: actions/cache@v2
+        id: symlinks
+        with:
+          path: ./ios/.symlinks
+          key: symlinks
+      - run: make project/install/package
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'setup'
+          subdirectory: 'ios'
+          verbose: true
+        env:
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
+          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
+          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
+          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
+          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
+          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
+          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'build_file_for_distribution'
           subdirectory: 'ios'
           verbose: true
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'build_file_for_app_distribution'
-          subdirectory: 'ios'
-          verbose: true
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'app_distribution_group_developer_qa' # can run specific group for test with input
-          subdirectory: 'ios'
-          verbose: true
-      - run: cd ios; ls -la
-#      - run: cd ios/build; ls -la
-      - uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'release'
-          subdirectory: 'ios'
-          verbose: true
-      - run: cd ios; ls -la
-      - uses: actions/cache@v2
-        id: file-ipa-for-distribute
-        with:
-          path: ./ios/Runner.ipa
-          key: file-ipa-for-distribute
-
-
-
-
-#  build_ipa:
-#    needs: [ setup ]
-#    runs-on: macos-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Setup java version 12.x
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: '12.x'
-#      - name: Setup flutter version stable
-#        uses: subosito/flutter-action@v1
-#        with:
-#          channel: 'stable'
-#      - uses: actions/cache@v2
-#        id: file-env
-#        with:
-#          path: ./.env
-#          key: file-env
-#      - uses: actions/cache@v2
-#        id: file-env-cicd
-#        with:
-#          path: ./.env-cicd
-#          key: file-env-cicd
-#      - uses: actions/cache@v2
-#        id: file-flutter-plugins
-#        with:
-#          path: ./.flutter-plugins
-#          key: file-flutter-plugins
-#      - uses: actions/cache@v2
-#        id: file-flutter-plugins-dependency
-#        with:
-#          path: ./.flutter-plugins-dependencies
-#          key: file-flutter-plugins-dependency
-#      - uses: actions/cache@v2
-#        id: file-flutter-packages
-#        with:
-#          path: ./.packages
-#          key: file-flutter-packages
-#      - uses: actions/cache@v2
-#        id: file-dart-tool
-#        with:
-#          path: ./.dart_tool
-#          key: file-dart-tool
-#      - uses: actions/cache@v2
-#        id: file-l10n
-#        with:
-#          path: ./lib/src/configs/l10n
-#          key: file-l10n
-#      - uses: actions/cache@v2
-#        id: googleService-info-plist
-#        with:
-#          path: ./ios/GoogleService-Info.plist
-#          key: googleService-info-plist
-#      - uses: actions/cache@v2
-#        id: app-store-connect-key
-#        with:
-#          path: ./ios/app_store_connect_key.p8
-#          key: app-store-connect-key
-#      - uses: actions/cache@v2
-#        id: distribution
-#        with:
-#          path: ./ios/distribution.p12
-#          key: distribution
-#      - uses: actions/cache@v2
-#        id: development
-#        with:
-#          path: ./ios/development.p12
-#          key: development
-#      - uses: actions/cache@v2
-#        id: distribute-comhugemanflutterstarterkit
-#        with:
-#          path: ./ios/Distribute_comhugemanflutterstarterkit.mobileprovision
-#          key: distribute-comhugemanflutterstarterkit
-#      - uses: actions/cache@v2
-#        id: adHoc-comhugemanflutterstarterkit
-#        with:
-#          path: ./ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
-#          key: adHoc-comhugemanflutterstarterkit
-#      - uses: actions/cache@v2
-#        id: pods
-#        with:
-#          path: ./ios/Pods
-#          key: pods
-#      - uses: actions/cache@v2
-#        id: pods-file
-#        with:
-#          path: ./ios/Podfile.lock
-#          key: pods-file
-#      - uses: actions/cache@v2
-#        id: flutter-export-enviroment
-#        with:
-#          path: ./ios/Flutter/flutter_export_enviroment.sh
-#          key: flutter-export-enviroment
-#      - uses: actions/cache@v2
-#        id: generated
-#        with:
-#          path: ./ios/Flutter/Generated.xcconfig
-#          key: generated
-#      - uses: actions/cache@v2
-#        id: symlinks
-#        with:
-#          path: ./ios/.symlinks
-#          key: symlinks
-#      - run: make project/install/package
-#      - uses: maierj/fastlane-action@v2.0.1
-#        with:
-#          lane: 'setup'
-#          subdirectory: 'ios'
-#          verbose: true
-#        env:
-#          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-#          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-#          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-#          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-#          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-#          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-#          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-#          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
-#          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
-#          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
-#          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
-#          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
-#          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
-#          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
-#      - uses: maierj/fastlane-action@v2.0.1
-#        with:
-#          lane: 'build_file_for_distribution'
-#          subdirectory: 'ios'
-#          verbose: true
-#        env:
-#          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
-#          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-#          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
-#          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-#          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-#          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
-#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-#          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-#          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
-#          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
-#          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
-#          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
-#          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
-#          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
-#          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
-#      - name: Run mobSF
-#        env:
-#          MOBSF_URL: ${{ secrets.MOBSF_URL }}
-#          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
-  #        run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='ios/a.ipa'; make mobsf/run
+        env:
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: ${{ secrets.SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_USERNAME: ${{ secrets.MATCH_USERNAME }}
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PATH: ${{ secrets.KEYCHAIN_PATH}}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+          DISTRIBUTE_PROFILE_NAME: ${{ secrets.DISTRIBUTE_PROFILE_NAME }}
+          ADHOC_PROFILE_NAME: ${{ secrets.ADHOC_PROFILE_NAME }}
+          DISTRIBUTION_P12_BASE64: ${{ secrets.DISTRIBUTION_P12_BASE64 }}
+          DEVELOPMENT_P12_BASE64: ${{ secrets.DEVELOPMENT_P12_BASE64 }}
+          DISTRIBUTE_PROFILE_BASE64: ${{ secrets.DISTRIBUTE_PROFILE_BASE64 }}
+          ADHOC_PROFILE_BASE64: ${{ secrets.ADHOC_PROFILE_BASE64 }}
+          EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
+      - name: Run mobSF
+        env:
+          MOBSF_URL: ${{ secrets.MOBSF_URL }}
+          MOBSF_API_KEY: ${{ secrets.MOBSF_API_KEY }}
+          run: export MOBSF_URL=$MOBSF_URL; export MOBSF_API_KEY=$MOBSF_API_KEY; export INPUT_FILE_NAME='ios/a.ipa'; make mobsf/run
 
 
 
