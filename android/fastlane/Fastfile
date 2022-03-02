@@ -81,8 +81,4 @@ platform:android do
             version_code: ENV["BUILD_NUMBER"],
         )
     end
-
-    error do |lane, exception, options|
-        # trigger jenkins
-    end
 end
