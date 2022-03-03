@@ -521,11 +521,11 @@ jobs:
         with:
           path:  /Users/runner/Library/Keychains
           key: keychain
-      # - uses: maierj/fastlane-action@v2.0.1
-      #   with:
-      #     lane: 'setup'
-      #     subdirectory: 'ios'
-      #     verbose: true
+      - uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'setup'
+          subdirectory: 'ios'
+          verbose: true
       - uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'build_file_for_distribution'
