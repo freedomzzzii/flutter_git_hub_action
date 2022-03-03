@@ -337,6 +337,11 @@ jobs:
         with:
           path: ~/Library/MobileDevice/Provisioning\ Profiles
           key: provisioning-profile
+      - uses: actions/cache@v2
+        id: keychain
+        with:
+          path:  /Users/runner/Library/Keychains
+          key: keychain
 #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@master
 #        with:
@@ -511,6 +516,11 @@ jobs:
         with:
           path:  /Users/runner/Library/Keychains/login.keychain-db
           key: keychain-login
+      - uses: actions/cache@v2
+        id: keychain
+        with:
+          path:  /Users/runner/Library/Keychains
+          key: keychain
       # - uses: maierj/fastlane-action@v2.0.1
       #   with:
       #     lane: 'setup'
