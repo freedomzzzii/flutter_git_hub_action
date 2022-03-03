@@ -467,7 +467,7 @@ jobs:
         run: sudo killall openvpn
 
   app_distribute:
-    needs: [ setup, build_ipa ]
+    needs: [ setup, build_ipa, mobSF ]
     runs-on: macos-latest
     steps:
       - name: Checkout
