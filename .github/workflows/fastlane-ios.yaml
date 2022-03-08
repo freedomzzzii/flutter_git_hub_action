@@ -769,11 +769,11 @@ jobs:
           path: ./ios/Runner.ipa
           key: file-ipa-for-distribute
       - name: Run fastlane release
-      uses: maierj/fastlane-action@v2.0.1
-        with:
-          lane: 'release'
-          subdirectory: 'ios'
-          verbose: true
+        uses: maierj/fastlane-action@v2.0.1
+          with:
+            lane: 'release'
+            subdirectory: 'ios'
+            verbose: true
 
   notify_slack_success:
     runs-on: ubuntu-latest
