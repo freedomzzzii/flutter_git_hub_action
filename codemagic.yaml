@@ -54,7 +54,7 @@ workflows:
         - name : AdHoc_comhugemanflutterstarterkit.mobileprovision
           script: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
         - name: Install dependencies
-          script: make prject/install/package/codemagic
+          script: make project/install/package/codemagic
         - name : Pod install
           script: cd ios; pod install
         - name : Generate l10n
