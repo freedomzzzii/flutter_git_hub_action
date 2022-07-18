@@ -61,3 +61,11 @@ workflows:
           script: make l10n/generate
         - name: Generate mock file for test
           script: make test/generate/mock-file
+        - name : fastlane setup
+          script : |
+            cd ios
+            fastlane setup
+        - name : fastlane test lab
+          script : |
+            cd ios
+            fastlane test_lab
