@@ -3,9 +3,61 @@ workflows:
     name: My workflow name    # workflow name displayed in Codemagic UI
     instance_type: mac_mini   # machine instance type
     max_build_duration: 60    # build duration in minutes (min 1, max 120)
+    environment:
+      xcode: latest # Define latest, edge or version (e.g. 11.2)
+      flutter: stable   # Define the channel name or version (e.g. v1.13.4)
+      groups:             # Define your environment variables groups here
+        - mobile_credentials
+        - apple_credentials
     triggering:
         events:
           - push
     name: Hello world workflow
     scripts:
         - echo "Hello World!"
+        - name: Create file GoogleService-Info.plist
+          script: |
+            cd ios; cat << EOF >> GoogleService-Info.plist
+            $GOOGLE_SERVICE_IOS
+            EOF
+        - name: Create file app_store_connect_key.p8
+          script: |
+            cd ios; cat << EOF >> app_store_connect_key.p8
+            $APP_STORE_CONNECT_AUTH_KEY_P8
+            EOF
+        - name: Create file distribute_p12_base64.txt
+          script: |
+            cd ios; cat << EOF >> distribute_p12_base64.txt
+            $DISTRIBUTION_P12_BASE64
+            EOF
+        - name : Generate distribution.p12
+          script : base64 -d ios/distribute_p12_base64.txt > ios/distribution.p12
+        - name: Create file development_p12_base64.txt
+          script: |
+            cd ios; cat << EOF >> development_p12_base64.txt
+            $DEVELOPMENT_P12_BASE64
+            EOF
+        - name: Generate development.p12
+          script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
+        - name: Create file distribute_profile_base64.txt
+          script: |
+            cd ios; cat << EOF >> distribute_profile_base64.txt
+            $DISTRIBUTE_PROFILE_BASE64
+            EOF
+        - name : Generate Distribute_comhugemanflutterstarterkit.mobileprovision
+          script : base64 -d ios/distribute_profile_base64.txt > ios/Distribute_comhugemanflutterstarterkit.mobileprovision
+        - name: Create file adhoc_profile_base64.txt
+          script: |
+            cd ios; cat << EOF >> adhoc_profile_base64.txt
+            $ADHOC_PROFILE_BASE64
+            EOF
+        - name : AdHoc_comhugemanflutterstarterkit.mobileprovision
+          script: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
+        - name: Install dependencies
+          script: make prject/install/package/codemagic
+        - name : Pod install
+          script: cd ios; pod install
+        - name : Generate l10n
+          script: make l10n/generate
+        - name: Generate mock file for test
+          script: make test/generate/mock-file
