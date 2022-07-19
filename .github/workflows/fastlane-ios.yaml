@@ -45,7 +45,7 @@ jobs:
         uses: subosito/flutter-action@v1
         # with:
         #   channel: 'stable'
-         with:
+        with:
           channel: 'master'
         # with:
         #   flutter-version: '3.0.4'
