@@ -43,8 +43,12 @@ jobs:
           java-version: '12.x'
       - name: Setup flutter version stable
         uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
+        # with:
+        #   channel: 'stable'
+         with:
+          channel: 'master'
+        # with:
+        #   flutter-version: '3.0.4'
       - name: Generate build number
         uses: einaregilsson/build-number@v3
         with:

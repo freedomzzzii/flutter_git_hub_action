@@ -7,7 +7,8 @@ workflows:
       # xcode: latest # Define latest, edge or version (e.g. 11.2)
       xcode: 13.4.1
       cocoapods: 1.11.2
-      flutter: stable   # Define the channel name or version (e.g. v1.13.4)
+      # flutter: stable   # Define the channel name or version (e.g. v1.13.4)
+      flutter: 3.0.4
       groups:             # Define your environment variables groups here
         - mobile_credentials
         - apple_credentials
