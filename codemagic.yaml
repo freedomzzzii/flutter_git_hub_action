@@ -67,6 +67,8 @@ workflows:
           script : |
             cd ios
             fastlane setup
+        - flutter build ios --config-only integration_test/main_integration_test.dart
+        - flutter build ios integration_test/main_integration_test.dart --release
         - name : fastlane test lab
           script : |
             cd ios
