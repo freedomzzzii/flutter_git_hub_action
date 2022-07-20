@@ -30,9 +30,7 @@ workflows:
             APPLE_ITC_TEAM_ID=$APPLE_ITC_TEAM_ID
             APPLE_TEAM_ID=$APPLE_TEAM_ID
             FIREBASE_TOKEN=test
-            # GIT_URL=${{ secrets.GIT_URL }}
             KEYCHAIN_PASSWORD=$KEYCHAIN_PASSWORD
-            # KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
             APP_STORE_CONNECT_AUTH_KEY_ID=$APP_STORE_CONNECT_AUTH_KEY_ID
             APP_STORE_CONNECT_AUTH_ISSUER_ID=$APP_STORE_CONNECT_AUTH_ISSUER_ID
             P12_PASSWORD=$P12_PASSWORD
