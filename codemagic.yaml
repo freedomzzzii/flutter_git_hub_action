@@ -17,11 +17,11 @@ workflows:
           - push
     name: Hello world workflow
     scripts:
-        - echo "Hello World!"
-        - name: Create file .env
-        run: |
-          cat << EOF >> .env
-          EOF
+      - echo "Hello World!"
+      - name: Create file .env
+      run: |
+        cat << EOF >> .env
+        EOF
       - name: Create file .env-cicd
         run: |
           cat << EOF >> .env-cicd
