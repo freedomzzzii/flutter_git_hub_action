@@ -18,6 +18,33 @@ workflows:
     name: Hello world workflow
     scripts:
         - echo "Hello World!"
+        - name: Create file .env
+        run: |
+          cat << EOF >> .env
+          EOF
+      - name: Create file .env-cicd
+        run: |
+          cat << EOF >> .env-cicd
+          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=$FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS
+          APP_BUNDLE_ID=$APP_BUNDLE_ID
+          APPLE_ITC_TEAM_ID=$APPLE_ITC_TEAM_ID
+          APPLE_TEAM_ID=$APPLE_TEAM_ID
+          FIREBASE_TOKEN=test
+          # GIT_URL=${{ secrets.GIT_URL }}
+          KEYCHAIN_PASSWORD=$KEYCHAIN_PASSWORD
+          # KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+          APP_STORE_CONNECT_AUTH_KEY_ID=$APP_STORE_CONNECT_AUTH_KEY_ID
+          APP_STORE_CONNECT_AUTH_ISSUER_ID=$APP_STORE_CONNECT_AUTH_ISSUER_ID
+          P12_PASSWORD=$P12_PASSWORD
+          CERTIFICATE_PASSWORD=$CERTIFICATE_PASSWORD
+          DISTRIBUTE_PROFILE_NAME=$DISTRIBUTE_PROFILE_NAME
+          ADHOC_PROFILE_NAME=$ADHOC_PROFILE_NAME
+          BUILD_NUMBER=$BUILD_NUMBER
+          MOBSF_URL=test
+          MOBSF_API_KEY=test
+          ADHOC_PROFILE_NAME=$ADHOC_PROFILE_NAME
+          BRANCH_NAME=test
+          EOF
         - name: Create file GoogleService-Info.plist
           script: |
             cd ios; cat << EOF >> GoogleService-Info.plist
