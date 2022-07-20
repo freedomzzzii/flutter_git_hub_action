@@ -15,15 +15,15 @@ workflows:
     triggering:
         events:
           - push
-    name: Hello world workflow
     scripts:
-        - echo "Hello World!"
+        - name: Hello world workflow
+          script: echo "Hello World!"
         - name: Create file .env
-          run: |
+          script: |
             cat << EOF >> .env
             EOF
         - name: Create file .env-cicd
-          run: |
+          script: |
             cat << EOF >> .env-cicd
             FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=$FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS
             APP_BUNDLE_ID=$APP_BUNDLE_ID
