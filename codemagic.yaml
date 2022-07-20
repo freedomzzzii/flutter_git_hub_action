@@ -17,87 +17,87 @@ workflows:
           - push
     name: Hello world workflow
     scripts:
-      - echo "Hello World!"
-      - name: Create file .env
-        run: |
-          cat << EOF >> .env
-          EOF
-      - name: Create file .env-cicd
-        run: |
-          cat << EOF >> .env-cicd
-          FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=$FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS
-          APP_BUNDLE_ID=$APP_BUNDLE_ID
-          APPLE_ITC_TEAM_ID=$APPLE_ITC_TEAM_ID
-          APPLE_TEAM_ID=$APPLE_TEAM_ID
-          FIREBASE_TOKEN=test
-          # GIT_URL=${{ secrets.GIT_URL }}
-          KEYCHAIN_PASSWORD=$KEYCHAIN_PASSWORD
-          # KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
-          APP_STORE_CONNECT_AUTH_KEY_ID=$APP_STORE_CONNECT_AUTH_KEY_ID
-          APP_STORE_CONNECT_AUTH_ISSUER_ID=$APP_STORE_CONNECT_AUTH_ISSUER_ID
-          P12_PASSWORD=$P12_PASSWORD
-          CERTIFICATE_PASSWORD=$CERTIFICATE_PASSWORD
-          DISTRIBUTE_PROFILE_NAME=$DISTRIBUTE_PROFILE_NAME
-          ADHOC_PROFILE_NAME=$ADHOC_PROFILE_NAME
-          BUILD_NUMBER=$BUILD_NUMBER
-          MOBSF_URL=test
-          MOBSF_API_KEY=test
-          ADHOC_PROFILE_NAME=$ADHOC_PROFILE_NAME
-          BRANCH_NAME=test
-          EOF
-      - name: Create file GoogleService-Info.plist
-        script: |
-          cd ios; cat << EOF >> GoogleService-Info.plist
-          $GOOGLE_SERVICE_IOS
-          EOF
-      - name: Create file app_store_connect_key.p8
-        script: |
-          cd ios; cat << EOF >> app_store_connect_key.p8
-          $APP_STORE_CONNECT_AUTH_KEY_P8
-          EOF
-      - name: Create file distribute_p12_base64.txt
-        script: |
-          cd ios; cat << EOF >> distribute_p12_base64.txt
-          $DISTRIBUTION_P12_BASE64
-          EOF
-      - name : Generate distribution.p12
-        script : base64 -d ios/distribute_p12_base64.txt > ios/distribution.p12
-      - name: Create file development_p12_base64.txt
-        script: |
-          cd ios; cat << EOF >> development_p12_base64.txt
-          $DEVELOPMENT_P12_BASE64
-          EOF
-      - name: Generate development.p12
-        script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
-      - name: Create file distribute_profile_base64.txt
-        script: |
-          cd ios; cat << EOF >> distribute_profile_base64.txt
-          $DISTRIBUTE_PROFILE_BASE64
-          EOF
-      - name : Generate Distribute_comhugemanflutterstarterkit.mobileprovision
-        script : base64 -d ios/distribute_profile_base64.txt > ios/Distribute_comhugemanflutterstarterkit.mobileprovision
-      - name: Create file adhoc_profile_base64.txt
-        script: |
-          cd ios; cat << EOF >> adhoc_profile_base64.txt
-          $ADHOC_PROFILE_BASE64
-          EOF
-      - name : AdHoc_comhugemanflutterstarterkit.mobileprovision
-        script: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
-      - name: Install dependencies
-        script: make project/install/package/codemagic
-      - name : Pod install
-        script: cd ios; pod install
-      - name : Generate l10n
-        script: make l10n/generate
-      - name: Generate mock file for test
-        script: make test/generate/mock-file
-      - name : fastlane setup
-        script : |
-          cd ios
-          fastlane setup
-      - flutter build ios --config-only integration_test/main_integration_test.dart
-      - flutter build ios integration_test/main_integration_test.dart --release
-      - name : fastlane test lab
-        script : |
-          cd ios
-          fastlane test_lab
+        - echo "Hello World!"
+        - name: Create file .env
+          run: |
+            cat << EOF >> .env
+            EOF
+        - name: Create file .env-cicd
+          run: |
+            cat << EOF >> .env-cicd
+            FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS=$FASTLANE_FIREBASE_APP_DISTRIBUTE_ID_IOS
+            APP_BUNDLE_ID=$APP_BUNDLE_ID
+            APPLE_ITC_TEAM_ID=$APPLE_ITC_TEAM_ID
+            APPLE_TEAM_ID=$APPLE_TEAM_ID
+            FIREBASE_TOKEN=test
+            # GIT_URL=${{ secrets.GIT_URL }}
+            KEYCHAIN_PASSWORD=$KEYCHAIN_PASSWORD
+            # KEYCHAIN_PATH=/Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+            APP_STORE_CONNECT_AUTH_KEY_ID=$APP_STORE_CONNECT_AUTH_KEY_ID
+            APP_STORE_CONNECT_AUTH_ISSUER_ID=$APP_STORE_CONNECT_AUTH_ISSUER_ID
+            P12_PASSWORD=$P12_PASSWORD
+            CERTIFICATE_PASSWORD=$CERTIFICATE_PASSWORD
+            DISTRIBUTE_PROFILE_NAME=$DISTRIBUTE_PROFILE_NAME
+            ADHOC_PROFILE_NAME=$ADHOC_PROFILE_NAME
+            BUILD_NUMBER=$BUILD_NUMBER
+            MOBSF_URL=test
+            MOBSF_API_KEY=test
+            ADHOC_PROFILE_NAME=$ADHOC_PROFILE_NAME
+            BRANCH_NAME=test
+            EOF
+        - name: Create file GoogleService-Info.plist
+          script: |
+            cd ios; cat << EOF >> GoogleService-Info.plist
+            $GOOGLE_SERVICE_IOS
+            EOF
+        - name: Create file app_store_connect_key.p8
+          script: |
+            cd ios; cat << EOF >> app_store_connect_key.p8
+            $APP_STORE_CONNECT_AUTH_KEY_P8
+            EOF
+        - name: Create file distribute_p12_base64.txt
+          script: |
+            cd ios; cat << EOF >> distribute_p12_base64.txt
+            $DISTRIBUTION_P12_BASE64
+            EOF
+        - name : Generate distribution.p12
+          script : base64 -d ios/distribute_p12_base64.txt > ios/distribution.p12
+        - name: Create file development_p12_base64.txt
+          script: |
+            cd ios; cat << EOF >> development_p12_base64.txt
+            $DEVELOPMENT_P12_BASE64
+            EOF
+        - name: Generate development.p12
+          script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
+        - name: Create file distribute_profile_base64.txt
+          script: |
+            cd ios; cat << EOF >> distribute_profile_base64.txt
+            $DISTRIBUTE_PROFILE_BASE64
+            EOF
+        - name : Generate Distribute_comhugemanflutterstarterkit.mobileprovision
+          script : base64 -d ios/distribute_profile_base64.txt > ios/Distribute_comhugemanflutterstarterkit.mobileprovision
+        - name: Create file adhoc_profile_base64.txt
+          script: |
+            cd ios; cat << EOF >> adhoc_profile_base64.txt
+            $ADHOC_PROFILE_BASE64
+            EOF
+        - name : AdHoc_comhugemanflutterstarterkit.mobileprovision
+          script: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
+        - name: Install dependencies
+          script: make project/install/package/codemagic
+        - name : Pod install
+          script: cd ios; pod install
+        - name : Generate l10n
+          script: make l10n/generate
+        - name: Generate mock file for test
+          script: make test/generate/mock-file
+        - name : fastlane setup
+          script : |
+            cd ios
+            fastlane setup
+        - flutter build ios --config-only integration_test/main_integration_test.dart
+        - flutter build ios integration_test/main_integration_test.dart --release
+        - name : fastlane test lab
+          script : |
+            cd ios
+            fastlane test_lab
