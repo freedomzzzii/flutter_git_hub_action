@@ -78,7 +78,7 @@ platform:ios do
         # zip file
         sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip .")
         # upload to firebase test lab
-        sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --device=model=iphone8,version=13.6,locale=en,orientation=portrait --xcode-version=12.5 ")
+        sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --device=model=iphone8,version=13.6,locale=en,orientation=portrait --xcode-version=12.5.1 ")
     end
 
     desc "Run mobSF (upload file and scan file)"
