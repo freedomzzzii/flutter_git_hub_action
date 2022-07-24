@@ -60,10 +60,10 @@ platform:ios do
             sh("pod install")
         end
 
-        sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
-        if is_ci
-            sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
-        end
+        # sh("security unlock-keychain -p #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        # if is_ci
+        #     sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['KEYCHAIN_PASSWORD']} ~/Library/Keychains/cicd.keychain-db")
+        # end
         # build file
         sh("flutter build ios --config-only integration_test/main_integration_test.dart")
         sh("flutter build ios integration_test/main_integration_test.dart --release")
