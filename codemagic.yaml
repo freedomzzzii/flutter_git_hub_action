@@ -114,6 +114,13 @@ workflows:
         #   script : |
         #     cd ios
         #     fastlane setup
+        - name: Run Firebase Test Lab tests
+          script: |
+            set -ex
+            echo $GCLOUD_KEY > ./gcloud_key_file.json
+            gcloud auth activate-service-account --key-file=gcloud_key_file.json
+
+            gcloud --quiet config set project $FIREBASE_PROJECT_ID
         - name : fastlane test lab
           script : |
             cd ios
