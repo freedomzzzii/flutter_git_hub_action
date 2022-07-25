@@ -4,8 +4,8 @@ workflows:
     instance_type: mac_mini   # machine instance type
     max_build_duration: 60    # build duration in minutes (min 1, max 120)
     environment:
-      xcode: latest # Define latest, edge or version (e.g. 11.2)
-      # xcode: 13.4.1
+      # xcode: latest # Define latest, edge or version (e.g. 11.2)
+      xcode: 13.3.1
       # cocoapods: 1.11.2
       # flutter: stable   # Define the channel name or version (e.g. v1.13.4)
       flutter: 3.0.3
