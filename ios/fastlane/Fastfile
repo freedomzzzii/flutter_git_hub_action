@@ -79,6 +79,7 @@ platform:ios do
         sh("pwd")
         sh("cd build/ios_integ/Build/Products/; ls -la; pwd")
         # sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip .")
+        sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip Release-iphoneos Runner_iphoneos15.5-arm64.xctestrun;")
         sh("pwd; ls -la")
         sh("cd build/ios_integ/Build/Products/; cd ../../../../../; ls -la; pwd")
         sh("cd ../; ls -la; pwd")
