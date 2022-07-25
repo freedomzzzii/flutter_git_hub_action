@@ -79,8 +79,9 @@ platform:ios do
         sh("pwd")
         sh("cd build/ios_integ/Build/Products/; ls -la; pwd")
         # sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip .")
-        sh("cd ios; ls -la")
+        sh("pwd; ls -la")
         sh("cd build/ios_integ/Build/Products/; cd ../../../../../; ls -la; pwd")
+        sh("cd ../; ls -la; pwd")
         # upload to firebase test lab
         # sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --device=model=iphone13pro,version=15.2,locale=en,orientation=portrait --xcode-version=13.3.1 ")
     end
