@@ -125,3 +125,11 @@ workflows:
           script : |
             cd ios
             fastlane test_lab
+        - name:
+          script: pwd
+        - name: build
+          script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing
+        - name: zip
+          script: cd build/ios_integ/Build/Products/; zip -r ios_tests.zip .
+        - name: gcloud
+          script: gcloud firebase test ios run --type=xctest --test=build/ios_integ/Build/Products/ios_tests.zip --device=model=ipad5,locale=en,orientation=portrait,version=15.4 --xcode-version=13.3.1
