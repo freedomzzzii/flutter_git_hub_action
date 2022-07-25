@@ -78,13 +78,13 @@ platform:ios do
         # zip file
         sh("pwd")
         sh("cd ../build/ios_integ/Build/Products/; ls -la; pwd")
-        sh("cd ../build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip .")
+        sh("cd ../build/ios_integ/Build/Products/; zip -r ios_tests.zip .")
         # sh("cd build/ios_integ/Build/Products/; zip -r ../../../../../ios_tests.zip Release-iphoneos Runner_iphoneos15.5-arm64.xctestrun;")
         sh("pwd; ls -la")
-        sh("cd ../build/ios_integ/Build/Products/; cd ../../../../../; ls -la; pwd")
+        sh("cd ../build/ios_integ/Build/Products/; ls -la; pwd")
         sh("cd ../; ls -la; pwd")
         # upload to firebase test lab
-        sh("gcloud firebase test ios run --type=xctest --test=../ios_tests.zip --xcode-version=13.3.1")
+        sh("cd ..; pwd; gcloud firebase test ios run --type=xctest --test=build/ios_integ/Build/Products/ios_tests.zip --xcode-version=13.3.1")
     end
 
     desc "Run mobSF (upload file and scan file)"
