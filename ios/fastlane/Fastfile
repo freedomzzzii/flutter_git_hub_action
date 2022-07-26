@@ -74,7 +74,7 @@ platform:ios do
             team_id: ENV["APPLE_TEAM_ID"],
             code_sign_identity:  "Apple Development",
         )
-        sh("cd ..; xcodebuild -workspace Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
+        # sh("cd ..; xcodebuild -workspace Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
         # zip file
         # sh("pwd")
         # sh("cd ../build/ios_integ/Build/Products/; ls -la; pwd")

@@ -4,11 +4,11 @@ workflows:
     instance_type: mac_mini   # machine instance type
     max_build_duration: 60    # build duration in minutes (min 1, max 120)
     environment:
-      # xcode: latest # Define latest, edge or version (e.g. 11.2)
-      xcode: 13.3.1
+      xcode: latest # Define latest, edge or version (e.g. 11.2)
+      # xcode: 13.3.1
       # cocoapods: 1.11.2
-      # flutter: stable   # Define the channel name or version (e.g. v1.13.4)
-      flutter: 3.0.3
+      flutter: stable   # Define the channel name or version (e.g. v1.13.4)
+      # flutter: 3.0.3
       groups:             # Define your environment variables groups here
         - mobile_credentials
         - apple_credentials
@@ -132,4 +132,4 @@ workflows:
         - name: zip
           script: cd build/ios_integ/Build/Products/; zip -r ios_tests.zip .
         - name: gcloud
-          script: gcloud firebase test ios run --type=xctest --test=build/ios_integ/Build/Products/ios_tests.zip --device=model=ipad5,locale=en,orientation=portrait,version=15.4 --xcode-version=13.3.1
+          script: gcloud firebase test ios run --test=build/ios_integ/Build/Products/ios_tests.zip 
