@@ -134,4 +134,4 @@ workflows:
         - name: zip file
           script: bash ./tool/test.sh
         - name: gcloud
-          script: gcloud firebase test ios run --test=build/ios_integ/Build/Products/ios_tests.zip 
+          script: gcloud firebase test ios run --test=ios/build/ios_integ/build_products/ios_tests.zip 
