@@ -85,6 +85,43 @@ platform:ios do
         # sh("cd ../; ls -la; pwd")
         # # upload to firebase test lab
         # # sh("cd ..; pwd; gcloud firebase test ios run --type=xctest --test=build/ios_integ/Build/Products/ios_tests.zip --device=model=ipad5,locale=en,orientation=portrait,version=15.4 --xcode-version=13.3.1")
+        
+        # xcodebuild 
+        # -workspace Runner.xcworkspace 
+        # -scheme Runner 
+        # -config Flutter/Release.xcconfig 
+        # -derivedDataPath build/ios_integ 
+        # -sdk iphoneos
+        #  build-for-testing
+        
+        # build_app(
+        #     workspace: "Runner.xcworkspace",
+        #     scheme: "Runner",
+        #     configuration: "Release",
+        #     clean: true,
+        #     output_directory: "build/ios_integ",
+        #     sdk: "iphoneos",
+        #     # xcargs: "build-for-testing"
+        #     # export_method: "app-store",
+        #     # export_team_id: ENV["APPLE_TEAM_ID"],
+        #     xcpretty_test_format: true,
+        #     # xcodebuild_command
+        # )
+
+        scan(
+            workspace: "Runner.xcworkspace",
+            scheme: "Runner",
+            configuration: "Release",
+            output_directory: "build/ios_integ",
+            output_xctestrun: true,
+            # output_xctestrun: "build/ios_integ",
+            sdk: "iphoneos",
+            should_zip_build_products: true,
+            build_for_testing: true,
+            skip_detect_devices: true,
+            # skip_testing: true,
+	    )
+    
     end
 
     desc "Run mobSF (upload file and scan file)"

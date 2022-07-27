@@ -127,9 +127,11 @@ workflows:
             fastlane test_lab
         - name:
           script: pwd
-        - name: build
-          script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing
-        - name: zip
-          script: cd build/ios_integ/Build/Products/; zip -r ios_tests.zip .
+        # - name: build
+        #   script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing
+        # - name: zip
+        #   script: cd build/ios_integ/Build/Products/; zip -r ios_tests.zip .
+        - name: zip file
+          script: bash ./tool/test.sh
         - name: gcloud
           script: gcloud firebase test ios run --test=build/ios_integ/Build/Products/ios_tests.zip 
