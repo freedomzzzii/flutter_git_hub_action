@@ -10,16 +10,18 @@ class ImagePickerUtilForWeb implements ImagePickerUtil {
   @override
   Future<String?> getBase64Image() async {
     try {
-      final Object? image =
-          await ImagePickerWeb.getImage(outputType: ImageType.bytes);
+      final Uint8List? image =
+          await ImagePickerWeb.getImageAsBytes();
 
       if (image != null) {
-        return const Base64Codec().encode(image as Uint8List);
+        return const Base64Codec().encode(image);
       }
+
+      return null;
     } catch (e) {
       throw ImagePickerUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }

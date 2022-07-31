@@ -6,7 +6,7 @@ import '../../helpers/check_os/check_os_helper.dart';
 import '../error_code/error_code_util.dart';
 
 abstract class FirebaseMessagingUtil {
-  factory FirebaseMessagingUtil({required osCodes osCode}) =>
+  factory FirebaseMessagingUtil({required OsCodes osCode}) =>
       getFirebaseMessagingUtil(osCode: osCode);
 
   Future<String?> getToken();
@@ -16,23 +16,71 @@ abstract class FirebaseMessagingUtil {
   Future<void> requestNotificationPermission();
 }
 
-FirebaseMessagingUtil getFirebaseMessagingUtil({required osCodes osCode}) {
+FirebaseMessagingUtil initFbMessaging(OsCodes os) {
+  try {
+    switch (os) {
+      case OsCodes.web:
+        final WebFirebaseMessagingUtil webFirebaseMessagingUtil =
+            WebFirebaseMessagingUtil(
+          messaging: FirebaseMessaging.instance,
+          localNotification: WebLocalNotificationUtil(
+            flutterLocalNotificationsPlugin: FlutterLocalNotificationsPlugin(),
+          ),
+        );
+
+        webFirebaseMessagingUtil.requestNotificationPermission();
+
+        return webFirebaseMessagingUtil;
+      case OsCodes.android:
+        final AndroidFirebaseMessagingUtil androidFirebaseMessagingUtil =
+            AndroidFirebaseMessagingUtil(
+          messaging: FirebaseMessaging.instance,
+          localNotification: AndroidLocalNotificationUtil(
+            flutterLocalNotificationsPlugin: FlutterLocalNotificationsPlugin(),
+          ),
+        );
+
+        androidFirebaseMessagingUtil.requestNotificationPermission();
+
+        return androidFirebaseMessagingUtil;
+      case OsCodes.ios:
+        return IosFirebaseMessagingUtil(
+          messaging: FirebaseMessaging.instance,
+          localNotification: IosLocalNotificationUtil(
+            flutterLocalNotificationsPlugin: FlutterLocalNotificationsPlugin(),
+          ),
+        );
+      default:
+        throw FirebaseMessagingUtilError(
+          message: 'Cannot init FbMessaging ',
+          code: AppErrorCodes.unknownError,
+        );
+    }
+  } catch (e) {
+    throw FirebaseMessagingUtilError(
+      message: e.toString(),
+      code: AppErrorCodes.unknownError,
+    );
+  }
+}
+
+FirebaseMessagingUtil getFirebaseMessagingUtil({required OsCodes osCode}) {
   switch (osCode) {
-    case osCodes.android:
+    case OsCodes.android:
       return AndroidFirebaseMessagingUtil(
         messaging: FirebaseMessaging.instance,
         localNotification: AndroidLocalNotificationUtil(
           flutterLocalNotificationsPlugin: FlutterLocalNotificationsPlugin(),
         ),
       );
-    case osCodes.ios:
+    case OsCodes.ios:
       return IosFirebaseMessagingUtil(
         messaging: FirebaseMessaging.instance,
         localNotification: IosLocalNotificationUtil(
           flutterLocalNotificationsPlugin: FlutterLocalNotificationsPlugin(),
         ),
       );
-    case osCodes.web:
+    case OsCodes.web:
       return WebFirebaseMessagingUtil(
         messaging: FirebaseMessaging.instance,
         localNotification: WebLocalNotificationUtil(
@@ -42,7 +90,7 @@ FirebaseMessagingUtil getFirebaseMessagingUtil({required osCodes osCode}) {
     default:
       throw FirebaseMessagingUtilError(
         message: 'Firebase messaging incompatibility with current platform',
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
   }
 }
@@ -50,12 +98,12 @@ FirebaseMessagingUtil getFirebaseMessagingUtil({required osCodes osCode}) {
 class FirebaseMessagingUtilError implements AppError {
   FirebaseMessagingUtilError({
     required String message,
-    required appErrorCodes code,
+    required AppErrorCodes code,
   })  : _message = message,
         _code = code;
 
   final String _message;
-  final appErrorCodes _code;
+  final AppErrorCodes _code;
 
   static const String errorContext = 'Error in firebase messaging:';
 
@@ -63,7 +111,7 @@ class FirebaseMessagingUtilError implements AppError {
   String get message => _message;
 
   @override
-  appErrorCodes get code => _code;
+  AppErrorCodes get code => _code;
 
   @override
   StackTrace? get stackTrace => throw '$errorContext $stackTrace';
@@ -94,7 +142,7 @@ class AndroidFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -110,7 +158,7 @@ class AndroidFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -139,7 +187,7 @@ class AndroidFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -167,7 +215,7 @@ class IosFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -188,7 +236,7 @@ class IosFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -217,7 +265,7 @@ class IosFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -245,7 +293,7 @@ class WebFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -259,7 +307,7 @@ class WebFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -288,7 +336,7 @@ class WebFirebaseMessagingUtil implements FirebaseMessagingUtil {
     } catch (e) {
       throw FirebaseMessagingUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -301,12 +349,12 @@ abstract class LocalNotificationUtil {
 class LocalNotificationUtilError implements AppError {
   LocalNotificationUtilError({
     required String message,
-    required appErrorCodes code,
+    required AppErrorCodes code,
   })  : _message = message,
         _code = code;
 
   final String _message;
-  final appErrorCodes _code;
+  final AppErrorCodes _code;
 
   static const String errorContext = 'Error in local notification:';
 
@@ -314,7 +362,7 @@ class LocalNotificationUtilError implements AppError {
   String get message => _message;
 
   @override
-  appErrorCodes get code => _code;
+  AppErrorCodes get code => _code;
 
   @override
   StackTrace? get stackTrace => throw '$errorContext $stackTrace';
@@ -341,6 +389,7 @@ class AndroidLocalNotificationUtil implements LocalNotificationUtil {
     'high_importance_channel',
     'High Importance Notifications',
     importance: Importance.max,
+    sound: RawResourceAndroidNotificationSound('sound'),
   );
 
   void _init() {
@@ -353,7 +402,7 @@ class AndroidLocalNotificationUtil implements LocalNotificationUtil {
     } catch (e) {
       throw LocalNotificationUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -366,7 +415,6 @@ class AndroidLocalNotificationUtil implements LocalNotificationUtil {
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(_channel);
-
       _flutterLocalNotificationsPlugin.show(
         message.notification.hashCode,
         message.notification?.title,
@@ -377,13 +425,16 @@ class AndroidLocalNotificationUtil implements LocalNotificationUtil {
             _channel.name,
             channelDescription: _channel.description,
             icon: 'launch_background',
+            sound: const RawResourceAndroidNotificationSound('sound'),
+            importance: Importance.max,
+            priority: Priority.max,
           ),
         ),
       );
     } catch (e) {
       throw LocalNotificationUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -412,7 +463,7 @@ class IosLocalNotificationUtil implements LocalNotificationUtil {
     } catch (e) {
       throw LocalNotificationUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }
@@ -436,10 +487,10 @@ class WebLocalNotificationUtil implements LocalNotificationUtil {
       _flutterLocalNotificationsPlugin.initialize(
         const InitializationSettings(),
       );
-    }  catch (e) {
+    } catch (e) {
       throw LocalNotificationUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }

@@ -3,5 +3,5 @@ import 'grpc_util.dart';
 
 GrpcClientUtil getGrpcClientUtil() => throw GrpcClientUtilError(
       message: 'GRPC is incompatibility with current platform',
-      code: appErrorCodes.unknownError,
+      code: AppErrorCodes.unknownError,
     );

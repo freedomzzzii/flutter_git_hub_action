@@ -45,7 +45,7 @@ void main() {
       expect(expectImagePickerUtil.imagePicker, mockImagePicker);
     });
 
-    test('Should have getImage method - Success case', () async {
+    test('Should have getBase64Image method - Success case', () async {
       when(mockImagePicker.pickImage(source: ImageSource.gallery))
           .thenAnswer((_) => Future<XFile>.value(expectImage));
 
@@ -55,7 +55,7 @@ void main() {
       expect(expectSelectImageFromDevice?.isNotEmpty, true);
     });
 
-    test('Should have getImage method - Failure case', () async {
+    test('Should have getBase64Image method - Failure case', () async {
       when(mockImagePicker.pickImage(source: ImageSource.gallery))
           .thenThrow(UnimplementedError());
 

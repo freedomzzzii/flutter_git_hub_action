@@ -6,25 +6,25 @@ import '../../commons/errors/app_error.dart';
 import '../../configs/error_messages/error_message_config.dart';
 import '../../utils/error_code/error_code_util.dart';
 
-enum osCodes { web, android, ios }
+enum OsCodes { web, android, ios }
 
-osCodes getOs() {
+OsCodes getOs() {
   try {
     if (kIsWeb) {
-      return osCodes.web;
+      return OsCodes.web;
     } else if (Platform.isAndroid) {
-      return osCodes.android;
+      return OsCodes.android;
     } else if (Platform.isIOS) {
-      return osCodes.ios;
+      return OsCodes.ios;
     }
 
     throw GetOsError(
-      code: appErrorCodes.unknownError,
+      code: AppErrorCodes.unknownError,
       message: cannotDetectOsMessage,
     );
   } catch (e) {
     throw GetOsError(
-      code: appErrorCodes.unknownError,
+      code: AppErrorCodes.unknownError,
       message: e.toString(),
     );
   }
@@ -33,12 +33,12 @@ osCodes getOs() {
 class GetOsError implements AppError {
   GetOsError({
     required String message,
-    required appErrorCodes code,
+    required AppErrorCodes code,
   })  : _message = message,
         _code = code;
 
   final String _message;
-  final appErrorCodes _code;
+  final AppErrorCodes _code;
 
   static const String errorContext =
       'An error occurred in the check os function:';
@@ -47,7 +47,7 @@ class GetOsError implements AppError {
   String get message => _message;
 
   @override
-  appErrorCodes get code => _code;
+  AppErrorCodes get code => _code;
 
   @override
   StackTrace? get stackTrace => throw '$errorContext $stackTrace';

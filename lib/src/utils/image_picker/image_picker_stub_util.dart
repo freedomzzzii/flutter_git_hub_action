@@ -3,5 +3,5 @@ import 'image_picker_util.dart';
 
 ImagePickerUtil getImagePickerUtil() => throw ImagePickerUtilError(
       message: 'Error cannot use package `image_picker` and `image_picker_web`',
-      code: appErrorCodes.unknownError,
+      code: AppErrorCodes.unknownError,
     );

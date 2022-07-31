@@ -25,10 +25,12 @@ class ImagePickerUtilForMobile implements ImagePickerUtil {
 
         return base64Encode(imageBytes);
       }
+
+      return null;
     } catch (e) {
       throw ImagePickerUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }

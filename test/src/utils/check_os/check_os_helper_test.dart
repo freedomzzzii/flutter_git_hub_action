@@ -5,13 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const Set<String> expectOsCodes = <String>{'web', 'android', 'ios'};
 
-  group('osCodes enum', () {
+  group('OsCodes enum', () {
     test('should have mandatory values', () {
-      for (final osCodes value in osCodes.values) {
+      for (final OsCodes value in OsCodes.values) {
         expect(expectOsCodes.contains(value.toString().split('.')[1]), true);
       }
 
-      expect(osCodes.values.length, expectOsCodes.length);
+      expect(OsCodes.values.length, expectOsCodes.length);
     });
   });
 

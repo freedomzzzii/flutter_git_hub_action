@@ -1,33 +1,33 @@
+// Note. ignore rule in this file because faker is dev dependencies
+// ignore: depend_on_referenced_packages
 import 'package:faker/faker.dart';
-import 'package:flutter_starter_kit/src/helpers/check_os/check_os_helper.dart';
-import 'package:flutter_starter_kit/src/utils/firebase/firebase_message_util.dart';
-import 'package:universal_html/html.dart';
 
+import '../../core/navigation/navigation_core.dart';
 import '../../helpers/check_os/check_os_helper.dart';
-import '../../modules/todo_module/applications/bloc/task_bloc/task_bloc.dart';
-import '../../modules/todo_module/applications/bloc/task_sse_bloc/task_sse_bloc.dart';
-import '../../modules/todo_module/applications/models/error_bloc_model.dart';
-import '../../modules/todo_module/applications/models/exception_bloc_model.dart';
-import '../../modules/todo_module/applications/models/task_bloc_models/task_create_bloc_model.dart';
-import '../../modules/todo_module/applications/models/task_bloc_models/task_delete_bloc_model.dart';
-import '../../modules/todo_module/applications/models/task_bloc_models/task_get_bloc_model.dart';
-import '../../modules/todo_module/applications/models/task_bloc_models/task_update_bloc_model.dart';
-import '../../modules/todo_module/commons/errors/datasource_error.dart';
-import '../../modules/todo_module/commons/errors/repository_error.dart';
-import '../../modules/todo_module/commons/errors/usecase_error.dart';
-import '../../modules/todo_module/commons/exceptions/usecase_exception.dart';
-import '../../modules/todo_module/configs/grpc/task.pbgrpc.dart';
-import '../../modules/todo_module/configs/usecasae_messages/usecase_message_config.dart';
-import '../../modules/todo_module/domains/entities/task_create_entity.dart';
-import '../../modules/todo_module/domains/entities/task_delete_entity.dart';
-import '../../modules/todo_module/domains/entities/task_get_entity.dart';
-import '../../modules/todo_module/domains/entities/task_update_entity.dart';
-import '../../modules/todo_module/services/commons/request_query.dart';
-import '../../modules/todo_module/services/models/task_create_datasource_model.dart';
-import '../../modules/todo_module/services/models/task_delete_datasource_model.dart';
-import '../../modules/todo_module/services/models/task_get_datasource_model.dart';
-import '../../modules/todo_module/services/models/task_update_datasource_model.dart';
+import '../../modules/common_module/configs/routes/route_config.dart';
+import '../../modules/task_module/applications/models/error_view_model.dart';
+import '../../modules/task_module/applications/models/exception_view_model.dart';
+import '../../modules/task_module/applications/models/task_create_view_model.dart';
+import '../../modules/task_module/applications/models/task_delete_view_model.dart';
+import '../../modules/task_module/applications/models/task_get_view_model.dart';
+import '../../modules/task_module/applications/models/task_update_view_model.dart';
+import '../../modules/task_module/commons/errors/datasource_error.dart';
+import '../../modules/task_module/commons/errors/repository_error.dart';
+import '../../modules/task_module/commons/errors/usecase_error.dart';
+import '../../modules/task_module/commons/exceptions/usecase_exception.dart';
+import '../../modules/task_module/configs/grpc/task.pbgrpc.dart';
+import '../../modules/task_module/configs/usecasae_messages/usecase_message_config.dart';
+import '../../modules/task_module/domains/entities/task_create_entity.dart';
+import '../../modules/task_module/domains/entities/task_delete_entity.dart';
+import '../../modules/task_module/domains/entities/task_get_entity.dart';
+import '../../modules/task_module/domains/entities/task_update_entity.dart';
+import '../../modules/task_module/services/commons/request_query.dart';
+import '../../modules/task_module/services/models/task_create_datasource_model.dart';
+import '../../modules/task_module/services/models/task_delete_datasource_model.dart';
+import '../../modules/task_module/services/models/task_get_datasource_model.dart';
+import '../../modules/task_module/services/models/task_update_datasource_model.dart';
 import '../error_code/error_code_util.dart';
+import '../firebase/firebase_message_util.dart';
 import '../grpc/grpc_util.dart';
 import '../image_picker/image_picker_util.dart';
 
@@ -61,7 +61,7 @@ const TaskGetRequestEntity expectTaskGetRequestEntity = TaskGetRequestEntity(
 
 final DataSourceError expectDataSourceError = DataSourceError(
   message: faker.lorem.word(),
-  code: appErrorCodes.missingRequiredFields,
+  code: AppErrorCodes.missingRequiredFields,
 );
 
 final ImagePickerUtilError expectImagePickerUtilError = ImagePickerUtilError(
@@ -105,14 +105,14 @@ final TaskGetUseCaseError expectTaskGetUseCaseError = TaskGetUseCaseError(
   code: expectDataSourceError.code,
 );
 
-final TaskGetRequestBlocModel expectTaskGetRequestBlocModel =
-    TaskGetRequestBlocModel(
+final TaskGetRequestControllerModel expectTaskGetRequestControllerModel =
+    TaskGetRequestControllerModel(
   sortBy: expectTaskGetRequestEntity.sortBy,
   orderBy: expectTaskGetRequestEntity.orderBy,
 );
 
-final TaskGetResponseBlocModel expectTaskGetResponseBlocModel =
-    TaskGetResponseBlocModel(
+final TaskGetResponseControllerModel expectTaskGetResponseControllerModel =
+    TaskGetResponseControllerModel(
   id: expectTaskGetResponseEntity.id,
   title: expectTaskGetResponseEntity.title,
   isDone: expectTaskGetResponseEntity.isDone,
@@ -120,15 +120,12 @@ final TaskGetResponseBlocModel expectTaskGetResponseBlocModel =
   createdAt: expectTaskGetResponseEntity.createdAt,
 );
 
-final List<TaskGetResponseBlocModel> expectTaskGetResponseBlocModelList =
-    <TaskGetResponseBlocModel>[expectTaskGetResponseBlocModel];
-
-final ExceptionBlocModel exceptExceptionBlocModel = ExceptionBlocModel(
+final ExceptionViewModel exceptExceptionViewModel = ExceptionViewModel(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
 
-final ErrorBlocModel exceptErrorBlocModel = ErrorBlocModel(
+final ErrorViewModel exceptErrorViewModel = ErrorViewModel(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
@@ -138,14 +135,14 @@ final DataSourceError expectDataSourceErrorRequiredField = DataSourceError(
   code: expectDataSourceError.code,
 );
 
-final TaskCreateRequestBlocModel expectTaskCreateRequestBlocModel =
-    TaskCreateRequestBlocModel(
+final TaskCreateRequestControllerModel expectTaskCreateRequestControllerModel =
+    TaskCreateRequestControllerModel(
   title: expectTaskCreateResponseEntity.title,
   imageUrl: expectTaskCreateResponseEntity.imageUrl,
 );
 
-final TaskCreateResponseBlocModel expectTaskCreateResponseBlocModel =
-    TaskCreateResponseBlocModel(
+final TaskCreateResponseControllerModel
+    expectTaskCreateResponseControllerModel = TaskCreateResponseControllerModel(
   id: expectTaskCreateResponseEntity.id,
   title: expectTaskCreateResponseEntity.title,
   isDone: expectTaskCreateResponseEntity.isDone,
@@ -174,34 +171,7 @@ final TaskCreateRequestEntity expectTaskCreateRequestEntity =
   imageUrl: expectTaskCreateResponseEntity.imageUrl,
 );
 
-final TaskInitialState expectTaskInitialState = TaskInitialState();
-
-final TaskGetState expectTaskGetState = TaskGetState(
-  status: taskStatusState.failure,
-  query: expectTaskGetRequestBlocModel,
-  data: expectTaskGetResponseBlocModelList,
-  error: exceptErrorBlocModel,
-  exception: exceptExceptionBlocModel,
-);
-
-final TaskGetState expectTaskGetStateSuccess = TaskGetState(
-  status: taskStatusState.success,
-  query: expectTaskGetRequestBlocModel,
-  data: expectTaskGetResponseBlocModelList,
-);
-
-final TaskGetState expectTaskGetStateSuccessDataEmpty = TaskGetState(
-  status: taskStatusState.success,
-  query: expectTaskGetRequestBlocModel,
-);
-
-final TaskGetState expectTaskGetStateError = TaskGetState(
-  status: taskStatusState.failure,
-  query: expectTaskGetRequestBlocModel,
-  error: exceptErrorBlocModel,
-);
-
-final TaskUpdateBodyRequestEntity expectTaskUpdateRequestEntity =
+final TaskUpdateBodyRequestEntity expectTaskUpdateBodyRequestEntity =
     TaskUpdateBodyRequestEntity(
   title: expectTaskGetResponseEntity.title,
   isDone: expectTaskGetResponseEntity.isDone,
@@ -242,25 +212,8 @@ final TaskUpdateRequestDataSourceModel expectTaskUpdateRequestDataSourceModel =
   isDone: expectTaskGetResponseEntity.isDone,
   imageUrl: expectTaskGetResponseEntity.imageUrl,
 );
-final TaskCreateState expectTaskCreateState = TaskCreateState(
-  error: exceptErrorBlocModel,
-  status: taskStatusState.failure,
-  exception: exceptExceptionBlocModel,
-);
 
 final FieldValidationException expectTaskFieldValidationExceptionTitleEmpty =
-    FieldValidationException(
-  message: requiredTitleMessage,
-  code: expectDataSourceError.code,
-);
-
-final FieldValidationException expectTaskFieldValidationExceptionImageUrlEmpty =
-    FieldValidationException(
-  message: requiredImageUrlMessage,
-  code: expectDataSourceError.code,
-);
-
-final FieldValidationException expectFieldValidationExceptionTitleEmpty =
     FieldValidationException(
   message: requiredTitleMessage,
   code: expectDataSourceError.code,
@@ -269,17 +222,14 @@ final FieldValidationException expectFieldValidationExceptionTitleEmpty =
 const FieldRequiredException expectFieldRequiredExceptionId =
     FieldRequiredException(
   message: requiredIdMessage,
-  code: appErrorCodes.missingRequiredFields,
+  code: AppErrorCodes.missingRequiredFields,
 );
 
 const FieldValidationException expectFieldValidationExceptionAtLeastOne =
     FieldValidationException(
   message: requiredAtLeastOneMessage,
-  code: appErrorCodes.missingRequiredFields,
+  code: AppErrorCodes.missingRequiredFields,
 );
-
-const TaskCreateState expectTaskCreateStateSuccess =
-    TaskCreateState(status: taskStatusState.success);
 
 final TaskCreateUseCaseError expectTaskCreateUseCaseError =
     TaskCreateUseCaseError(
@@ -293,20 +243,13 @@ final TaskUpdateQueryParamsRequestDataSourceModel
   id: expectTaskGetResponseEntity.id,
 );
 
-final TaskUpdateState expectTaskUpdateStateSuccess = TaskUpdateState(
-  data: expectTaskUpdateBlocModel,
-  status: taskStatusState.success,
-);
-
-final TaskUpdateBlocModel expectTaskUpdateBlocModel = TaskUpdateBlocModel(
+final TaskUpdateControllerModel expectTaskUpdateControllerModel =
+    TaskUpdateControllerModel(
   id: expectTaskCreateResponseEntity.id,
   title: expectTaskCreateResponseEntity.title,
   isDone: expectTaskCreateResponseEntity.isDone,
   imageUrl: expectTaskCreateResponseEntity.imageUrl,
 );
-
-final TaskSelectedToUpdatedEvent expectTaskSelectedToUpdateEvent =
-    TaskSelectedToUpdatedEvent(model: expectTaskUpdateBlocModel);
 
 final TaskUpdateUseCaseError expectTaskUpdateUseCaseError =
     TaskUpdateUseCaseError(
@@ -320,12 +263,14 @@ final TaskDeleteUseCaseError expectTaskDeleteUseCaseError =
   code: expectDataSourceError.code,
 );
 
-final TaskUpdateQueryParamsRequestBlocModel
-    expectTaskUpdateQueryParamsRequestBlocModel =
-    TaskUpdateQueryParamsRequestBlocModel(id: expectTaskGetResponseEntity.id);
+final TaskUpdateQueryParamsRequestControllerModel
+    expectTaskUpdateQueryParamsRequestControllerModel =
+    TaskUpdateQueryParamsRequestControllerModel(
+  id: expectTaskGetResponseEntity.id,
+);
 
-final TaskUpdateResponseBlocModel expectTaskUpdateResponseBlocModel =
-    TaskUpdateResponseBlocModel(
+final TaskUpdateResponseControllerModel
+    expectTaskUpdateResponseControllerModel = TaskUpdateResponseControllerModel(
   id: expectTaskGetResponseEntity.id,
   title: expectTaskGetResponseEntity.title,
   isDone: expectTaskGetResponseEntity.isDone,
@@ -333,28 +278,18 @@ final TaskUpdateResponseBlocModel expectTaskUpdateResponseBlocModel =
   createdAt: expectTaskGetResponseEntity.createdAt,
 );
 
-final TaskDeleteQueryParamsRequestBlocModel
-    expectTaskDeleteQueryParamsRequestBlocModel =
-    TaskDeleteQueryParamsRequestBlocModel(id: expectTaskGetResponseEntity.id);
+final TaskDeleteQueryParamsRequestControllerModel
+    expectTaskDeleteQueryParamsRequestControllerModel =
+    TaskDeleteQueryParamsRequestControllerModel(
+  id: expectTaskGetResponseEntity.id,
+);
 
-final TaskUpdateBodyRequestBlocModel expectTaskUpdateBodyRequestBlocModel =
-    TaskUpdateBodyRequestBlocModel(
+final TaskUpdateBodyRequestControllerModel
+    expectTaskUpdateBodyRequestControllerModel =
+    TaskUpdateBodyRequestControllerModel(
   title: expectTaskGetResponseEntity.title,
   isDone: expectTaskGetResponseEntity.isDone,
   imageUrl: expectTaskGetResponseEntity.imageUrl,
-);
-
-final TaskUpdateState expectTaskUpdateState = TaskUpdateState(
-  data: expectTaskUpdateBlocModel,
-  exception: exceptExceptionBlocModel,
-  error: exceptErrorBlocModel,
-  status: expectTaskGetState.status,
-);
-
-final TaskDeleteState expectTaskDeleteState = TaskDeleteState(
-  exception: exceptExceptionBlocModel,
-  error: exceptErrorBlocModel,
-  status: expectTaskGetState.status,
 );
 
 final FirebaseMessagingUtilError expectFirebaseMessagingUtilError =
@@ -398,117 +333,29 @@ final GetOsError expectGetOsError = GetOsError(
   code: expectDataSourceError.code,
 );
 
-final EventSource expectEventSource =
-    EventSource(expectTaskGetResponseEntity.title);
-
-final TaskSseConnectGetTaskState expectTaskSseConnectGetTaskState =
-    TaskSseConnectGetTaskState(
-  status: taskSseStatusState.success,
-  eventSource: expectEventSource,
-  error: exceptErrorBlocModel,
-  exception: expectExceptionBlocModel,
-);
-
-final TaskSseGetTaskState expectTaskSseGetTaskStateError = TaskSseGetTaskState(
-  status: taskSseStatusState.failure,
-  eventSource: expectEventSource,
-  error: exceptErrorBlocModel,
-  exception: expectExceptionBlocModel,
-  data: expectTaskGetResponseBlocModelList,
-);
-
-final TaskSseGetTaskState expectTaskSseGetTaskState = TaskSseGetTaskState(
-  status: taskSseStatusState.success,
-  data: expectTaskGetResponseBlocModelList,
-);
-
-const TaskSseGetTaskState expectTaskSseGetTaskStateEmpty = TaskSseGetTaskState(
-  status: taskSseStatusState.success,
-);
-
-final ErrorBlocModel expectErrorBlocModel = ErrorBlocModel(
+final ErrorViewModel expectErrorViewModel = ErrorViewModel(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
 
-final ExceptionBlocModel expectExceptionBlocModel = ExceptionBlocModel(
+final ExceptionViewModel expectExceptionViewModel = ExceptionViewModel(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
 );
 
-final TaskSseCloseConnectState expectTaskSseCloseConnectStateError =
-    TaskSseCloseConnectState(
-  exception: expectExceptionBlocModel,
-      error: expectErrorBlocModel,
-  status: taskSseStatusState.failure,
+final TaskUpdateEntity expectTaskUpdateEntity = TaskUpdateEntity(
+  id: expectTaskGetResponseEntity.id,
+  title: expectTaskGetResponseEntity.title,
+  imageUrl: expectTaskGetResponseEntity.imageUrl,
+  isDone: expectTaskGetResponseEntity.isDone,
 );
 
-const TaskSseCloseConnectState expectTaskSseCloseConnectState =
-    TaskSseCloseConnectState(
-  status: taskSseStatusState.success,
+final SubPath expectSubPath = SubPath(
+  name: expectTaskGetResponseEntity.title,
+  path: commonNotFoundPath.path,
 );
 
-final TaskSseConnectGetTaskState expectTaskSseConnectGetTaskStateError =
-    TaskSseConnectGetTaskState(
-  error: expectErrorBlocModel,
-  exception: expectExceptionBlocModel,
-  status: taskSseStatusState.failure,
-);
-
-final dynamic expectSseResponse = '''
-{"data":[{"id":"${expectTaskGetResponseEntity.id}","title":"${expectTaskGetResponseEntity.title}","isDone":${expectTaskGetResponseEntity.isDone},"imageUrl":"${expectTaskGetResponseEntity.imageUrl}","createdAt":"${expectTaskGetResponseEntity.createdAt}"}]}''';
-
-final TaskSseInitialState expectTaskSseInitialState = TaskSseInitialState();
-
-final TaskLoadingState expectTaskLoadingState = TaskLoadingState();
-
-final TaskStreamGetUseCaseError expectTaskStreamGetUseCaseError =
-    TaskStreamGetUseCaseError(
+final NavigationError expectNavigationError = NavigationError(
   message: expectDataSourceError.message,
   code: expectDataSourceError.code,
-);
-
-final TaskSendDataUseCaseError expectTaskSendDataUseCaseError =
-    TaskSendDataUseCaseError(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final TaskDisconnectUseCaseError expectTaskDisconnectUseCaseError =
-    TaskDisconnectUseCaseError(
-  message: expectDataSourceError.message,
-  code: expectDataSourceError.code,
-);
-
-final TaskStreamGetState expectTaskStreamGetStateSuccess = TaskStreamGetState(
-  status: taskStatusState.success,
-  data: expectTaskGetResponseBlocModelList,
-);
-
-final TaskStreamSubscriptionState expectTaskStreamSubscriptionState =
-    TaskStreamSubscriptionState(
-  exception: exceptExceptionBlocModel,
-  error: exceptErrorBlocModel,
-  status: taskStatusState.failure,
-);
-
-final TaskStreamGetState expectTaskStreamGetState = TaskStreamGetState(
-  exception: exceptExceptionBlocModel,
-  data: expectTaskGetResponseBlocModelList,
-  error: exceptErrorBlocModel,
-  status: taskStatusState.failure,
-);
-
-final TaskRefreshStreamGetState expectTaskRefreshStreamGetState =
-TaskRefreshStreamGetState(
-  exception: exceptExceptionBlocModel,
-  error: exceptErrorBlocModel,
-  status: taskStatusState.failure,
-);
-
-final TaskDisconnectStreamGetState expectTaskDisconnectStreamGetState =
-TaskDisconnectStreamGetState(
-  exception: exceptExceptionBlocModel,
-  error: exceptErrorBlocModel,
-  status: taskStatusState.failure,
 );

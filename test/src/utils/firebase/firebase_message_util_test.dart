@@ -1,4 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
+// Note. ignore this because mock firebase init need class MethodChannelFirebase
+// ignore: depend_on_referenced_packages
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_starter_kit/src/utils/firebase/firebase_message_util.dart';
 import 'package:flutter_starter_kit/src/utils/test_data/mock_test_data.dart';
@@ -7,6 +13,45 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'firebase_message_util_test.mocks.dart';
+
+// create Callback for mock initial firebase
+typedef Callback = void Function(MethodCall call);
+// create setupFirebaseAuthMocks function for mock initial firebase
+void setupFirebaseAuthMocks([Callback? customHandlers]) {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  MethodChannelFirebase.channel
+      .setMockMethodCallHandler((MethodCall call) async {
+    if (call.method == 'Firebase#initializeCore') {
+      return <Object>[
+        <String, dynamic>{
+          'name': defaultFirebaseAppName,
+          'options': <String, String>{
+            'apiKey': '123',
+            'appId': '123',
+            'messagingSenderId': '123',
+            'projectId': '123',
+          },
+          'pluginConstants': <String, dynamic>{},
+        }
+      ];
+    }
+
+    if (call.method == 'Firebase#initializeApp') {
+      return <String, dynamic>{
+        'name': call.arguments['appName'],
+        'options': call.arguments['options'],
+        'pluginConstants': <String, dynamic>{},
+      };
+    }
+
+    if (customHandlers != null) {
+      customHandlers(call);
+    }
+
+    return null;
+  });
+}
 
 @GenerateMocks(<Type>[
   FirebaseMessaging,
@@ -30,7 +75,21 @@ void main() {
     authorizationStatus: AuthorizationStatus.authorized,
     announcement: AppleNotificationSetting.enabled,
     alert: AppleNotificationSetting.enabled,
+    timeSensitive: AppleNotificationSetting.enabled,
   );
+
+  setupFirebaseAuthMocks();
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+  });
+
+  group('initFbMessaging Function', () {
+    test('Should have initFbMessaging Function', () {
+      expect(initFbMessaging, initFbMessaging);
+    });
+  });
 
   group('FirebaseMessagingUtilError Class', () {
     test('Should have FirebaseMessagingUtilError Class', () {

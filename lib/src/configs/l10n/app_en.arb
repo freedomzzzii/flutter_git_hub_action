@@ -5,7 +5,6 @@
   "listBottomMenu": "List",
   "updateBottomMenu": "Update",
   "grpcBottomMenu": "gRPC",
-  "sseBottomMenu": "SSE",
   "updateTaskAppBar": "Update Task",
   "saveUpdateTaskBtn": "Save",
   "noUpdateImage": "No Image",
@@ -21,6 +20,5 @@
   "textFieldPlaceHolder": "Enter your some text",
   "selectImage": "Select Image",
   "successSnackBar": "Success",
-  "failureSnackBar": "Failure",
-  "webSocketMenu": "websocket"
+  "failureSnackBar": "Failure"
 }

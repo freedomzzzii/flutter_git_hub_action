@@ -16,7 +16,7 @@ class GrpcClientUtilForWeb implements GrpcClientUtil {
     } catch (e) {
       throw GrpcClientUtilError(
         message: e.toString(),
-        code: appErrorCodes.unknownError,
+        code: AppErrorCodes.unknownError,
       );
     }
   }

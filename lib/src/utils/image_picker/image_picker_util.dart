@@ -15,12 +15,12 @@ abstract class ImagePickerUtil {
 class ImagePickerUtilError implements AppError {
   ImagePickerUtilError({
     required String message,
-    required appErrorCodes code,
+    required AppErrorCodes code,
   })  : _message = message,
         _code = code;
 
   final String _message;
-  final appErrorCodes _code;
+  final AppErrorCodes _code;
 
   static const String errorContext = 'Error in image picker util:';
 
@@ -28,7 +28,7 @@ class ImagePickerUtilError implements AppError {
   String get message => _message;
 
   @override
-  appErrorCodes get code => _code;
+  AppErrorCodes get code => _code;
 
   @override
   StackTrace? get stackTrace => throw '$errorContext $stackTrace';

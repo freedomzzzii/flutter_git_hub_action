@@ -1,15 +1,15 @@
 import '../../commons/constants/api_constant.dart';
 
-enum appErrorCodes { missingRequiredFields, resourceNotFound, unknownError }
+enum AppErrorCodes { missingRequiredFields, resourceNotFound, unknownError }
 
-appErrorCodes getAppErrorCode({required dynamic code}) {
+AppErrorCodes getAppErrorCode({required dynamic code}) {
   switch (code) {
     case 400:
     case errorRequireFieldCodeAPI:
-      return appErrorCodes.missingRequiredFields;
+      return AppErrorCodes.missingRequiredFields;
     case 404:
-      return appErrorCodes.resourceNotFound;
+      return AppErrorCodes.resourceNotFound;
     default:
-      return appErrorCodes.unknownError;
+      return AppErrorCodes.unknownError;
   }
 }

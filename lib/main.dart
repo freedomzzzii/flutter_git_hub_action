@@ -2,14 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
-import 'src/configs/env/env_config.dart';
 import 'src/configs/l10n/app_localizations.dart';
-import 'src/configs/routes/route_config.dart';
+import 'src/helpers/check_os/check_os_helper.dart';
 import 'src/modules/app_module.dart';
-import 'src/modules/app_screen.dart';
+import 'src/modules/common_module/configs/routes/route_config.dart';
+import 'src/modules/task_module/configs/routes/route_config.dart';
 
 Future<void> main() async {
   try {
@@ -18,16 +18,20 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
 
-    final Trace myTrace = FirebasePerformance.instance.newTrace('dot_env');
+    final Trace _dotENVTrace = FirebasePerformance.instance.newTrace('dot_env');
+    final AppBinding _initialAppBinding = AppBinding(os: getOs());
 
-    myTrace.start();
-    await dotenv.load(fileName: envFileName);
-    myTrace.stop();
+    _dotENVTrace.start();
+    await dotenv.load();
+    _dotENVTrace.stop();
 
     return runApp(
-      ModularApp(
-        module: AppModule(),
-        child: const AppScreen(),
+      GetMaterialApp(
+        initialRoute: taskModule.getFullPath(subPath: taskListEditPath),
+        initialBinding: _initialAppBinding,
+        getPages: allRouteScreen,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   } catch (e) {
@@ -42,7 +46,7 @@ Future<void> main() async {
             },
           ),
         ),
-        initialRoute: initialRoute,
+        initialRoute: commonModule.getFullPath(subPath: commonNotFoundPath),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
       ),

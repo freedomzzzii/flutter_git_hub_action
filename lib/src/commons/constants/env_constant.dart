@@ -4,5 +4,3 @@ const String grpcMobilePortEnv = 'GRPC_MOBILE_PORT';
 const String grpcWebSchemeEnv = 'GRPC_WEB_SCHEME';
 const String grpcWebDomainEnv = 'GRPC_WEB_DOMAIN';
 const String grpcWebPortEnv = 'GRPC_WEB_PORT';
-const String ssrUrlEnv = 'SSR_URL';
-const String webSocketUrlEnv = 'WEB_SOCKET_URL';

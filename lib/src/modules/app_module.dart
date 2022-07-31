@@ -1,82 +1,46 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_starter_kit/src/utils/firebase/firebase_message_util.dart';
+import 'package:get/get.dart';
 
-import '../configs/routes/route_config.dart';
+import '../core/navigation/navigation_core.dart';
 import '../helpers/check_os/check_os_helper.dart';
-import '../modules/todo_module/presentations/screens/not_found_screen.dart';
-import '../modules/todo_module/todo_module.dart';
-import '../utils/error_code/error_code_util.dart';
+import '../utils/firebase/firebase_message_util.dart';
+import 'common_module/common_module.dart';
+import 'task_module/task_module.dart';
 
-class AppModule extends Module {
-  AppModule() {
-    final FirebaseMessagingUtil fbMessaging = initFbMessaging(_os);
+final TaskModule taskModule = TaskModule();
+final CommonModule commonModule = CommonModule();
 
-    _fbMessaging = fbMessaging;
-    _fbMessaging.requestNotificationPermission();
-  }
+final List<GetPage<Map<String, dynamic>>> allRouteScreen =
+    <GetPage<Map<String, dynamic>>>[
+  ...taskModule.routeScreen,
+  ...commonModule.routeScreen,
+];
 
-  final osCodes _os = getOs();
-  late final FirebaseMessagingUtil _fbMessaging;
+abstract class Module {
+  List<GetPage<Map<String, dynamic>>> get routeScreen =>
+      <GetPage<Map<String, dynamic>>>[];
 
-  FirebaseMessagingUtil initFbMessaging(osCodes os) {
-    try {
-      switch (os) {
-        case osCodes.web:
-          return WebFirebaseMessagingUtil(
-            messaging: FirebaseMessaging.instance,
-            localNotification: WebLocalNotificationUtil(
-              flutterLocalNotificationsPlugin:
-                  FlutterLocalNotificationsPlugin(),
-            ),
-          );
-        case osCodes.android:
-          return AndroidFirebaseMessagingUtil(
-            messaging: FirebaseMessaging.instance,
-            localNotification: AndroidLocalNotificationUtil(
-              flutterLocalNotificationsPlugin:
-                  FlutterLocalNotificationsPlugin(),
-            ),
-          );
-        case osCodes.ios:
-          return IosFirebaseMessagingUtil(
-            messaging: FirebaseMessaging.instance,
-            localNotification: IosLocalNotificationUtil(
-              flutterLocalNotificationsPlugin:
-                  FlutterLocalNotificationsPlugin(),
-            ),
-          );
-        default:
-          throw FirebaseMessagingUtilError(
-            message: 'Cannot init FbMessaging ',
-            code: appErrorCodes.unknownError,
-          );
-      }
-    } catch (e) {
-      throw FirebaseMessagingUtilError(
-        message: e.toString(),
-        code: appErrorCodes.unknownError,
-      );
-    }
-  }
+  List<SubPath> get subPaths => <SubPath>[];
+
+  String get mainPath => '';
+
+  String getFullPath({
+    required SubPath subPath,
+    Map<String, String>? replaceParameters,
+    String? params,
+  }) =>
+      '';
+}
+
+class AppBinding implements Bindings {
+  AppBinding({required OsCodes os}) : _os = os;
+
+  final OsCodes _os;
+
+  OsCodes get os => _os;
 
   @override
-  List<Bind<Object>> get binds => <Bind<Object>>[
-        Bind<FirebaseMessagingUtil>(
-          (_) => _fbMessaging,
-        ),
-        Bind<osCodes>(
-          (_) => _os,
-        ),
-      ];
-
-  @override
-  List<ModularRoute<dynamic>> get routes => <ModularRoute<dynamic>>[
-        ModuleRoute(initialRoute, module: TodoModule()),
-        ChildRoute<ChildRoute<String>>(
-          notFoundRoute,
-          child: (_, __) => const NotFoundScreen(),
-        )
-      ];
+  void dependencies() {
+    Get.put<FirebaseMessagingUtil>(initFbMessaging(_os));
+    Get.put<OsCodes>(_os);
+  }
 }

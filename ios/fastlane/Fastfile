@@ -74,7 +74,7 @@ platform:ios do
             team_id: ENV["APPLE_TEAM_ID"],
             code_sign_identity:  "Apple Development",
         )
-        # sh("cd ..; xcodebuild -workspace Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
+        sh("xcodebuild -workspace Runner.xcworkspace -scheme Runner -config Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing")
         # zip file
         # sh("pwd")
         # sh("cd ../build/ios_integ/Build/Products/; ls -la; pwd")
@@ -108,19 +108,19 @@ platform:ios do
         #     # xcodebuild_command
         # )
 
-        scan(
-            workspace: "Runner.xcworkspace",
-            scheme: "Runner",
-            configuration: "Release",
-            output_directory: "build/ios_integ",
-            output_xctestrun: true,
-            # output_xctestrun: "build/ios_integ",
-            sdk: "iphoneos",
-            should_zip_build_products: true,
-            build_for_testing: true,
-            skip_detect_devices: true,
-            # skip_testing: true,
-	    )
+        # scan(
+        #     workspace: "Runner.xcworkspace",
+        #     scheme: "Runner",
+        #     configuration: "Release",
+        #     output_directory: "build/ios_integ",
+        #     output_xctestrun: true,
+        #     # output_xctestrun: "build/ios_integ",
+        #     sdk: "iphoneos",
+        #     should_zip_build_products: true,
+        #     build_for_testing: true,
+        #     skip_detect_devices: true,
+        #     # skip_testing: true,
+	    # )
     
     end
 
