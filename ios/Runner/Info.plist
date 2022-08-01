@@ -61,5 +61,7 @@
     <true/>
     <key>FirebaseAppDelegateProxyEnabled</key>
     <true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>
