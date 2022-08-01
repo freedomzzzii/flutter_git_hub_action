@@ -1,12 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.hugeman.flutterstarterkit">
-    <!-- Flutter needs it to communicate with the running application
+    package="com.example.test_codemagic">
+    <!-- The INTERNET permission is required for development. Specifically,
+         the Flutter tool needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!--  Enabling use of Firebase Emulator Suite (firebase)  -->
-    <!--  see more in https://firebase.flutter.dev/docs/installation/android#enabling-use-of-firebase-emulator-suite  -->
-    <application android:usesCleartextTraffic="true">
-        <!-- possibly other elements -->
-    </application>
 </manifest>
