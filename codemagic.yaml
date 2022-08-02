@@ -67,13 +67,13 @@ workflows:
         #     EOF
         # - name: Generate development.p12
         #   script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
-        # - name: Create file distribute_profile_base64.txt
-        #   script: |
-        #     cd ios; cat << EOF >> distribute_profile_base64.txt
-        #     $DISTRIBUTE_PROFILE_BASE64
-        #     EOF
-        # - name : Generate Distribute_comhugemanflutterstarterkit.mobileprovision
-        #   script : base64 -d ios/distribute_profile_base64.txt > ios/Distribute_comhugemanflutterstarterkit.mobileprovision
+        - name: Create file apple_development_base64.txt
+          script: |
+            cd ios; cat << EOF >> apple_development_base64.txt
+            $TEST_PROFILE_BASE64
+            EOF
+        - name : Generate profile
+          script : base64 -d apple_development_base64.txt > apple_development.mobileprovision
         # - name: Create file adhoc_profile_base64.txt
         #   script: |
         #     cd ios; cat << EOF >> adhoc_profile_base64.txt
@@ -89,15 +89,15 @@ workflows:
         #   script: make l10n/generate
         # - name: Generate mock file for test
         #   script: make test/generate/mock-file
-        # - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
-        #   script: keychain initialize
-        # - name: Set up Provisioning profiles from environment variables
-        #   script: |
-        #     PROFILES_HOME="$HOME/Library/MobileDevice/Provisioning Profiles"
-        #     mkdir -p "$PROFILES_HOME"
-        #     PROFILE_PATH="$(mktemp "$PROFILES_HOME"/"$ADHOC_PROFILE_NAME".mobileprovision)"
-        #     echo ${ADHOC_PROFILE_BASE64} | base64 --decode > "$PROFILE_PATH"
-        #     echo "Saved provisioning profile $PROFILE_PATH"      
+        - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
+          script: keychain initialize
+        - name: Set up Provisioning profiles from environment variables
+          script: |
+            PROFILES_HOME="$HOME/Library/MobileDevice/Provisioning Profiles"
+            mkdir -p "$PROFILES_HOME"
+            PROFILE_PATH="$(mktemp "$PROFILES_HOME"/apple_development.mobileprovision)"
+            echo ${TEST_PROFILE_BASE64} | base64 --decode > "$PROFILE_PATH"
+            echo "Saved provisioning profile $PROFILE_PATH"      
         # - name: Set up signing certificate
         #   script: |
         #     echo $DEVELOPMENT_P12_BASE64 | base64 --decode > /tmp/certificate.p12
@@ -130,7 +130,7 @@ workflows:
         - name: build
           script: flutter build ios integration_test/main_test.dart --release --no-codesign 
         - name: build
-          script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing -allowProvisioningUpdates 
+          script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing
         - name:
           script:  cd build/ios_integ/Build/Products/; ls -la
         - name: zip
