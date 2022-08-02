@@ -130,7 +130,7 @@ workflows:
         - name: build
           script: flutter build ios integration_test/main_test.dart --release --no-codesign 
         - name: build
-          script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing  --signingCertificate="Apple Development"
+          script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -config ios/Flutter/Release.xcconfig -derivedDataPath build/ios_integ -sdk iphoneos build-for-testing  --signingCertificate="Apple Development" --signingStyle=manual
         - name:
           script:  cd build/ios_integ/Build/Products/; ls -la
         - name: zip
