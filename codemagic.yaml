@@ -69,7 +69,7 @@ workflows:
         #   script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
         - name: Create file apple_development_base64.txt
           script: |
-            cd ios; cat << EOF >> apple_development_base64.txt
+            cat << EOF >> apple_development_base64.txt
             $TEST_PROFILE_BASE64
             EOF
         - name : Generate profile
