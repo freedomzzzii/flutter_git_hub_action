@@ -48,39 +48,39 @@ workflows:
         #     cd ios; cat << EOF >> GoogleService-Info.plist
         #     $GOOGLE_SERVICE_IOS
         #     EOF
-        # - name: Create file app_store_connect_key.p8
-        #   script: |
-        #     cd ios; cat << EOF >> app_store_connect_key.p8
-        #     $APP_STORE_CONNECT_AUTH_KEY_P8
-        #     EOF
-        # - name: Create file distribute_p12_base64.txt
-        #   script: |
-        #     cd ios; cat << EOF >> distribute_p12_base64.txt
-        #     $DISTRIBUTION_P12_BASE64
-        #     EOF
-        # - name : Generate distribution.p12
-        #   script : base64 -d ios/distribute_p12_base64.txt > ios/distribution.p12
-        # - name: Create file development_p12_base64.txt
-        #   script: |
-        #     cd ios; cat << EOF >> development_p12_base64.txt
-        #     $DEVELOPMENT_P12_BASE64
-        #     EOF
-        # - name: Generate development.p12
-        #   script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
-        - name: Create file apple_development_base64.txt
+        - name: Create file app_store_connect_key.p8
           script: |
-            cat << EOF >> apple_development_base64.txt
-            $TEST_PROFILE_BASE64
+            cd ios; cat << EOF >> app_store_connect_key.p8
+            $APP_STORE_CONNECT_AUTH_KEY_P8
             EOF
-        - name : Generate profile
-          script : base64 -d apple_development_base64.txt > apple_development.mobileprovision
-        # - name: Create file adhoc_profile_base64.txt
-        #   script: |
-        #     cd ios; cat << EOF >> adhoc_profile_base64.txt
-        #     $ADHOC_PROFILE_BASE64
-        #     EOF
-        # - name : AdHoc_comhugemanflutterstarterkit.mobileprovision
-        #   script: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
+        - name: Create file distribute_p12_base64.txt
+          script: |
+            cd ios; cat << EOF >> distribute_p12_base64.txt
+            $DISTRIBUTION_P12_BASE64
+            EOF
+        - name : Generate distribution.p12
+          script : base64 -d ios/distribute_p12_base64.txt > ios/distribution.p12
+        - name: Create file development_p12_base64.txt
+          script: |
+            cd ios; cat << EOF >> development_p12_base64.txt
+            $DEVELOPMENT_P12_BASE64
+            EOF
+        - name: Generate development.p12
+          script : base64 -d ios/distribute_p12_base64.txt > ios/development.p12
+        - name: Create file distribute_profile_base64.txt
+          script: |
+            cd ios; cat << EOF >> distribute_profile_base64.txt
+            $DISTRIBUTE_PROFILE_BASE64
+            EOF
+        - name : Generate Distribute_comhugemanflutterstarterkit.mobileprovision
+          script : base64 -d ios/distribute_profile_base64.txt > ios/Distribute_comhugemanflutterstarterkit.mobileprovision
+        - name: Create file adhoc_profile_base64.txt
+          script: |
+            cd ios; cat << EOF >> adhoc_profile_base64.txt
+            $ADHOC_PROFILE_BASE64
+            EOF
+        - name : AdHoc_comhugemanflutterstarterkit.mobileprovision
+          script: base64 -d ios/adhoc_profile_base64.txt > ios/AdHoc_comhugemanflutterstarterkit.mobileprovision
         - name: Install dependencies
           script: flutter pub get; bash ./tool/install-dart.sh
         # # - name : Pod install
@@ -95,19 +95,19 @@ workflows:
           script: |
             PROFILES_HOME="$HOME/Library/MobileDevice/Provisioning Profiles"
             mkdir -p "$PROFILES_HOME"
-            PROFILE_PATH="$(mktemp "$PROFILES_HOME"/apple_development.mobileprovision)"
-            echo ${TEST_PROFILE_BASE64} | base64 --decode > "$PROFILE_PATH"
+            PROFILE_PATH="$(mktemp "$PROFILES_HOME"/"$ADHOC_PROFILE_NAME".mobileprovision)"
+            echo ${ADHOC_PROFILE_BASE64} | base64 --decode > "$PROFILE_PATH"
             echo "Saved provisioning profile $PROFILE_PATH"      
-        # - name: Set up signing certificate
-        #   script: |
-        #     echo $DEVELOPMENT_P12_BASE64 | base64 --decode > /tmp/certificate.p12
-        #     if [ -z ${CERTIFICATE_PASSWORD+x} ]; then
-        #       # when using a certificate that is not password-protected
-        #       keychain add-certificates --certificate /tmp/certificate.p12
-        #     else
-        #       # when using a password-protected certificate
-        #       keychain add-certificates --certificate /tmp/certificate.p12 --certificate-password $CERTIFICATE_PASSWORD
-        #     fi      
+        - name: Set up signing certificate
+          script: |
+            echo $DEVELOPMENT_P12_BASE64 | base64 --decode > /tmp/certificate.p12
+            if [ -z ${CERTIFICATE_PASSWORD+x} ]; then
+              # when using a certificate that is not password-protected
+              keychain add-certificates --certificate /tmp/certificate.p12
+            else
+              # when using a password-protected certificate
+              keychain add-certificates --certificate /tmp/certificate.p12 --certificate-password $CERTIFICATE_PASSWORD
+            fi       
         - name: Set up code signing settings on Xcode project
           script: xcode-project use-profiles
         # - name : fastlane setup
